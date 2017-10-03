@@ -1,0 +1,5 @@
+package risk.game;
+
+public class Event {
+
+}

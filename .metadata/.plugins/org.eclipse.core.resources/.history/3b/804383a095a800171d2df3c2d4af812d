@@ -1,0 +1,12 @@
+package risk.game;
+
+import java.io.Serializable;
+
+public class Event implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6215663455811987250L;
+
+}
