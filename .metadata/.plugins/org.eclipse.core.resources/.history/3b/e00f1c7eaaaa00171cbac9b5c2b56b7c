@@ -1,0 +1,9 @@
+package risk.util.map.editor;
+
+public class Editor {
+
+	public Editor() {
+		// TODO Auto-generated constructor stub
+	}
+
+}
