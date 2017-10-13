@@ -11,12 +11,22 @@
 .mtj.tmp/
 
 
+
 # Eclipse
 .metadata/*
 .metadata/
 .classpath
-.project
-.settings/
+.metadata
+bin/**
+bin/*
+*.pydevproject
+
+
+# External tool builders
+.externalToolBuilders/
+
+# Locally stored "Eclipse launch configurations"
+*.launch
 
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
