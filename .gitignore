@@ -15,6 +15,7 @@
 # Eclipse
 .metadata/*
 .metadata/
+.metadata/**
 .classpath
 .metadata
 bin/**
