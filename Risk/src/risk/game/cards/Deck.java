@@ -57,7 +57,7 @@ public class Deck {
 		/**
 		* Withdraws a card from the deck and return it
 		**/
-		public Card draw() {
+		public Card drawFromDeck() {
 		
 			drawCard = deck.get(0);
 			deck.remove(0);
@@ -67,15 +67,15 @@ public class Deck {
 
 		/**
 		* Add a card to the deck
-		* @param card an about of the Card class
+		* @param card an object of the Card class
 		**/
-		public void add(Card card) {
+		public void addToDeck(Card card) {
 		
 			deck.add(card);
 		}
 
 		/**
-		* Shuffle the deck of cards
+		* Shuffle the deck of cards so that it becomes random.
 		**/
 		public void shuffle() {
 		
