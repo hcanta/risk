@@ -27,7 +27,7 @@ public final class Card {
      */
 	
 	public String getName() {
-		return country.getName() + ", " + type;
+		return "";
 	}
 	
 	/**
