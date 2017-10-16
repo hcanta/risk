@@ -1,7 +1,7 @@
 package risk.model;
 
 /**
- * @author Ayushi Jain
+ * @author Ayushi  Jain
  *
  */
 
