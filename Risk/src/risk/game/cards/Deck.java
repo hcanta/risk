@@ -57,7 +57,7 @@ public class Deck {
 		/**
 		* Withdraws a card from the deck and return it
 		**/
-		public Card drawFromDeck() {
+		public Card draw() {
 		
 			drawCard = deck.get(0);
 			deck.remove(0);
@@ -69,7 +69,7 @@ public class Deck {
 		* Add a card to the deck
 		* @param card an object of the Card class
 		**/
-		public void addToDeck(Card card) {
+		public void add(Card card) {
 		
 			deck.add(card);
 		}
