@@ -1,8 +1,6 @@
 package risk.game.cards;
 
-import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import risk.util.map.Country;
 
