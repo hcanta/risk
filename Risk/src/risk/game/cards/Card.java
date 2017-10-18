@@ -1,6 +1,5 @@
 package risk.game.cards;
 
-import risk.util.map.Country;
 
 /**
  * This class is for the card that is being used in the game.
@@ -10,13 +9,13 @@ import risk.util.map.Country;
 public final class Card {
 
     private final String type;
-    private final Country country;
+    private final String country;
     /**
      * parameterized constructor
      * @param type String value representing the type of a card
      * @param country Object of country class to associate the card with it.
      */
-    public Card( String type, Country country ) {
+    public Card( String type, String country ) {
 		this.type = type;
 		this.country = country;
     }
@@ -39,7 +38,7 @@ public final class Card {
 		return type;
     }
 
-    public Country getCountry() {
+    public String getCountry() {
 		return country;
     }
 }
