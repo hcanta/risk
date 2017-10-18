@@ -47,7 +47,8 @@ public class JFileChooserComponent
 	/**
 	 * @return the fileChooser
 	 */
-	public JFileChooser getFileChooser() {
+	public JFileChooser getFileChooser() 
+	{
 		return fileChooser;
 	}
 	

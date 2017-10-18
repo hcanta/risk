@@ -36,12 +36,17 @@ public enum Continents
 	
 	public Set<Regions> getRegions() 
 	{
-		if (regions == null) {
-			synchronized(this) {
-				if (regions == null) {
+		if (regions == null) 
+		{
+			synchronized(this) 
+			{
+				if (regions == null) 
+				{
 					Set<Regions> regions = new HashSet<Regions>();
-					for (Regions regionName : Regions.values()) {
-						if (regionName.continent == this) {
+					for (Regions regionName : Regions.values()) 
+					{
+						if (regionName.continent == this) 
+						{
 							regions.add(regionName);
 						}
 					}

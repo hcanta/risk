@@ -6,9 +6,11 @@ import java.awt.Point;
 import javax.swing.JFrame;
 
 import risk.model.MapModel;
+import risk.util.RiskEnum.E_MapEditorMode;
 
 
-public class Editor extends JFrame {
+public class Editor extends JFrame 
+{
 	
 	/**
 	 * @author Ayushi Jain
@@ -37,8 +39,10 @@ public class Editor extends JFrame {
 	 *            is the map editor mode
 	 */
 	public void MapEditor(JFrame new_parent, String new_title, int new_width, int new_height, MapModel new_mapModel,
-			E_MapEditorMode new_mapEditorMode) {
-		if (new_parent != null) {
+			E_MapEditorMode new_mapEditorMode) 
+	{
+		if (new_parent != null) 
+		{
 			Dimension parentSize = new_parent.getSize();
 			Point p = new_parent.getLocation();
 			setLocation(p.x + parentSize.width / 4, p.y + parentSize.height / 4);
@@ -48,9 +52,11 @@ public class Editor extends JFrame {
 		mapEditorMode = new_mapEditorMode;
 
 		if (E_MapEditorMode.Create == mapEditorMode) 
-				{
+		{
 			new_title += " " + MAP_MODE_CREATE;
-		} else {
+		} 
+		else 
+		{
 			new_title += " " + MAP_MODE_OPEN;
 		}
 
@@ -71,9 +77,7 @@ public class Editor extends JFrame {
 
 	}
 	
-	public enum E_MapEditorMode {
-		Create, Open, Play
-	}
+
 
 	
 

@@ -4,7 +4,8 @@ import java.util.LinkedList;
 
 
 
-public class ContinentInfo {
+public class ContinentInfo 
+{
 	
 	private Continents continent;
 	private int id;
@@ -28,18 +29,21 @@ public class ContinentInfo {
 	/**
 	 * @return A list with the Regions that are part of this SuperRegion
 	 */
-	public LinkedList<RegionInfo> getSubRegions() {
+	public LinkedList<RegionInfo> getSubRegions() 
+	{
 		return subRegions;
 	}
 
-	public Continents getContinent() {
+	public Continents getContinent() 
+	{
 		return continent;
 	}
 	
 	/**
 	 * @return The id of this SuperRegion
 	 */
-	public int getId() {
+	public int getId() 
+	{
 		return id;
 	}
 }

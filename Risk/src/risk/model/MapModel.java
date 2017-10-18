@@ -14,7 +14,8 @@ public class MapModel  implements Cloneable
 	/**
 	 * Default constructor
 	 */
-	public MapModel() {
+	public MapModel() 
+	{
 		// default constructor
 	}
 
@@ -24,7 +25,8 @@ public class MapModel  implements Cloneable
 	 * 
 	 * @return mapwidth width of the map
 	 */
-	public int getMapWidth() {
+	public int getMapWidth() 
+	{
 		return mapWidth;
 	}
 	
@@ -35,7 +37,8 @@ public class MapModel  implements Cloneable
 	 * @param mapWidth
 	 *            width of the map
 	 */
-	public void setMapWidth(int mapWidth) {
+	public void setMapWidth(int mapWidth) 
+	{
 		this.mapWidth = mapWidth;
 	}
 }

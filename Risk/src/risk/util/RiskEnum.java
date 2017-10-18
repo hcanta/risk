@@ -11,5 +11,10 @@ public class RiskEnum {
 	{
 		Red, Green, Yellow, Blue
 	}
+	
+	public enum E_MapEditorMode 
+	{
+		Create, Open, Play
+	}
 
 }

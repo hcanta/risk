@@ -9,7 +9,8 @@ import risk.ui.Game;
  * @author Henry Michel Cantave
  *
  */
-public class GameEngine {
+public class GameEngine 
+{
 
 		/**
 		 * Main Method of the class that creates the Game Instance and starts the
@@ -19,8 +20,8 @@ public class GameEngine {
 		 *            contains the supplied command-line arguments as an array of
 		 *            String objects
 		 */
-		public static void main(String new_args[]) {
+		public static void main(String new_args[]) 
+		{
 			Game.getInstance().start();
 		}
-
 }

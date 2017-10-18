@@ -15,14 +15,12 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-
 import org.apache.log4j.Logger;
 
 import risk.model.MapModel;
 import risk.util.map.editor.Editor;
-import risk.util.map.editor.Editor.E_MapEditorMode;
 import risk.util.map.editor.FileStorage;
+import risk.util.RiskEnum.E_MapEditorMode;
 
 public class JMenuBarComponent 
 {
@@ -114,9 +112,7 @@ public class JMenuBarComponent
 								FileStorage fileStored = new FileStorage();
 								MapModel mapModel = fileStored.openMapFile(file);
 								System.out.println("Value of mapModel is: "+mapModel);
-								
 							}
-							
 							
 						}
 						
@@ -147,15 +143,11 @@ public class JMenuBarComponent
 						{
 							System.out.println("Nothing to do");
 						}
-						
-						
-						
 					}
-				
 				}
 			
 			
-				}
+			}
 					
 			
 			menuItemCreateMap.addActionListener(new menuItemAction());
@@ -171,9 +163,11 @@ public class JMenuBarComponent
 		 * 
 		 * @return map path string
 		 */
-		public String getMapFilePath() {
+		public String getMapFilePath() 
+		{
 
-			try {
+			try 
+			{
 
 				in = new BufferedReader(new FileReader(fileGameLoad.getAbsoluteFile()));
 
@@ -186,7 +180,9 @@ public class JMenuBarComponent
 				mapFilePath = dataFileInfoArray[1];
 				returnMsg = mapFilePath;
 
-			} catch (Exception e) {
+			} 
+			catch (Exception e)
+			{
 				e.getMessage();
 			}
 			return returnMsg;
