@@ -1,5 +1,8 @@
 /**
+ * 
+ */
+/**
  * @author Henry Michel Cantave
  *
  */
-package risk.game;
+package risk.model.character;

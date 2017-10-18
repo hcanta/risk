@@ -1,4 +1,4 @@
-package risk.model;
+package risk.model.character;
 
 import java.util.Observable;
 

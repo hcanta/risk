@@ -1,4 +1,4 @@
-package risk.character;
+package risk.model.character;
 
 import risk.util.RiskEnum.RiskColor;
 

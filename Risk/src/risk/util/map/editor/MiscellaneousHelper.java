@@ -41,7 +41,6 @@ public class MiscellaneousHelper {
 	 */
 	public String RemoveCharacterFromStrartorLeft(String new_inputString, String new_characters) {
 		return new_inputString.replaceAll("^" + new_characters + "+", "");
-		// return InputString.replaceAll("^0+(?!$)", "");
 	}
 
 	/**
@@ -128,7 +127,7 @@ public class MiscellaneousHelper {
 		try {
 			return new String(Files.readAllBytes(Paths.get(new_file.getPath())));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		return null;

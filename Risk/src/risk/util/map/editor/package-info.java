@@ -1,8 +1,5 @@
 /**
- * 
- */
-/**
- * @author henry
+ * @author Henry Michel Cantave
  *
  */
 package risk.util.map.editor;

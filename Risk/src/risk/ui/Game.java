@@ -10,7 +10,7 @@ import javax.swing.JMenuBar;
 
 import org.apache.log4j.Logger;
 
-import risk.model.PlayerModel;
+import risk.model.character.PlayerModel;
 
 /**
  * @author Ayushi Jain
@@ -43,7 +43,6 @@ public class Game extends Canvas implements Runnable {
 		
 		// THREAD
 		private Thread thread;
-		private boolean running = false;
 		
 		
 		/**
@@ -79,24 +78,13 @@ public class Game extends Canvas implements Runnable {
 	
 	
 	
-		/**
-		 * Main Method of the class that creates the Game Instance and starts the
-		 * game.
-		 * 
-		 * @param new_args
-		 *            contains the supplied command-line arguments as an array of
-		 *            String objects
-		 */
-		public static void main(String new_args[]) {
-			Game.getInstance().start();
-		}
+		
 		
 		/**
 		 * This method starts the thread
 		 */
 		public synchronized void start() {
 			thread = new Thread(this);
-			running = true;
 			thread.start();
 		}
 
@@ -107,7 +95,6 @@ public class Game extends Canvas implements Runnable {
 			try {
 				thread.join(0); // stops the thread
 				System.out.println("Game loop is stopped.");
-				running = false;
 			} catch (Exception e) {
 				e.printStackTrace();
 				System.out.println("EXCEPTION HERE void stop function.");

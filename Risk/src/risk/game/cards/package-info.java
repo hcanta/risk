@@ -2,7 +2,7 @@
  * 
  */
 /**
- * @author henry
+ * @author Henry Michel Cantave
  *
  */
 package risk.game.cards;
