@@ -39,6 +39,11 @@ public final class Card {
 		return type;
     }
 
+    /**
+     * Getter method of the class 
+     * @return Country object reference
+     */
+	
     public Country getCountry() {
 		return country;
     }

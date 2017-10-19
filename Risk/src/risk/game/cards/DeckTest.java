@@ -38,7 +38,7 @@ public class DeckTest {
 		temp.add(testCountry);
 		testObject = new Deck(temp);
 		Country testCountry= temp.remove(0);
-		checking = testCountry.getCard();
+		checking = "Infantry";
 		cardObject.add(1,testCard);
 		otherChecking = testCard.getType();
 	}
