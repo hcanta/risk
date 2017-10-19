@@ -226,8 +226,6 @@ public class RiskBoard
 		
 	}
 
-	
-	
 	/**
 	 * 
 	 * @param territory we re searching for

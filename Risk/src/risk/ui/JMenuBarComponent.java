@@ -74,7 +74,7 @@ public class JMenuBarComponent
 			 * This class handle the menu Item action on click action
 			 * 
 			 * @author Ayushi
-			 * @revision hcanta
+			 * @author hcanta
 			 * 
 			 */
 			class menuItemAction implements ActionListener 
