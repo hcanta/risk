@@ -1,6 +1,6 @@
 
 /**
- * @author Henry Michel Cantave
+ * @author hcanta
  * 
  */
 package risk;

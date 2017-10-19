@@ -6,7 +6,7 @@ package risk.game;
 import risk.ui.Game;
 
 /**
- * @author Henry Michel Cantave
+ * @author hcanta
  *
  */
 public class GameEngine 

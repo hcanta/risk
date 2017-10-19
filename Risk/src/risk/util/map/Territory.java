@@ -99,8 +99,31 @@ public class Territory
 	 * set the amount of army on the territory
 	 * @param armyOn the armyOn to set
 	 */
-	public void setArmyOn(int armyOn) {
+	public void setArmyOn(int armyOn) 
+	{
 		this.armyOn = armyOn;
+	}
+	
+	/**
+	 * Clears the list of Neighbours
+	 */
+	public void clear()
+	{
+		this.neighbours.clear();
+	}
+	
+	/**
+	 * 
+	 * @param neighbour to be removed to the adjacency list.
+	 */
+	public void removeNeighbours(String neighbour)
+	{
+		String n_neighbour = neighbour.toLowerCase();
+		if(this.neighbours.contains(n_neighbour))
+		{
+			this.neighbours.remove(n_neighbour);
+		}
+		
 	}
 
 

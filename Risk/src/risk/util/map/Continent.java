@@ -145,5 +145,32 @@ public class Continent
 			this.ownerID = id;
 		}
 	}
+	
+	/**
+	 * Empties the list of territories belonging to that 
+	 */
+	public void clear()
+	{
+		for(String value: territories.keySet())
+		{
+			territories.get(value).clear();
+		}
+		territories.clear();
+	}
+	
+	/**
+	 * 
+	 * @param territory to be removed to the adjacency list.
+	 */
+	public void removeTerritory(String territory)
+	{
+		String n_territory = territory.toLowerCase();
+		if(this.territories.containsKey(n_territory))
+		{
+			territories.get(n_territory).clear();
+			this.territories.remove(n_territory);
+		}
+		
+	}
 
 }

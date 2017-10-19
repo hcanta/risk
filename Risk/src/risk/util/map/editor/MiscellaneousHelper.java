@@ -107,7 +107,7 @@ public class MiscellaneousHelper {
 
 	/**
 	 * This method return date in string form. The date format is depend upon
-	 * the input Provied by user.
+	 * the input Provided by user.
 	 * 
 	 * @param new_format new format
 	 * @return date 

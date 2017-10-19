@@ -33,14 +33,6 @@ public class RiskBoard
 		this.ownerID = ownerID;
 	}
 
-
-	/**
-	 * @return the boardName
-	 */
-	public String getBoardName() 
-	{
-		return boardName;
-	}
 	
 	/**
 	 * 
@@ -118,6 +110,50 @@ public class RiskBoard
 			this.ownerID = id;
 		}
 	}
+
+
+	/**
+	 * @return the boardName
+	 */
+	public String getBoardName() 
+	{
+		return boardName;
+	}
+
+
+	/**
+	 * @param boardName the boardName to set
+	 */
+	public void setBoardName(String boardName) 
+	{
+		this.boardName = boardName;
+	}
 	
+	/**
+	 * Empties the list of territories belonging to that 
+	 */
+	public void clear()
+	{
+		for(String value: continents.keySet())
+		{
+			continents.get(value).clear();
+		}
+		continents.clear();
+	}
+	
+	/**
+	 * 
+	 * @param continent to be removed to the adjacency list.
+	 */
+	public void removeTerritory(String continent)
+	{
+		String n_continent = continent.toLowerCase();
+		if(this.continents.containsKey(n_continent))
+		{
+			continents.get(n_continent).clear();
+			this.continents.remove(n_continent);
+		}
+		
+	}
 
 }
