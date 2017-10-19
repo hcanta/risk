@@ -90,7 +90,7 @@ public class GameEngine
 			int player = i%pl.size();
 			
 			pl.get(player).addTerritory(countries.get(i));
-			RiskBoard.Instance.getTerritory(countries.get(i));
+			RiskBoard.Instance.getTerritory(countries.get(i)).setOwnerID(pl.get(player).getTurnID());
 		}
 
 	}

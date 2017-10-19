@@ -226,10 +226,22 @@ public class RiskBoard
 		
 	}
 
-
-	public Territory getTerritory(String string) 
+	
+	
+	/**
+	 * 
+	 * @param territory we re searching for
+	 * @return the territory
+	 */
+	public Territory getTerritory(String territory) 
 	{
-		
-		
+		for(String continent : this.continents.keySet())
+		{
+			if(continents.get(continent).getTerritories().contains(territory))
+			{
+				return continents.get(continent).getTerritory(territory);
+			}
+		}
+		return null;
 	}
 }
