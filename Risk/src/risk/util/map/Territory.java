@@ -1,6 +1,7 @@
 package risk.util.map;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 /**
  * 
  * @author hcanta
@@ -8,7 +9,7 @@ import java.util.ArrayList;
  */
 public class Territory 
 {
-	private String name;
+	private String territoryName;
 	private String continent;
 	private ArrayList<String> neighbours;
 	private int ownerID;
@@ -17,7 +18,7 @@ public class Territory
 	public Territory(String name, String continent, int ownerID) 
 	{
 
-		this.name = name;
+		this.territoryName = name;
 		this.continent = continent;
 		this.neighbours = new ArrayList<String>();
 		this.ownerID = ownerID;
@@ -27,25 +28,33 @@ public class Territory
 	public Territory(String name, String continent) 
 	{
 
-		this.name = name;
+		this.territoryName = name;
 		this.continent = continent;
 		this.neighbours = new ArrayList<String>();
 		this.ownerID = Integer.MIN_VALUE;
 		this.armyOn = 1;
 	}
 
+	public Territory(String name, String continent, String[] neighbours) {
+		this.territoryName = name;
+		this.continent = continent;
+		this.neighbours = new ArrayList<String>(Arrays.asList(neighbours));
+		this.ownerID = Integer.MIN_VALUE;
+		this.armyOn = 1;
+	}
+
 	/**
-	 * @return the name
+	 * @return the territory name
 	 */
-	public String getName() 
+	public String getTerritoryName() 
 	{
-		return name;
+		return this.territoryName;
 	}
 
 	/**
 	 * @return the continent
 	 */
-	public String getContinent() 
+	public String getContinentName() 
 	{
 		return continent;
 	}
@@ -124,6 +133,23 @@ public class Territory
 			this.neighbours.remove(n_neighbour);
 		}
 		
+	}
+	
+	/**
+	 * @return A string representation of the Territory
+	 */
+	public String toString()
+	{
+		StringBuffer str = new StringBuffer();
+		str.append(this.territoryName+ ": ");
+		for(String neighbour : this.neighbours)
+		{
+			str.append(neighbour + ". ");
+		}
+		
+		str.append("\n");
+		
+		return str.toString();
 	}
 
 

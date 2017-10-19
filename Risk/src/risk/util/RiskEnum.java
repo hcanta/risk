@@ -9,7 +9,7 @@ public class RiskEnum {
 	
 	public static enum RiskColor
 	{
-		Red, Green, Yellow, Blue
+		Red, Green, Yellow, Blue, Purple, orange
 	}
 	
 	public enum E_MapEditorMode 

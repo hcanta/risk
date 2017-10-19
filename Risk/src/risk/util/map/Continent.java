@@ -1,5 +1,6 @@
 package risk.util.map;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import risk.model.ModelException;
@@ -12,7 +13,7 @@ import risk.model.ModelException;
 public class Continent 
 {
 	
-	private String name;
+	private String continentName;
 	private HashMap<String, Territory> territories;
 	private int ownerID;
 	private int continentBonus;
@@ -20,7 +21,7 @@ public class Continent
 	public Continent(String name, int continentBonus) 
 	{
 		this.continentBonus = continentBonus;
-		this.name = name;
+		this.continentName = name;
 		this.ownerID = Integer.MIN_VALUE;
 		territories = new HashMap<String, Territory>();
 	}
@@ -66,20 +67,20 @@ public class Continent
 		String n_name = name.toLowerCase();
 		if(!territories.containsKey(n_name))
 		{
-			territories.put(n_name, new Territory(n_name,this.name, ownerID));
+			territories.put(n_name, new Territory(n_name,this.continentName, ownerID));
 		}
 	}
 	
 	/**
 	 * 
-	 * @param name name The name of the territory to be added to the continent
+	 * @param name  The name of the territory to be added to the continent
 	 */
 	public void addTerritory(String name)
 	{
 		String n_name = name.toLowerCase();
 		if(!territories.containsKey(n_name))
 		{
-			territories.put(n_name, new Territory(n_name,this.name));
+			territories.put(n_name, new Territory(n_name,this.continentName));
 		}
 	}
 
@@ -102,9 +103,9 @@ public class Continent
 	/**
 	 * @return the name
 	 */
-	public String getName() 
+	public String geContinentName() 
 	{
-		return name;
+		return continentName;
 	}
 
 	/**
@@ -171,6 +172,47 @@ public class Continent
 			this.territories.remove(n_territory);
 		}
 		
+	}
+	
+	
+	/**
+	 * @return a string representation of the continent
+	 */
+	public String toString()
+	{
+		StringBuffer str = new StringBuffer();
+		str.append("\nContinent: " + this.continentName+ "\n\n");
+		for(String territory : this.territories.keySet())
+		{
+			str.append(this.territories.get(territory).toString());
+		}
+		str.append("\n");
+		
+		return str.toString();
+	}
+	
+	/**
+	 * 
+	 * @param name The name of the territory to be added to the continent
+	 * @param neighbours the neighbous to said territory
+	 */
+	public void addTerritory(String name, String[] neighbours) 
+	{
+		String n_name = name.toLowerCase();
+		if(!territories.containsKey(n_name))
+		{
+			territories.put(n_name, new Territory(n_name,this.continentName, neighbours));
+		}
+		
+	}
+	
+	/**
+	 * 
+	 * @return the list of territories belonging to that continent
+	 */
+	public ArrayList<String> getTerritories() {
+		
+		return new ArrayList<String>(territories.keySet());
 	}
 
 }

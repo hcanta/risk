@@ -1,4 +1,4 @@
-package risk.util.map.editor;
+package risk.ui;
 
 import java.awt.Dimension;
 import java.awt.Point;

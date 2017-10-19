@@ -54,10 +54,7 @@ public class FileStorage
 		String fileContent = "";
 		try {
 			fileContent = new String(Files.readAllBytes(Paths.get(new_file.getPath())));
-			System.out.println("File content is: "+fileContent);
-//			fileContent = (new MiscellaneousHelper()).DecodeBase64(fileContent);
-//			System.out.println("File content after decoding is: "+fileContent);
-			
+			System.out.println("File content is: "+fileContent);		
 			return (MapModel) getObjectFromJson(fileContent, MapModel.class);
 		} catch (IOException e) 
 		{
@@ -84,7 +81,7 @@ public class FileStorage
 	 * @param new_jsonString
 	 *            json string object
 	 * @param new_class
-	 *            new clas
+	 *            new class
 	 * @return object object from json
 	 */
 	

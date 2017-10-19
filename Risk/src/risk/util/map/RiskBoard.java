@@ -1,5 +1,6 @@
 package risk.util.map;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import risk.model.ModelException;
@@ -9,10 +10,13 @@ public class RiskBoard
 	private int ownerID;
 	private String boardName;
 	private HashMap<String, Continent> continents;
+	
+	public static RiskBoard Instance = new RiskBoard();
 
 	public RiskBoard() {
 
 		ownerID = Integer.MIN_VALUE;
+		continents = new HashMap<String, Continent>();
 	}
 
 
@@ -134,6 +138,7 @@ public class RiskBoard
 	 */
 	public void clear()
 	{
+		this.ownerID = Integer.MIN_VALUE;
 		for(String value: continents.keySet())
 		{
 			continents.get(value).clear();
@@ -155,5 +160,67 @@ public class RiskBoard
 		}
 		
 	}
-
+	
+	/**
+	 * @return a string representation of the Board
+	 */
+	public String toString()
+	{
+		StringBuffer str = new StringBuffer();
+		str.append("\nBoard: " + this.boardName+ "\n ");
+		for(String continent : this.continents.keySet())
+		{
+			str.append(this.continents.get(continent).toString());
+		}
+		str.append("\n");
+		
+		return str.toString();
+	}
+	
+	/**
+	 * 
+	 * @param continentName the name of the continent to which we need to add a territory
+	 * @param territoryName the name of the territory to be added to said continent
+	 */
+	public void addTerritory(String continentName, String territoryName)
+	{
+		String c_name = continentName.toLowerCase();
+		String t_name = territoryName.toLowerCase();
+		if(continents.containsKey(c_name))
+		{
+			continents.get(c_name).addTerritory(t_name);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param continentName the name of the continent to which we need to add a territory
+	 * @param territoryName the name of the territory to be added to said continent
+	 * @param neighbours the list of neighbours of said territory
+	 */
+	public void addTerritory(String continentName, String territoryName, String[] neighbours)
+	{
+		String c_name = continentName.toLowerCase();
+		String t_name = territoryName.toLowerCase();
+		if(continents.containsKey(c_name))
+		{
+			continents.get(c_name).addTerritory(t_name, neighbours);
+		}
+	}
+	
+	/**
+	 * 
+	 * @return all the territories name on the board
+	 */
+	public ArrayList<String>getTerritories()
+	{
+		ArrayList<String> countries = new ArrayList<String>();
+		for(String continent : this.continents.keySet())
+		{
+			countries.addAll(this.continents.get(continent).getTerritories());
+		}
+		
+		return countries;
+		
+	}
 }
