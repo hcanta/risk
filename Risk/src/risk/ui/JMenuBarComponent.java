@@ -41,7 +41,6 @@ public class JMenuBarComponent
 	String[] dataArray, dataFileInfoArray;
 	File fileGameLoad;
 	
-	// Logger added
 		final static Logger logger = Logger.getLogger(JMenuBarComponent.class);
 
 		
@@ -78,7 +77,6 @@ public class JMenuBarComponent
 				@Override
 				public void actionPerformed(ActionEvent e) 
 				{
-					// TODO Auto-generated method stub
 					boolean isGamePlay = false;
 					JFileChooser fileChooser = new JFileChooser();
 					File file;
@@ -145,8 +143,6 @@ public class JMenuBarComponent
 						}
 					}
 				}
-			
-			
 			}
 					
 			

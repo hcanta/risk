@@ -33,7 +33,7 @@ public class Game extends Canvas implements Runnable {
 		private static String LOG_CURRENT_SESSION_TAG = "";
 		public static final int WINDOW_WIDTH = 840;
 		public static final int WINDOW_HEIGHT = (int) WINDOW_WIDTH / 12 * 9;
-		private static final String TITLE_GAME_WINDOW = "======== The Conquest Game ========";
+		private static final String TITLE_GAME_WINDOW = "======== Risk ========";
 		
 		public static PlayerModel PLAYERMODEL;
 		
@@ -118,8 +118,7 @@ public class Game extends Canvas implements Runnable {
 	
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-		
+
 	}
 	
 	public static void setLog_Current_Session_Tag(String new_session) 
