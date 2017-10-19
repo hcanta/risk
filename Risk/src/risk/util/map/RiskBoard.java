@@ -102,6 +102,8 @@ public class RiskBoard
 		boolean update = true;
 		for(String value: continents.keySet())
 		{
+			continents.get(value).checkOwnerStatus();
+			
 			if (continents.get(value).getOwnerID()!= id)
 			{
 				update = false;

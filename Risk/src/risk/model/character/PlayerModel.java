@@ -1,5 +1,6 @@
 package risk.model.character;
 
+import java.util.ArrayList;
 import java.util.Observable;
 
 import org.apache.log4j.Logger;
@@ -15,6 +16,14 @@ import risk.util.RiskEnum.RiskColor;
 public class PlayerModel extends Observable implements ICharacter
 {
 	public String playerName;
+
+	private short turnID;
+
+	private RiskColor color;
+	
+	private int nbArmiesToBePlaced;
+	
+	private ArrayList<String>territoriesOwned;
 	
 	final static Logger logger = Logger.getLogger(PlayerModel.class);
 	
@@ -43,21 +52,29 @@ public class PlayerModel extends Observable implements ICharacter
 		setChanged();
 		notifyObservers();
 	}
+	
+	public PlayerModel(String name, RiskColor color, short turnID) 
+	{
+		this.playerName=name;
+		this.turnID = turnID;
+		this.color = color;
+		territoriesOwned = new ArrayList<String>();
+	}
 
 
 	@Override
 	public RiskColor getColor() 
 	{
-		// TODO Auto-generated method stub
-		return null;
+		
+		return this.color;
 	}
 
 
 	@Override
 	public String getName() 
 	{
-		// TODO Auto-generated method stub
-		return null;
+		
+		return this.playerName;
 	}
 
 
@@ -72,8 +89,77 @@ public class PlayerModel extends Observable implements ICharacter
 	@Override
 	public short getTurnID() 
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		
+		return this.turnID;
+	}
+
+
+	/**
+	 * @return the nbArmiesToBePlaced
+	 */
+	@Override
+	public int getNbArmiesToBePlaced() {
+		return nbArmiesToBePlaced;
+	}
+
+
+	/**
+	 * @param nbArmiesToBePlaced the nbArmiesToBePlaced to set
+	 */
+	@Override
+	public void setNbArmiesToBePlaced(int nbArmiesToBePlaced) {
+		this.nbArmiesToBePlaced = nbArmiesToBePlaced;
+	}
+	
+	/**
+	 * Decrements the amount of armies
+	 */
+	@Override
+	public void decrementArmies()
+	{
+		if(this.nbArmiesToBePlaced > 0)
+		{
+			this.nbArmiesToBePlaced--;
+		}
+	}
+	
+	/**
+	 * Increments the amount of armies to be placed
+	 */
+	@Override
+	public void incrementArmies()
+	{
+		this.nbArmiesToBePlaced ++;
+	}
+	
+	/**
+	 *  Increments the number of armies to be placed by the given number;
+	 * @param nb
+	 */
+	@Override
+	public void updateArmiestoBeplaced(int nb)
+	{
+		this.nbArmiesToBePlaced += nb;
+	}
+	
+	/**
+	 * @param name the territory to be added
+	 */
+	@Override
+	public void addTerritory(String name)
+	{
+		if(!this.territoriesOwned.contains(name))
+			this.territoriesOwned.add(name);
+	}
+	
+	/**
+	 * @param name the territory to be removed
+	 */
+	@Override
+	public void removeTerritory(String name)
+	{
+		if(this.territoriesOwned.contains(name))
+			this.territoriesOwned.remove(name);
 	}
 
 }

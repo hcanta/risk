@@ -164,8 +164,7 @@ public class JMenuBarComponent
 					}
 				}
 			}
-					
-			
+							
 			menuItemCreateMap.addActionListener(new menuItemAction());
 			menuItemOpenMap.addActionListener(new menuItemAction());
 			menuItemExit.addActionListener(new menuItemAction());
