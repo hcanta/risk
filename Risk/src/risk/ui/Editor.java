@@ -8,14 +8,15 @@ import javax.swing.JFrame;
 import risk.model.MapModel;
 import risk.util.RiskEnum.E_MapEditorMode;
 
-
+/**
+ * The editor Jframe
+ * @author Ayushi Jain
+ *
+ */
 public class Editor extends JFrame 
 {
 	
-	/**
-	 * @author Ayushi Jain
-	 *
-	 */
+	
 	private static final long serialVersionUID = 1L;
 	MapModel mapModel;
 	public static final String MAP_MODE_CREATE = "(CREATE)";

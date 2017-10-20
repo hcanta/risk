@@ -3,7 +3,11 @@ package risk.model.character;
 import java.util.ArrayList;
 
 import risk.util.RiskEnum.RiskColor;
-
+/**
+ * 
+ * The player Model and later on Robot model will implement this
+ *
+ */
 public interface ICharacter 
 {
 	/**

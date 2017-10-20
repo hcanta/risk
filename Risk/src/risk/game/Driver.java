@@ -1,11 +1,12 @@
 package risk.game;
 
-import java.io.File;
-import java.io.IOException;
-
 import risk.ui.Game;
-import risk.util.map.editor.Utilities;
 
+/**
+ * @author akif
+ * Contains the main method that will run the game
+ *
+ */
 public class Driver {
 
 	/**
@@ -18,8 +19,6 @@ public class Driver {
 	 */
 	public static void main(String new_args[]) 
 	{
-		
-	
 		Game.getInstance().start();
 	}
 

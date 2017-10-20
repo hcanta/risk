@@ -1,6 +1,4 @@
-/**
- * 
- */
+
 package risk.game;
 
 import java.io.IOException;
@@ -17,8 +15,9 @@ import risk.util.map.RiskBoard;
 import risk.util.map.editor.Utilities;
 
 /**
+ * Handles most of the operation happening during the Game and is a singleton
  * @author hcanta
- *
+ * 
  */
 public class GameEngine 
 {

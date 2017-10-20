@@ -19,10 +19,8 @@ import javax.swing.JOptionPane;
 import org.apache.log4j.Logger;
 
 import risk.game.GameEngine;
-import risk.model.MapModel;
 import risk.util.map.RiskBoard;
 import risk.util.map.editor.Utilities;
-import risk.util.RiskEnum.E_MapEditorMode;
 
 public class JMenuBarComponent 
 {
