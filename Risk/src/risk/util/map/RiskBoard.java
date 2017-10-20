@@ -71,6 +71,16 @@ public class RiskBoard
 	
 	/**
 	 * 
+	 * @return A list of name of all the continents.
+	 */
+	public ArrayList<String> getContinents()
+	{
+		return new ArrayList<String>(this.continents.keySet());
+		
+	}
+	
+	/**
+	 * 
 	 * @param name e name of the continent to be added to the board
 	 * @param bonus Bonus of army associated with the continent
 	 */

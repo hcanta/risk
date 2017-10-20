@@ -222,5 +222,13 @@ public class PlayerModel extends Observable implements ICharacter
 		
 	}
 
+
+	@Override
+	public void incrementArmiesBy(int continentBonus) 
+	{
+		this.nbArmiesToBePlaced+=continentBonus;
+		
+	}
+
 	
 }

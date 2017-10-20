@@ -78,4 +78,10 @@ public interface ICharacter
 	 * @param territory The territory to reinforce
 	 */
 	public void reinforce(String territory);
+
+	/**
+	 * Increments the amount of armies to be placed by the given amount
+	 * @param continentBonus
+	 */
+	public void incrementArmiesBy(int continentBonus);
 }

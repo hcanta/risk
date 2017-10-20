@@ -146,6 +146,7 @@ public class GameEngine
 	 */
 	public void reinforce(String playername, String territory) throws ModelException
 	{
+		
 		for(int i =0; i < players.size(); i++)
 		{
 			if(players.get(i).getName().equalsIgnoreCase(playername))
@@ -153,6 +154,25 @@ public class GameEngine
 				players.get(i).reinforce( territory);
 				break;
 			}
+		}
+	}
+	
+	/**
+	 *  Update the OwnerID if necessary
+	 */
+	public void checkOwnerStatus()
+	{
+		RiskBoard.Instance.checkOwnerStatus();
+		for(String continent: RiskBoard.Instance.getContinents() )
+		{
+			for(int i =0; i < players.size(); i++)
+			{
+				if(players.get(i).getTurnID()==(short)RiskBoard.Instance.getContinent(continent).getOwnerID())
+				{
+					players.get(i).incrementArmiesBy(RiskBoard.Instance.getContinent(continent).getContinentBonus());
+				}
+			}
+			
 		}
 	}
 
