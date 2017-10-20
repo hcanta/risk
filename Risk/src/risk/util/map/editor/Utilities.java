@@ -6,7 +6,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import risk.util.map.MapExcpetion;
 import risk.util.map.RiskBoard;
 
 public class Utilities 
@@ -15,11 +14,11 @@ public class Utilities
 	/**
 	 * 
 	 * @param filename the name of the file where the risk board will be saved
-	 * @throws IOException
+	 * @throws IOException Could not open/write to file
 	 */
 	public static void saveMap(String filename) throws IOException
 	{
-		String n_filename = filename + ".map";
+		String n_filename = "Maps\\"+filename + ".map";
 		FileWriter fw = new FileWriter(n_filename);
 		
 		fw.write("[Map]\n");
@@ -36,9 +35,9 @@ public class Utilities
 	/**
 	 * 
 	 * @param file the file to be loaded in the Risk Board
-	 * @throws MapExcpetion
+	 * @return was the map loaded valid or not
 	 */
-	public static void loadFile(File file) throws MapExcpetion
+	public static boolean loadFile(File file)
 	{
 		RiskBoard.Instance.clear();
 		try
@@ -91,7 +90,7 @@ public class Utilities
 					}
 					else
 					{
-						throw new MapExcpetion("A country must have at least one neighbour");
+						return false;
 					}
 				}
 			}
@@ -101,7 +100,7 @@ public class Utilities
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+		return RiskBoard.Instance.validateMap();
 		
 	}
 

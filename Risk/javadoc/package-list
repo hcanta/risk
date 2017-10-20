@@ -3,6 +3,7 @@ risk.game
 risk.game.cards
 risk.model
 risk.model.character
+risk.test
 risk.ui
 risk.util
 risk.util.map

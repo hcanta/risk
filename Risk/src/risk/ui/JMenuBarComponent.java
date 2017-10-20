@@ -113,10 +113,16 @@ public class JMenuBarComponent
 							{
 								new_jframe.remove(backGround);
 								new_jframe.setBackground(Color.WHITE);
-								Utilities.loadFile(file);
+								if(Utilities.loadFile(file))
+								{
 										
 								System.out.println(RiskBoard.Instance.toString());
 								GameEngine.Instance.startup();
+								}
+								else
+								{
+									System.out.println("Invalid File Loaded");
+								}
 							
 							}
 							

@@ -37,7 +37,7 @@ public interface ICharacter
 	
 	/**
 	 *  Increments the number of armies to be placed by the given number;
-	 * @param nb
+	 * @param nb number of armies to be placed
 	 */
 	void updateArmiestoBeplaced(int nb);
 	
@@ -87,7 +87,7 @@ public interface ICharacter
 
 	/**
 	 * Increments the amount of armies to be placed by the given amount
-	 * @param continentBonus
+	 * @param continentBonus the amount of bonus armies if the continent is conquered
 	 */
 	public void incrementArmiesBy(int continentBonus);
 	

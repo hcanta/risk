@@ -119,10 +119,19 @@ public class GameEngine
 	}
 	
 	/**
+	 * 
+	 * @return the number of players
+	 */
+	public short getNumberOfPlayers()
+	{
+		return this.numberOfPlayers;
+	}
+	/**
 	 * Generates computer player
 	 */
 	public void createBots()
 	{
+		players.clear();
 		for(short i = 1; i< this.numberOfPlayers; i++)
 		{			
 			players.add(new PlayerModel("Computer "+ i, RiskColor.values()[i], (short)(i+1)));
@@ -140,8 +149,9 @@ public class GameEngine
 	
 	/**
 	 * Give the armies according to the risk rules
+	 * @return the number of armies to be set.
 	 */
-	public void setArmiesforPlayers()
+	public int setArmiesforPlayers()
 	{
 		int nbArmiesToBePlaced = 0;
 		
@@ -168,6 +178,7 @@ public class GameEngine
 		{
 			players.get(i).setNbArmiesToBePlaced(nbArmiesToBePlaced);
 		}
+		return nbArmiesToBePlaced;
 	}
 	
 	/**
@@ -203,8 +214,7 @@ public class GameEngine
 	 * @param playername The player name
 	 * @param territory1 The origin territory
 	 * @param territory2 The destination territory
-	 * @param armies The number of armies to be moved
-	 * @throws Model Exception  
+	 * @param armies The number of armies to be moved  
 	 */
 	public void fortify(String playername, String territory1, String territory2, int armies) throws ModelException
 	{
