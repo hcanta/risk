@@ -19,14 +19,8 @@ public class Driver {
 	public static void main(String new_args[]) 
 	{
 		
-		try {
-			Utilities.loadFile(new File("D:\\OneDrive\\Soen6441\\Maps\\Atlantis.map"));
-			Utilities.saveMap("test");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		//Game.getInstance().start();
+	
+		Game.getInstance().start();
 	}
 
 }

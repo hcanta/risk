@@ -96,26 +96,20 @@ public class PlayerModel extends Observable implements ICharacter
 	}
 
 
-	/**
-	 * @return the nbArmiesToBePlaced
-	 */
+
 	@Override
 	public int getNbArmiesToBePlaced() {
 		return nbArmiesToBePlaced;
 	}
 
 
-	/**
-	 * @param nbArmiesToBePlaced the nbArmiesToBePlaced to set
-	 */
+
 	@Override
 	public void setNbArmiesToBePlaced(int nbArmiesToBePlaced) {
 		this.nbArmiesToBePlaced = nbArmiesToBePlaced;
 	}
 	
-	/**
-	 * Decrements the amount of armies
-	 */
+
 	@Override
 	public void decrementArmies()
 	{
@@ -125,28 +119,21 @@ public class PlayerModel extends Observable implements ICharacter
 		}
 	}
 	
-	/**
-	 * Increments the amount of armies to be placed
-	 */
+
 	@Override
 	public void incrementArmies()
 	{
 		this.nbArmiesToBePlaced ++;
 	}
 	
-	/**
-	 *  Increments the number of armies to be placed by the given number;
-	 * @param nb
-	 */
+
 	@Override
 	public void updateArmiestoBeplaced(int nb)
 	{
 		this.nbArmiesToBePlaced += nb;
 	}
 	
-	/**
-	 * @param name the territory to be added
-	 */
+
 	@Override
 	public void addTerritory(String name)
 	{
@@ -154,21 +141,14 @@ public class PlayerModel extends Observable implements ICharacter
 			this.territoriesOwned.add(name);
 	}
 	
-	/**
-	 * @param name the territory to be removed
-	 */
+
 	@Override
 	public void removeTerritory(String name)
 	{
 		if(this.territoriesOwned.contains(name))
 			this.territoriesOwned.remove(name);
 	}
-	/**
-	 * @param territory1 The origin territory
-	 * @param territory2 The destination territory
-	 * @param armies The number of armies to be moved
-	 * @throws Model Exception one or more of the parameter given is invalid
-	 */
+
 	@Override
 	public void fortify(String territory1, String territory2, int armies) throws ModelException
 	{
@@ -228,6 +208,30 @@ public class PlayerModel extends Observable implements ICharacter
 	{
 		this.nbArmiesToBePlaced+=continentBonus;
 		
+	}
+	@Override
+	public int nbTerritoriesOwned()
+	{
+		return this.territoriesOwned.size();
+	}
+
+
+	@Override
+	public ArrayList<String> getTerritoriesOwned() {
+		
+		return new ArrayList<String>(this.territoriesOwned);
+	}
+
+
+	@Override
+	public ArrayList<String> getTerritoriesOwnedWithArmies() {
+		
+		ArrayList<String> array = new ArrayList<String>();
+		for(int i = 0; i< this.territoriesOwned.size(); i++)
+		{
+			array.add(this.territoriesOwned.get(i)+" "+RiskBoard.Instance.getTerritory(this.territoriesOwned.get(i)).getArmyOn());
+		}
+		return array;
 	}
 
 	

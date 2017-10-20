@@ -1,5 +1,7 @@
 package risk.model.character;
 
+import java.util.ArrayList;
+
 import risk.util.RiskEnum.RiskColor;
 
 public interface ICharacter 
@@ -84,4 +86,22 @@ public interface ICharacter
 	 * @param continentBonus
 	 */
 	public void incrementArmiesBy(int continentBonus);
+	
+	/**
+	 * 
+	 * @return  the number of territories belonging to the player
+	 */
+	public int nbTerritoriesOwned();
+
+	/**
+	 * 
+	 * @return a list of territories owned
+	 */
+	public ArrayList<String> getTerritoriesOwned();
+	
+	/**
+	 * 
+	 * @return a list of territories owned with the amount of armies present on it
+	 */
+	public ArrayList<String> getTerritoriesOwnedWithArmies();
 }

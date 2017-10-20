@@ -288,6 +288,19 @@ public class RiskBoard
 			return false;
 		if((this.getTerritories().size())< 2)
 			return false;
+		ArrayList<String> n_continents = new ArrayList<String>();
+		for(int i =0; i< this.continents.keySet().size(); i++)
+		{
+			if(n_continents.contains((String)this.continents.keySet().toArray()[i]))
+			{
+				return false;
+			}
+			else
+			{
+				n_continents.add((String)this.continents.keySet().toArray()[i]);
+			}
+		}
+		n_continents.clear();
 		for(String continent : this.continents.keySet())
 		{
 			valid = this.continents.get(continent).validateContinent();
@@ -296,6 +309,17 @@ public class RiskBoard
 		}
 		
 		return valid;
+	}
+
+
+	public void removeTerritory(String continentName, String territoryName) {
+		String c_name = continentName.toLowerCase();
+		String t_name = territoryName.toLowerCase();
+		if(continents.containsKey(c_name))
+		{
+			continents.get(c_name).removeTerritory(t_name);
+		}
+		
 	}
 
 

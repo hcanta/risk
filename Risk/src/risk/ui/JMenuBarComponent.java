@@ -18,6 +18,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import org.apache.log4j.Logger;
 
+import risk.game.GameEngine;
 import risk.model.MapModel;
 import risk.util.map.RiskBoard;
 import risk.util.map.editor.Utilities;
@@ -117,6 +118,7 @@ public class JMenuBarComponent
 								Utilities.loadFile(file);
 										
 								System.out.println(RiskBoard.Instance.toString());
+								GameEngine.Instance.startup();
 							
 							}
 							
@@ -133,22 +135,43 @@ public class JMenuBarComponent
 					
 					else if (e.getSource().equals(menuItemCreateMap))
 					{
-						String[] choices = {null,"World", "USA", "Europe", "India", "China", "Australia"};
-						String input = (String) JOptionPane.showInputDialog(null, "Choose the area now...",
-						        "Choose the area and Play !!", JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
-						System.out.println("Input is: "+input);
+						GameEngine.Instance.createMap();
+					}
+					else if (e.getSource().equals(menuItemEditMap))
+					{
+						System.out.println("OPENING A MAP in .map format");
+						isGamePlay = true;
+						fileChooser = new JFileChooserComponent().getJFileChooser
+								(JFileChooserComponent.E_JFileChooserMode.MapLoad);
+						int result = fileChooser.showOpenDialog(new_jframe);
 						
-						if(input != null)
+						if (result == JFileChooser.APPROVE_OPTION) 
 						{
-							MapModel mapModel = new MapModel();
-							Editor edit = new Editor();
-							edit.MapEditor(new_jframe, TITLE_MAP_EDITOR, CHILD_POPUP_WINDOW_WIDTH, CHILD_POPUP_WINDOW_HEIGHT, mapModel, 
-									E_MapEditorMode.Create);
+							file = fileChooser.getSelectedFile();
+							System.out.println("file name is: "+file);
+							if (!isGamePlay) 
+							{
+								file = new File(getMapFilePath());
+							}
+							// Check file exist or not
+							if (!file.exists() && !file.isDirectory()) 
+							{
+								JOptionPane.showMessageDialog(null,
+										"ERROR: Unable to find .Map file in the system. \n Please paste a new .map file at the required location."
+												+ file.getAbsolutePath());
+							} 
+							else 
+							{
+								new_jframe.remove(backGround);
+								new_jframe.setBackground(Color.WHITE);
+								Utilities.loadFile(file);
+										
+								System.out.println(RiskBoard.Instance.toString());
+								
+								GameEngine.Instance.editMap();
+							}
 						}
-						else
-						{
-							System.out.println("Nothing to do");
-						}
+
 					}
 				}
 			}
@@ -156,7 +179,7 @@ public class JMenuBarComponent
 			menuItemCreateMap.addActionListener(new menuItemAction());
 			menuItemOpenMap.addActionListener(new menuItemAction());
 			menuItemExit.addActionListener(new menuItemAction());
-			
+			menuItemEditMap.addActionListener(new menuItemAction());
 			return menuBar;
 		}
 	

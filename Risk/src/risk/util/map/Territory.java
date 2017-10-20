@@ -180,6 +180,8 @@ public class Territory
 		
 		for(String neighbour : this.neighbours)
 		{
+			if(RiskBoard.Instance.getTerritory(neighbour) == null)
+				return false;
 			if(!RiskBoard.Instance.getTerritory(neighbour).getNeighbours().contains(this.territoryName))
 				return false;
 		}
