@@ -3,13 +3,41 @@ package risk.util.map.editor;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import risk.util.map.MapExcpetion;
 import risk.util.map.RiskBoard;
 
-public class Utilities {
+public class Utilities 
+{
+	
+	/**
+	 * 
+	 * @param filename the name of the file where the risk board will be saved
+	 * @throws IOException
+	 */
+	public static void saveMap(String filename) throws IOException
+	{
+		String n_filename = filename + ".map";
+		FileWriter fw = new FileWriter(n_filename);
+		
+		fw.write("[Map]\n");
+		fw.write("author = team1\n\n");
+		fw.write("[Continents]\n");
+		fw.write(RiskBoard.Instance.continentsToString());
+		fw.write("\n[Territories]\n");
+		
+		fw.write(RiskBoard.Instance.territoriesToString());
+		
+		fw.close();
+	}
 
+	/**
+	 * 
+	 * @param file the file to be loaded in the Risk Board
+	 * @throws MapExcpetion
+	 */
 	public static void loadFile(File file) throws MapExcpetion
 	{
 		RiskBoard.Instance.clear();

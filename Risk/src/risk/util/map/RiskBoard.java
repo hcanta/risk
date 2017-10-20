@@ -152,7 +152,7 @@ public class RiskBoard
 	 * 
 	 * @param continent to be removed to the adjacency list.
 	 */
-	public void removeTerritory(String continent)
+	public void removeContinent(String continent)
 	{
 		String n_continent = continent.toLowerCase();
 		if(this.continents.containsKey(n_continent))
@@ -176,6 +176,34 @@ public class RiskBoard
 		}
 		str.append("\n");
 		
+		return str.toString();
+	}
+	
+	/**
+	 * 
+	 * @return a string representation of the continents to be saved in a .map file
+	 */
+	public String continentsToString()
+	{
+		StringBuffer str = new StringBuffer();
+		for(String continent : this.continents.keySet())
+		{
+			str.append(this.continents.get(continent).getContinentName()+"="+this.continents.get(continent).getContinentBonus()+"\n");
+		}
+		return str.toString();
+	}
+	/**
+	 * 
+	 * @return  a string representation of the territories to be saved in a .map file
+	 */
+	public String territoriesToString() {
+		
+		StringBuffer str = new StringBuffer();
+		for(String continent : this.continents.keySet())
+		{
+			str.append(this.continents.get(continent).territoriesToString());
+		}
+		str.append("\n");
 		return str.toString();
 	}
 	
@@ -242,4 +270,24 @@ public class RiskBoard
 		}
 		return null;
 	}
+	
+	public boolean validateMap()
+	{
+		boolean valid = true;
+		if(!(this.continents.keySet().size()>=1))
+			return false;
+		if((this.getTerritories().size())< 2)
+			return false;
+		for(String continent : this.continents.keySet())
+		{
+			valid = this.continents.get(continent).validateContinent();
+			if(!valid)
+				return false;
+		}
+		
+		return valid;
+	}
+
+
+
 }

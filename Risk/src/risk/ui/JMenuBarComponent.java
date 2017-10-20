@@ -1,8 +1,6 @@
 package risk.ui;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 
 import java.awt.event.ActionListener;
@@ -18,8 +16,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-
 import org.apache.log4j.Logger;
 
 import risk.model.MapModel;
@@ -31,7 +27,8 @@ public class JMenuBarComponent
 {
 	public static final String MENU_FILE = "FILE";
 	public static final String MENU_ITEM_CREATE_MAP = "CREATE MAP";
-	public static final String MENU_ITEM_OPEN_MAP = "OPEN MAP";
+	public static final String MENU_ITEM_EDIT_MAP = "EDIT MAP";
+	public static final String MENU_ITEM_OPEN_MAP = "OPEN MAP AND PLAY";
 	public static final String MENU_ITEM_EXIT = "EXIT GAME";
 	public static final String MSG_CLOSING_GAME_APPLICATION = "Closing game application.";
 	public static final String MSG_MENU_SELECTED = "Breadcrumbs Menu Selected: %s > %s.";
@@ -62,6 +59,9 @@ public class JMenuBarComponent
 			
 			final JMenuItem menuItemCreateMap = new JMenuItem(MENU_ITEM_CREATE_MAP);
 			menuFile.add(menuItemCreateMap);
+			
+			final JMenuItem menuItemEditMap = new JMenuItem(MENU_ITEM_EDIT_MAP);
+			menuFile.add(menuItemEditMap);
 			
 			final JMenuItem menuItemOpenMap = new JMenuItem(MENU_ITEM_OPEN_MAP);
 			menuFile.add(menuItemOpenMap);
@@ -115,21 +115,9 @@ public class JMenuBarComponent
 								new_jframe.remove(backGround);
 								new_jframe.setBackground(Color.WHITE);
 								Utilities.loadFile(file);
-								
-								/*JPanel mapPanel = new JPanel();
-								mapPanel.setBackground(Color.red);
-								new_jframe.add(mapPanel);
-								mapPanel.setBounds(0, 0, new_jframe.getSize().width-20, new_jframe.getSize().height - 50);
-								mapPanel.setLayout(new BorderLayout());
-								JLabel countries = new JLabel("Hello");
-								countries.setVisible(true);
-								mapPanel.add(countries);*/
-								
+										
 								System.out.println(RiskBoard.Instance.toString());
-								/*
-								FileStorage fileStored = new FileStorage();
-								MapModel mapModel = fileStored.openMapFile(file);
-								System.out.println("Value of mapModel is: "+mapModel);*/
+							
 							}
 							
 						}
@@ -183,7 +171,6 @@ public class JMenuBarComponent
 
 			try 
 			{
-
 				in = new BufferedReader(new FileReader(fileGameLoad.getAbsoluteFile()));
 
 				String temp = in.readLine();

@@ -70,11 +70,6 @@ public class Editor extends JFrame
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setVisible(true);
 
-//		// -- Load MenuBar From Components
-//		this.setJMenuBar((new JMenuBarComponent()).getMapEditorJMenuBar(new_mapModel, this));
-//		// -- Load GridEditor Panel From Components
-//		this.setContentPane((new JPanelComponent()).getMapEditorGridPanel(mapModel, null, mapEditorMode));
-
 	}
 	
 

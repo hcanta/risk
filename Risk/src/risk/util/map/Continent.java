@@ -103,7 +103,7 @@ public class Continent
 	/**
 	 * @return the name
 	 */
-	public String geContinentName() 
+	public String getContinentName() 
 	{
 		return continentName;
 	}
@@ -193,6 +193,22 @@ public class Continent
 	
 	/**
 	 * 
+	 * @return  a string representation of the territories to be saved in a .map file
+	 */
+	public String territoriesToString() {
+		StringBuffer str = new StringBuffer();
+		
+		for(String territory : this.territories.keySet())
+		{
+			str.append(this.territories.get(territory).territoriesToString());
+		}
+		str.append("\n");
+		
+		return str.toString();
+	}
+	
+	/**
+	 * 
 	 * @param name The name of the territory to be added to the continent
 	 * @param neighbours the neighbous to said territory
 	 */
@@ -214,5 +230,21 @@ public class Continent
 		
 		return new ArrayList<String>(territories.keySet());
 	}
+
+	public boolean validateContinent() {
+		
+		boolean valid = true;
+		if(!(this.territories.keySet().size()>=1))
+			return false;
+		for(String territory : this.territories.keySet())
+		{
+			valid = this.territories.get(territory).validateTerritory();
+			if(!valid)
+				return false;
+		}
+		return valid;
+	}
+
+	
 
 }

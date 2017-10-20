@@ -118,6 +118,10 @@ public class Territory
 	 */
 	public void clear()
 	{
+		for(int i =0; i< this.neighbours.size(); i ++)
+		{
+			RiskBoard.Instance.getTerritory(this.neighbours.get(i)).removeNeighbours(this.territoryName);
+		}
 		this.neighbours.clear();
 	}
 	
@@ -150,6 +154,36 @@ public class Territory
 		str.append("\n");
 		
 		return str.toString();
+	}
+	
+	/**
+	 * 
+	 * @return  a string representation of the territories to be saved in a .map file
+	 */
+	public String territoriesToString() 
+	{
+		StringBuffer str = new StringBuffer();
+		str.append(this.territoryName+",0,0,"+this.continent);
+		for(String neighbour : this.neighbours)
+		{
+			str.append(","+neighbour);
+		}
+		str.append("\n");
+		
+		return str.toString();
+	}
+
+	public boolean validateTerritory() 
+	{
+		if(this.neighbours.size()< 1)
+			return false;
+		
+		for(String neighbour : this.neighbours)
+		{
+			if(!RiskBoard.Instance.getTerritory(neighbour).getNeighbours().contains(this.territoryName))
+				return false;
+		}
+		return true;
 	}
 
 
