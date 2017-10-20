@@ -1,5 +1,5 @@
 /**
- * @author Rio
+ * @author hcanta
  *
  */
 package risk.game;
