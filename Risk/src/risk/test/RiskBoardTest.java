@@ -52,6 +52,9 @@ public class RiskBoardTest {
 		Assert.assertTrue(RiskBoard.Instance.validateMap());
 		RiskBoard.Instance.addContinent("testcontinent", 3);
 		Assert.assertFalse(RiskBoard.Instance.validateMap());
+		Assert.assertFalse(Utilities.loadFile(new File("Maps/invalidAtlantis.map")));
+		Assert.assertFalse(Utilities.loadFile(new File("Maps/invalidUSA.map")));
+		Assert.assertFalse(Utilities.loadFile(new File("Maps/invalidWorld.map")));
 	}
 
 	@Test
