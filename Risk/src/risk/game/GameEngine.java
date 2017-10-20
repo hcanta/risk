@@ -29,6 +29,11 @@ public class GameEngine
 		
 	}
 	
+	public void startup()
+	{
+		
+	}
+	
 	/**
 	 *  Set the number of players
 	 * @param numberPl Number of players

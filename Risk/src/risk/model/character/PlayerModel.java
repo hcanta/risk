@@ -164,7 +164,7 @@ public class PlayerModel extends Observable implements ICharacter
 			this.territoriesOwned.remove(name);
 	}
 	/**
-	* @param territory1 The origin territory
+	 * @param territory1 The origin territory
 	 * @param territory2 The destination territory
 	 * @param armies The number of armies to be moved
 	 * @throws Model Exception one or more of the parameter given is invalid
