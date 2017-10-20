@@ -62,7 +62,7 @@ public class GameEngine
 		sc.nextLine();
 		
 		boolean armiesToBeplaced = true;
-		checkOwnerStatus();
+		checkOwnerStatus(false);
 		Collections.shuffle(players);
 		for(int i =0; i< players.size(); i++)
 		{
@@ -250,8 +250,9 @@ public class GameEngine
 	
 	/**
 	 *  Update the OwnerID if necessary
+	 * @param b 
 	 */
-	public void checkOwnerStatus()
+	public void checkOwnerStatus(boolean b)
 	{
 		RiskBoard.Instance.checkOwnerStatus();
 		for(String continent: RiskBoard.Instance.getContinents() )
@@ -264,6 +265,13 @@ public class GameEngine
 				}
 			}
 			
+		}
+		if(b)
+		{
+			for(int i =0; i< players.size(); i++)
+			{
+				players.get(i).incrementArmiesBy((int)(players.get(i).getTerritoriesOwned().size()/3));
+			}
 		}
 	}
 	/**
@@ -687,6 +695,17 @@ public class GameEngine
 		}
 		sc.nextLine();
 		RiskBoard.Instance.addContinent(str, bonus);
+	}
+	public ICharacter getPlayers(String name) {
+		
+		for(int i =0; i< players.size(); i ++)
+		{
+			if(players.get(i).getName().equalsIgnoreCase(name))
+			{
+				return this.players.get(i);
+			}
+		}
+		return null;
 	}
 
 		

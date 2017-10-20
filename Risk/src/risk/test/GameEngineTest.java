@@ -62,13 +62,37 @@ public class GameEngineTest {
 	
 
 	@Test
-	public void testFortify() {
-		fail("Not yet implemented");
+	public void testRandomAssign() {
+		RiskBoard.Instance.clear();
+		Utilities.loadFile(new File("Maps/World.map"));
+		GameEngine.Instance.setNumberofPlayers((short)6);
+		GameEngine.Instance.createBots();
+		GameEngine.Instance.addHumanPlayer("human");
+		GameEngine.Instance.setArmiesforPlayers();
+		
+		Assert.assertTrue(GameEngine.Instance.getPlayers("human").getNbArmiesToBePlaced() == 20);
+		GameEngine.Instance.randomAssignTerritories();
+
+		Assert.assertTrue(GameEngine.Instance.getPlayers("human").getNbArmiesToBePlaced() == (20 - GameEngine.Instance.getPlayers("human").nbTerritoriesOwned()));
 	}
+
+	
 
 	@Test
 	public void testReinforce() {
-		fail("Not yet implemented");
+		RiskBoard.Instance.clear();
+		Utilities.loadFile(new File("Maps/World.map"));
+		GameEngine.Instance.setNumberofPlayers((short)6);
+		GameEngine.Instance.createBots();
+		GameEngine.Instance.addHumanPlayer("human");
+		GameEngine.Instance.setArmiesforPlayers();
+		Assert.assertTrue(GameEngine.Instance.getPlayers("human").getNbArmiesToBePlaced() == 20);
+		GameEngine.Instance.randomAssignTerritories();
+
+		Assert.assertTrue(GameEngine.Instance.getPlayers("human").getNbArmiesToBePlaced() == (20 - GameEngine.Instance.getPlayers("human").nbTerritoriesOwned()));
+		GameEngine.Instance.reinforce("human", GameEngine.Instance.getPlayers("human").getTerritoriesOwned().get(0));
+		Assert.assertTrue(GameEngine.Instance.getPlayers("human").getNbArmiesToBePlaced() == (20 - 1 - GameEngine.Instance.getPlayers("human").nbTerritoriesOwned()));
+		
 	}
 
 }
