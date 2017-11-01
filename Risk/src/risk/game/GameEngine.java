@@ -250,7 +250,7 @@ public class GameEngine
 	
 	/**
 	 *  Update the OwnerID if necessary
-	 * @param b 
+	 * @param b if it s the turn
 	 */
 	public void checkOwnerStatus(boolean b)
 	{
