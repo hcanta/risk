@@ -1,25 +1,26 @@
+/**
+ * The game package holds the driver and the Game Engine
+ */
 package risk.game;
 
-import risk.ui.Game;
+import risk.views.GameView;
 
 /**
- * @author akif
- * Contains the main method that will run the game
+ * The driver holds the main method too launch the game
+ * @author hcanta
  *
  */
 public class Driver {
 
 	/**
-	 * Main Method of the class that creates the Game Instance and starts the
-	 * game.
-	 * 
-	 * @param new_args
-	 *            contains the supplied command-line arguments as an array of
-	 *            String objects
+	 * Main Method. the Game Engine is initiated there.
+	 * @param args (No arguments are needed to lunch the game
 	 */
-	public static void main(String new_args[]) 
+	public static void main(String[] args) 
 	{
-		Game.getInstance().start();
+		GameView gamev = new GameView();
+		gamev.launch();
+
 	}
 
 }

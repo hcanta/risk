@@ -1,10 +1,5 @@
-risk
 risk.game
-risk.game.cards
-risk.model
-risk.model.character
-risk.test
-risk.ui
-risk.util
-risk.util.map
-risk.util.map.editor
+risk.utils
+risk.utils.constants
+risk.views
+risk.views.ui
