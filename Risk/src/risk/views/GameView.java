@@ -25,18 +25,46 @@ import risk.views.ui.StatePanel;
  */
 public class GameView 
 {
+	/**
+	 * The main Frame to be displayed
+	 */
 	private static JFrame gFrame;
+	/**
+	 * A label that contains the picture background
+	 */
 	final JLabel backGround = new JLabel(new ImageIcon(
 			((new ImageIcon("img/g1.png").getImage().getScaledInstance(RiskIntegers.GAME_WIDTH - RiskIntegers.GAME_OFFSET,
 					 RiskIntegers.GAME_HEIGHT - RiskIntegers.GAME_OFFSET -30, java.awt.Image.SCALE_SMOOTH)))));
 	
+	/**
+	 * The top bar Menu
+	 */
 	private static RiskMenu riskMenu;
 
+	/**
+	 * The log/ history menu on the right
+	 */
 	private HistoryPanel textPanel;
+	/**
+	 * Text scroller to be contained within the history panel
+	 */
 	private JScrollPane textScroller;
+	/**
+	 * The panel of the top of the frame
+	 */
 	private JPanel top;
+	/**
+	 * Centered panel of the frame where the graphs will be displayed
+	 */
 	private JPanel center;
+	/**
+	 * Bottom panel of the frame that contains the state panel
+	 */
 	private StatePanel bottom;
+	
+	/**
+	 * Pannel to the East of the frame
+	 */
 	private JPanel east;
 	
 	
