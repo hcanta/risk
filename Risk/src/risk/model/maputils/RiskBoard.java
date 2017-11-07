@@ -5,6 +5,7 @@ package risk.model.maputils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Observable;
 
 import com.mxgraph.view.mxGraph;
 
@@ -14,7 +15,7 @@ import risk.utils.constants.RiskIntegers;
  * This class implements the RiskBoard it contains all the elements of the board. continents and territories
  * @author hcanta
  */
-public class RiskBoard 
+public class RiskBoard extends Observable
 {
 	/**
 	 * The graph that will be displayed
@@ -365,5 +366,22 @@ public class RiskBoard
 	public int getNbTerritories() 
 	{
 		return getTerritories().size();
+	}
+	
+	/**
+	 * This function is used to notify the observers
+	 */
+	public void update()
+	{
+		notifyObservers(this);
+	}
+	
+	/**
+	 * Returns the graph object belonging to the board
+	 * @return The graph object belonging to the board
+	 */
+	public mxGraph getGraph()
+	{
+		return this.graph;
 	}
 }
