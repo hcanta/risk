@@ -8,31 +8,25 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import risk.model.maputils.RiskBoard;
-import risk.utils.MapUtils;
+import risk.model.RiskBoard;
 import risk.utils.constants.RiskIntegers;
-import risk.utils.constants.RiskStrings;
-import risk.views.ui.GraphDisplayPanel;
 import risk.views.ui.HistoryPanel;
-import risk.views.ui.MapSelector;
 import risk.views.ui.RiskMenu;
 import risk.views.ui.StatePanel;
 
 /**
  *The Game View Class generates the overall JFrame for the game.
  * @author hcanta
+ * @version 2.3
  */
 public class GameView implements Observer
 {
@@ -43,7 +37,7 @@ public class GameView implements Observer
 	/**
 	 * A label that contains the picture background
 	 */
-	final static JLabel backGround = new JLabel(new ImageIcon(
+	public final static JLabel backGround = new JLabel(new ImageIcon(
 			((new ImageIcon("img/g1.png").getImage().getScaledInstance(RiskIntegers.GAME_WIDTH - RiskIntegers.GAME_OFFSET,
 					 RiskIntegers.GAME_HEIGHT - RiskIntegers.GAME_OFFSET -30, java.awt.Image.SCALE_SMOOTH)))));
 	
@@ -87,7 +81,7 @@ public class GameView implements Observer
 		
 		riskMenu = new RiskMenu();
 		historyActionListener();
-		loadAndPlayActionListener();
+		
 	    top = new JPanel();
 	    center = new JPanel();
 	    bottom = new StatePanel();
@@ -166,69 +160,7 @@ public class GameView implements Observer
 		});	
 	}
 	
-	/**
-	 * This method add the action listener for the load and Play option from the riskMenu
-	 */
-	private void loadAndPlayActionListener()
-	{
-		GameView.riskMenu.menuItemOpenMap.addActionListener(new ActionListener()
-		{
-		
-			public void actionPerformed(ActionEvent e)
-			{
-				JFileChooser fileChooser =  MapSelector.getJFileChooser();
-				int result = fileChooser.showOpenDialog(GameView.gFrame);
-				
-				if (result == JFileChooser.APPROVE_OPTION) 
-				{
-					GameView.textPanel.addMessage("Attempting To Load Map");
-					RiskBoard.ProperInstance(false).update();
-					
-					File file = fileChooser.getSelectedFile();
-					if (!file.exists() && !file.isDirectory()) 
-					{
-						JOptionPane.showMessageDialog(null,
-								RiskStrings.INVALID_FILE_LOCATION
-										+ file.getAbsolutePath());
-						
-						GameView.textPanel.addMessage(RiskStrings.INVALID_FILE_LOCATION);
-						RiskBoard.ProperInstance(false).update();
-					}
-					else
-					{
-						GameView.textPanel.addMessage("file name is: " + file.getName());
-						RiskBoard.ProperInstance(false).update();
-						if(MapUtils.loadFile(file, false))
-						{
-							GameView.textPanel.addMessage("The Map File was properly loaded.");
-							RiskBoard.ProperInstance(false).update();
-							
-							GameView.center.removeAll();
-							GameView.center.repaint();
-							GameView.center.validate();
-							GameView.center.add((new GraphDisplayPanel(RiskBoard.ProperInstance(false).getGraph()).getContentPane()));
-							GameView.gFrame.repaint();
-							GameView.gFrame.validate();
-						}
-						else
-						{
-							GameView.textPanel.addMessage("The Map File was invalid.");
-							GameView.center.removeAll();
-							GameView.center.repaint();
-							GameView.center.validate();
-							GameView.center.add(backGround);
-							GameView.center.repaint();
-							GameView.center.validate();
-							RiskBoard.ProperInstance(false).update();
-							RiskBoard.ProperInstance(false).clear();
-						}
-					}
-				}
-			}  
-		});	
-			
-	}
-	
+
 	/**
 	 * Returns the History panel of the gameView
 	 * @return The history panel of the gameView
@@ -247,10 +179,17 @@ public class GameView implements Observer
 		return riskMenu;
 	}
 	
-
+	/**
+	 * This method is called whenever the observed object is changed. An application calls an Observable object's notifyObservers method to have all the object's observers notified of the change.
+	 * @param obj The object Changed
+	 * @param param a parameter for possible observers
+	 */
 	@Override
-	public void update(Observable arg0, Object arg1) {
-		this.bottom.update(arg0, arg1);
+	public void update(Observable obj, Object param) {
+		this.bottom.update(obj, param);
+		String stateString = "Current State: "+ ((RiskBoard)obj).getState().name();
+		if(!GameView.textPanel.getLastMessage().equals(stateString))
+			GameView.textPanel.addMessage(stateString);
 		GameView.textPanel.update();
 		GameView.textScroller.validate();
 		GameView.textScroller.repaint();
@@ -268,5 +207,13 @@ public class GameView implements Observer
 	public JFrame getFrame() {
 	
 		return GameView.gFrame;
+	}
+
+	/**
+	 * Returns the center panel of the game view
+	 * @return The center panel of the game view
+	 */
+	public JPanel getCenter() {
+		return center;
 	}
 }

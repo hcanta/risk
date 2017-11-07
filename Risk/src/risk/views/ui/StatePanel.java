@@ -13,7 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import risk.model.maputils.RiskBoard;
+import risk.model.RiskBoard;
 import risk.utils.constants.RiskIntegers;
 import risk.utils.constants.RiskStrings;
 

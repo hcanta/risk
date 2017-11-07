@@ -1,7 +1,7 @@
 /**
  * The risk.model.maputils package contains the class implementing the territory The riskBoard and the continent classes
  */
-package risk.model.maputils;
+package risk.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,6 +9,8 @@ import java.util.Observable;
 
 import com.mxgraph.view.mxGraph;
 
+import risk.model.maputils.Continent;
+import risk.model.maputils.Territory;
 import risk.utils.MapUtils;
 import risk.utils.constants.RiskEnum.GameState;
 import risk.utils.constants.RiskIntegers;
@@ -16,6 +18,7 @@ import risk.utils.constants.RiskIntegers;
 /**
  * This class implements the RiskBoard it contains all the elements of the board. continents and territories
  * @author hcanta
+ * @version 2.4
  */
 public class RiskBoard extends Observable
 {

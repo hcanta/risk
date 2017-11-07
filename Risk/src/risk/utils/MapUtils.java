@@ -10,7 +10,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Stack;
 
-import risk.model.maputils.RiskBoard;
+import risk.model.RiskBoard;
 import risk.utils.constants.RiskIntegers;
 
 /**

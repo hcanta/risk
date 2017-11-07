@@ -1,8 +1,8 @@
 /**
- * The game package holds the driver and the Game Engine
+ * The model package holds the board and the players
  */
 /**
- * The game package holds the driver and the Game Engine
+ * The model package holds the board and the players
  * @author hcanta
  */
 package risk.model;

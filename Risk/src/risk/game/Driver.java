@@ -3,7 +3,7 @@
  */
 package risk.game;
 
-import risk.model.maputils.RiskBoard;
+import risk.model.RiskBoard;
 import risk.views.GameView;
 
 /**

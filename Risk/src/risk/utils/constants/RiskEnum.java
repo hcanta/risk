@@ -25,6 +25,6 @@ public class RiskEnum
 	 */
 	public static enum PlayerColors
 	{
-		red, yellow, brown, black, pink, green
+		red, yellow, brown, green,  pink, purple
 	}
 }

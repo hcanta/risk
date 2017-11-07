@@ -69,6 +69,18 @@ public class HistoryPanel extends JTextArea
 		this.setText(toPrint.toString());
 	}
 
+	/**
+	 * Returns The last Message That was entered in the history panel
+	 * @return The last message entered 
+	 */
+	public String getLastMessage() {
+		if(this.fTextLog.size() == 0)
+		{
+			return "";
+		}
+		return this.fTextLog.get(this.fTextLog.size() - 1);
+	}
+
 	
 
 }

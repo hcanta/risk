@@ -6,8 +6,11 @@ package risk.model.maputils;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import com.mxgraph.util.mxConstants;
 import com.mxgraph.view.mxGraph;
 
+import risk.model.RiskBoard;
+import risk.utils.constants.RiskEnum.PlayerColors;
 import risk.utils.constants.RiskIntegers;
 
 /**
@@ -163,6 +166,10 @@ public class Territory {
 	public void setOwnerID(int ownerID) 
 	{
 		this.ownerID = ownerID;
+		if(graph!= null)
+		{
+			graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, PlayerColors.values()[ownerID].name(), new Object[]{vertex}); 
+		}
 	}
 	
 	/**

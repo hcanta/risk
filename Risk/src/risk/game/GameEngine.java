@@ -7,30 +7,48 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Random;
 import java.util.Scanner;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
-import risk.model.maputils.RiskBoard;
+import risk.model.PlayerModel;
+import risk.model.RiskBoard;
+import risk.model.playerutils.IPlayer;
 import risk.utils.MapUtils;
+import risk.utils.constants.RiskEnum.GameState;
+import risk.utils.constants.RiskEnum.PlayerColors;
 import risk.utils.constants.RiskStrings;
 import risk.views.GameView;
+import risk.views.ui.GraphDisplayPanel;
 import risk.views.ui.MapSelector;
 
 /**
  * The Implementation of the Game Engine
  * @author hcanta
- *
+ * @version 2.2
  */
 public class GameEngine {
 
+	/**
+	 * Creates a mapping of player IDs to IPlayer Object
+	 */
+	private HashMap<Integer, IPlayer> players;
+	
+	/**
+	 * Contains the order in which the players will play
+	 */
+	private ArrayList<Integer> playerTurnOrder;
 	/**
 	 * Set to true if we re debugging or not
 	 */
 	private boolean debug;
 	/**
-	 * The GameView
+	 * The Game View
 	 */
 	private GameView gamev;
 	/**
@@ -88,6 +106,27 @@ public class GameEngine {
 				         }
 					});
 					thread.start();
+			
+				}
+		});
+		
+		this.gamev.getRiskMenu().menuItemOpenMap.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent e)
+				{
+					gamev.getHistoryPanel().addMessage("\n Loading  Map Mode");
+
+					loadMapHelper(true);
+					RiskBoard.ProperInstance(debug).update();
+					setState(GameState.STARTUP);
+					Thread thread = new Thread(new Runnable() {
+				         @Override
+				         public void run() {
+				             deploy();
+				             play();
+				         }
+					});
+					thread.start();
+					
 			
 				}
 		});
@@ -219,9 +258,10 @@ public class GameEngine {
 		sc.close();
 	}
 	/**
-	 * This function chooses the file to be edited
+	 * This function chooses the file to be edited or loaded
+	 * @param load are we loading to play or to edit
 	 */
-	public void editMapHelper()
+	private void loadMapHelper(boolean load)
 	{
 		JFileChooser fileChooser =  MapSelector.getJFileChooser();
 		int result = fileChooser.showOpenDialog(this.gamev.getFrame());
@@ -239,17 +279,25 @@ public class GameEngine {
 								+ file.getAbsolutePath());
 				
 				this.gamev.getHistoryPanel().addMessage(RiskStrings.INVALID_FILE_LOCATION);
-				RiskBoard.ProperInstance(false).update();
+				RiskBoard.ProperInstance(this.debug).update();
 			}
 			else
 			{
 				this.gamev.getHistoryPanel().addMessage("file name is: " + file.getName());
 				RiskBoard.ProperInstance(this.debug).update();
-				if(MapUtils.loadFile(file, false))
+				if(MapUtils.loadFile(file, this.debug))
 				{
 					this.gamev.getHistoryPanel().addMessage("The Map File was properly loaded.");
 					RiskBoard.ProperInstance(this.debug).update();
-					
+					if(load)
+					{
+						this.gamev.getCenter().removeAll();
+						this.gamev.getCenter().repaint();
+						this.gamev.getCenter().validate();
+						this.gamev.getCenter().add((new GraphDisplayPanel(RiskBoard.ProperInstance(false).getGraph()).getContentPane()));
+						this.gamev.getCenter().repaint();
+						this.gamev.getCenter().validate();
+					}
 					
 				}
 				else
@@ -257,6 +305,16 @@ public class GameEngine {
 					this.gamev.getHistoryPanel().addMessage("The Map File was invalid.");
 					RiskBoard.ProperInstance(this.debug).update();
 					RiskBoard.ProperInstance(this.debug).clear();
+					if(load)
+					{
+						
+						this.gamev.getCenter().removeAll();
+						this.gamev.getCenter().repaint();
+						this.gamev.getCenter().validate();
+						this.gamev.getCenter().add(GameView.backGround);
+						this.gamev.getCenter().repaint();
+						this.gamev.getCenter().validate();
+					}
 				}
 			}
 		}
@@ -268,7 +326,7 @@ public class GameEngine {
 	 */
 	public void editMap() 
 	{
-		editMapHelper();
+		loadMapHelper(false);
 		Scanner sc = new Scanner(System.in);
 		String str = "";
 		int option =0;
@@ -594,5 +652,164 @@ public class GameEngine {
 		RiskBoard.ProperInstance(this.debug).addContinent(str, bonus);
 	}
 	
+	/**
+	 * Set the current state of the game
+	 * @param state the state to be set
+	 */
+	private void setState(GameState state)
+	{
+		RiskBoard.ProperInstance(this.debug).setState(state);
+	}
+	
+	/**
+	 * This function is called during the startup phase in order to deploy the game
+	 */
+	private void deploy()
+	{
+		players = new HashMap<Integer, IPlayer>();
+		playerTurnOrder = new ArrayList<Integer>();
+		Scanner sc = new Scanner(System.in);
+		int nbPlayer = 0;
+		while(!(nbPlayer >=2 && nbPlayer <= 6))
+		{
+			System.out.print("Please Set the Number of players between 2 and 6: ");
+			nbPlayer = sc.nextInt();
+		}
+		
+		sc.nextLine();
+		createBots(nbPlayer);
+		for(int i=0; i< nbPlayer; ++i)
+		{
+			playerTurnOrder.add(new Integer(i));
+		}
+		Collections.shuffle(playerTurnOrder);
+		String str ="";
+		while(str.length() == 0)
+		{
+			System.out.println("Please Enter your name");
+			str = sc.nextLine();
+		}
+		
+		addHumanPlayer(str);
+		setArmiesforPlayers();
+		System.out.println("Random Assignement of countries");
+		randomAssignTerritories();
+		System.out.println("Placing Remaining armies");
+		placeRemainingArmies();
+		for(int i =0; i< players.keySet().size(); i++)
+		{
+			System.out.println(players.get(new Integer(i)).getName());
+			System.out.println("Territories Owned");
+			System.out.println(players.get(new Integer(i)).getTerritoriesOwnedWithArmies());
+		}
+		sc.close();
+		
+	}
+	
+	/**
+	 * Ad user/human player
+	 * @param name The players name
+	 */
+	public void addHumanPlayer(String name)
+	{
+		players.put(new Integer(0),new PlayerModel(name, PlayerColors.values()[0], (short)(0), debug));
+	}
+	
+	/**
+	 * Generates computer player
+	 * @param numberOfPlayers The Number of Players in the game
+	 */
+	public void createBots(int numberOfPlayers)
+	{
+		players.clear();
+		for(short i = 1; i< numberOfPlayers; i++)
+		{			
+			players.put(new Integer(i), new PlayerModel("Computer "+ i, PlayerColors.values()[i], (short)(i),debug));
+		}
+	}
+	
+	/**
+	 * Give the armies according to the risk rules
+	 * @return the number of armies to be set.
+	 */
+	public int setArmiesforPlayers()
+	{
+		int nbArmiesToBePlaced = 0;
+		
+		switch(players.keySet().size())
+		{
+			case 6:
+				nbArmiesToBePlaced = 20;
+				break;
+			case 5:
+				nbArmiesToBePlaced = 25;
+				break;
+			case 4:
+				nbArmiesToBePlaced = 30;
+				break;
+			case 3:
+				nbArmiesToBePlaced = 35;
+				break;
+			case 2:
+				nbArmiesToBePlaced = 40;
+				break;
+		}
+		
+		for(int i =0; i < players.size(); i++)
+		{
+			players.get(new Integer(i)).setNbArmiesToBePlaced(nbArmiesToBePlaced);
+		}
+		return nbArmiesToBePlaced;
+	}
+	
+	/**
+	 * Randomly assign territories according to the risk rules
+	 */
+	public void randomAssignTerritories()
+	{
+		ArrayList<String> countries = RiskBoard.ProperInstance(debug).getTerritories();
+		Collections.shuffle(countries);
+		
+
+		for(int i=0; i< countries.size(); i++)
+		{
+			Integer player = new Integer(i%this.playerTurnOrder.size());			
+			players.get(player).addTerritory(countries.get(i));
+			players.get(player).decrementArmies();
+			RiskBoard.ProperInstance(debug).getTerritory(countries.get(i)).setOwnerID(players.get(player).getTurnID());
+			RiskBoard.ProperInstance(debug).getTerritory(countries.get(i)).setArmyOn(1);
+			RiskBoard.ProperInstance(debug).update();
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+				
+				e.printStackTrace();
+			} 
+		}
+	}
+	
+	/**
+	 * Place the remaining Armies
+	 */
+	public void placeRemainingArmies()
+	{
+		Random rand = new Random();
+		for(int i = 0; i < this.playerTurnOrder.size(); i++)
+		{
+			while(players.get(playerTurnOrder.get(i)).getNbArmiesToBePlaced() > 0)
+			{
+				int index = rand.nextInt(players.get(playerTurnOrder.get(i)).nbTerritoriesOwned());
+				players.get(playerTurnOrder.get(i)).reinforce(players.get(playerTurnOrder.get(i)).getTerritoriesOwned().get(index));
+			}
+		}
+	}
+	
+	/**
+	 * Play The Game
+	 */
+	public void play()
+	{
+		this.setState(GameState.ATTACK);
+	}
 
 }

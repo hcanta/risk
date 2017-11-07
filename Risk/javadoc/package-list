@@ -1,6 +1,7 @@
 risk.game
 risk.model
 risk.model.maputils
+risk.model.playerutils
 risk.utils
 risk.utils.constants
 risk.views
