@@ -57,7 +57,7 @@ public class RiskIntegers
 	/**
 	 * x Offset Of center Of Cells
 	 */
-	public static final int GRAPH_CELL_X_OFFSET = 95;
+	public static final int GRAPH_CELL_X_OFFSET = 125;
 	
 	/**
 	 * y Offset Of center Of Cells
@@ -67,6 +67,6 @@ public class RiskIntegers
 	/**
 	 * Number Of Cells per Rows on the graph to be displayed
 	 */
-	public static final int CELL_PER_ROWS = 5;
+	public static final int CELL_PER_ROWS = 4;
 
 }

@@ -460,8 +460,7 @@ public class RiskBoard extends Observable
 				adjMatrix[i][j]= this.getTerritory(territories.get(i)).getNeighbours().contains(territories.get(j)) ? 1 : 0;				
 			}
 		}
-		System.out.println( "territories "+ territories.size());
-		System.out.println("count "+MapUtils.performTraversal(adjMatrix));
+		
 		return MapUtils.performTraversal(adjMatrix) == territories.size();
 	}
 	

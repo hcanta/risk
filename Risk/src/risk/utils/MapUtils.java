@@ -107,6 +107,8 @@ public class MapUtils
 	public static int performTraversal( int[][] adjMatrix)
 	{
 		boolean[] isVisited =  new boolean[adjMatrix[0].length];
+		for(int i =0; i < isVisited.length; ++i)
+			isVisited[i] = false;
 		Stack<Integer> stack = new Stack<Integer>(); 
 		stack.push(0);
 		int count = 0;
@@ -114,20 +116,18 @@ public class MapUtils
 		while(!stack.isEmpty())
 		{
 			current = stack.pop();
-			if(!isVisited[current])
+			if(isVisited[current])
 			{
-				count++;
-				isVisited[current]= true;
+				continue;
 			}
+			count++;
+			isVisited[current] = true;
 			
 			for(int i =0; i< isVisited.length; i++)
 			{
-				if((adjMatrix[current][i] == 1)&& !isVisited[i])
+				if(adjMatrix[current][i] == 1 && !isVisited[i])
 				{
-					stack.push(current);
-					isVisited[i] = true;
-					count ++;
-					current = i;
+					stack.push(i);
 				}
 			}
 		}

@@ -203,7 +203,7 @@ public class GameView implements Observer
 							GameView.textPanel.addMessage("The Map File was properly loaded.");
 							RiskBoard.ProperInstance(false).update();
 							
-							GameView.center.remove(backGround);
+							GameView.center.removeAll();
 							GameView.center.add((new GraphDisplayPanel(RiskBoard.ProperInstance(false).getGraph()).getContentPane()));
 							GameView.gFrame.repaint();
 							GameView.gFrame.validate();
