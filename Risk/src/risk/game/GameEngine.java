@@ -836,6 +836,15 @@ public class GameEngine {
 	private void fortifyPhase(Integer integer) {
 		// TODO Auto-generated method stub
 		this.setState(GameState.FORTIFY);
+		//Player Object
+		if((int)integer == 0)
+		{
+			
+		}
+		else //Robot Randomly picks a country and perform reinforce otherwise skip
+		{
+			
+		}
 		
 	}
 
