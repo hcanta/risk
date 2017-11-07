@@ -10,7 +10,7 @@ import risk.utils.constants.RiskEnum.PlayerColors;
 /**
  * This interface contains the function that a player Human or Not must implement
  * @author hcanta
- * @version 1
+ * @version 1.2
  */
 public interface IPlayer 
 {
@@ -77,8 +77,9 @@ public interface IPlayer
 	 * @param origin The origin territory
 	 * @param destination The destination territory
 	 * @param armies The number of armies to be moved
+	 * @return was the fortification sucessful or not
 	 */
-	public void fortify(String origin, String destination, int armies);
+	public boolean fortify(String origin, String destination, int armies);
 	
 	
 	/**

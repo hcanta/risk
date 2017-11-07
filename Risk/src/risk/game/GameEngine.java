@@ -809,7 +809,62 @@ public class GameEngine {
 	 */
 	public void play()
 	{
+		while(!isGameOver())
+		{
+			for(int i =0; i < this.playerTurnOrder.size(); i++)
+			{
+				reinforcePhase(this.playerTurnOrder.get(i));
+				attackPhase(this.playerTurnOrder.get(i));
+				if(isGameOver())
+				{
+					this.setState(GameState.IDLE);
+					this.gamev.getHistoryPanel().addMessage("The Game is Over");
+					this.gamev.getHistoryPanel().addMessage("winner: "+ this.players.get(new Integer(RiskBoard.ProperInstance(debug).getOwnerID())).getName());
+					RiskBoard.ProperInstance(debug).update();
+					return;
+				}
+					
+				fortifyPhase(this.playerTurnOrder.get(i));
+			}
+			
+		}
+	}
+	/**
+	 * The fortification phase
+	 * @param integer the id of the player
+	 */
+	private void fortifyPhase(Integer integer) {
+		// TODO Auto-generated method stub
+		this.setState(GameState.FORTIFY);
+		
+	}
+
+	/**
+	 * The attack Phase
+	 * @param integer the id Of the Player
+	 */
+	private void attackPhase(Integer integer) {
+		// TODO Auto-generated method stub
 		this.setState(GameState.ATTACK);
+		
+	}
+
+	/**
+	 * The reinforcement phase
+	 * @param integer The id of the player
+	 */
+	private void reinforcePhase(Integer integer) {
+		// TODO Auto-generated method stub
+		this.setState(GameState.REINFORCE);
+		
+	}
+
+	/**
+	 * Checks if the Game is Done Or not
+	 * @return true/false is the game over or not
+	 */
+	private boolean isGameOver() {
+		return RiskBoard.ProperInstance(debug).isGameOver();
 	}
 
 }

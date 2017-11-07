@@ -101,6 +101,7 @@ public class RiskBoard extends Observable
 	 */
 	public int getOwnerID() 
 	{
+		checkOwnerStatus();
 		return ownerID;
 	}
 
@@ -166,15 +167,6 @@ public class RiskBoard extends Observable
 		{
 			continents.put(n_name, new Continent(n_name,bonus, graph));
 		}
-	}
-	
-	/**
-	 * Check if the game is Over or Not
-	 * @return Is the game done or not;
-	 */
-	public boolean gameOver()
-	{
-		return this.ownerID != Integer.MIN_VALUE;
 	}
 	
 	
@@ -485,5 +477,36 @@ public class RiskBoard extends Observable
 			continents.get(c_name).removeTerritory(t_name);
 		}
 		
+	}
+	
+	/**
+	 *  Update the OwnerID if necessary
+	 */
+	private void checkOwnerStatus()
+	{
+		int id = continents.get(continents.keySet().toArray()[0]).getOwnerID();
+		boolean update = true;
+		for(String value: continents.keySet())
+		{
+	
+			if (continents.get(value).getOwnerID()!= id)
+			{
+				update = false;
+				break;
+			}
+		}
+		
+		if(update)
+		{
+			this.ownerID = id;
+		}
+	}
+
+	/**
+	 * Checks if the Game is Done Or not
+	 * @return true/false is the game over or not
+	 */
+	public boolean isGameOver() {
+		return this.ownerID != RiskIntegers.INITIAL_OWNER;
 	}
 }

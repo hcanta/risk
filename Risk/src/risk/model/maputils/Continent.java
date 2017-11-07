@@ -159,6 +159,7 @@ public class Continent
 	 */
 	public int getOwnerID() 
 	{
+		checkOwnerStatus();
 		return ownerID;
 	}
 
@@ -298,5 +299,27 @@ public class Continent
 				return false;
 		}
 		return valid;
+	}
+	
+	/**
+	 *  Update the OwnerID if necessary
+	 */
+	private void checkOwnerStatus()
+	{
+		int id = territories.get(territories.keySet().toArray()[0]).getOwnerID();
+		boolean update = true;
+		for(String value: territories.keySet())
+		{
+			if (territories.get(value).getOwnerID()!= id)
+			{
+				update = false;
+				break;
+			}
+		}
+		
+		if(update)
+		{
+			this.ownerID = id;
+		}
 	}
 }

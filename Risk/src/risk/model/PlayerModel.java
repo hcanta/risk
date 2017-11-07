@@ -177,9 +177,10 @@ public class PlayerModel implements IPlayer
 	 * @param origin The origin territory
 	 * @param destination The destination territory
 	 * @param armies The number of armies to be moved
+	 * @return was the fortification successful or not
 	 */
 	@Override
-	public void fortify(String origin, String destination, int armies) {
+	public boolean fortify(String origin, String destination, int armies) {
 		if(this.territoriesOwned.contains(origin.toLowerCase().trim()) && 
 				this.territoriesOwned.contains(destination.toLowerCase().trim()))
 		{
@@ -189,9 +190,11 @@ public class PlayerModel implements IPlayer
 			{
 				RiskBoard.ProperInstance(debug).getTerritory(origin).setArmyOn(armyOn1 - armies);
 				RiskBoard.ProperInstance(debug).getTerritory(destination).setArmyOn(armyOn2 + armies);
+				return true;
 			}
 			
 		}
+		return false;
 		
 	}
 
