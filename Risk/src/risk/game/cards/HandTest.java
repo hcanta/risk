@@ -23,7 +23,7 @@ public class HandTest extends TestCase {
 	protected void tearDown() throws Exception {
 		super.tearDown();
 	}
-
+	
 	public void testAdd() {
 		assertNotNull(first);
 		first.add(card);
