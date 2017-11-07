@@ -242,6 +242,18 @@ public class Continent
 	{
 		return new ArrayList<String>(territories.keySet());
 	}
+	
+	/**
+	 * Empties the list of territories belonging to that 
+	 */
+	public void clear()
+	{
+		for(String value: territories.keySet())
+		{
+			territories.get(value).clear();
+		}
+		territories.clear();
+	}
 
 
 }

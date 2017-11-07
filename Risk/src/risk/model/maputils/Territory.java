@@ -19,7 +19,6 @@ public class Territory {
 	/**
 	 * The graph that will be displayed
 	 */
-	@SuppressWarnings("unused")
 	private mxGraph graph;
 	/**
 	 * Vertex representation on the graph
@@ -285,5 +284,17 @@ public class Territory {
 	 */
 	public void setyCoord(int yCoord) {
 		this.yCoord = yCoord;
-	}		
+	}
+	
+	/**
+	 * Clears the list of Neighbors
+	 */
+	public void clear()
+	{
+		for(int i =0; i< this.neighbours.size(); i ++)
+		{
+			RiskBoard.ProperInstance(graph == null).getTerritory(this.neighbours.get(i)).removeNeighbours(this.territoryName);
+		}
+		this.neighbours.clear();
+	}
 }
