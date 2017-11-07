@@ -9,6 +9,7 @@ import java.util.Observable;
 
 import com.mxgraph.view.mxGraph;
 
+import risk.utils.constants.RiskEnum.GameState;
 import risk.utils.constants.RiskIntegers;
 
 /**
@@ -17,6 +18,10 @@ import risk.utils.constants.RiskIntegers;
  */
 public class RiskBoard extends Observable
 {
+	/**
+	 * The state of the game
+	 */
+	private GameState state;
 	/**
 	 * The graph that will be displayed
 	 */
@@ -72,6 +77,7 @@ public class RiskBoard extends Observable
 		ownerID = RiskIntegers.INITIAL_OWNER;
 		continents = new HashMap<String, Continent>();
 		this.graph = mxGraph;
+		setState(GameState.IDLE);
 	}
 	
 	/**
@@ -119,7 +125,6 @@ public class RiskBoard extends Observable
 	 * Returns The continent Object associated with the name if it exists null otherwise
 	 * @param name  Continent searched
 	 * @return The continent with the name passed
-	 * @throws ModelException the continent is not part of this continent
 	 */
 	public Continent getContinent(String name)
 	{
@@ -383,5 +388,22 @@ public class RiskBoard extends Observable
 	public mxGraph getGraph()
 	{
 		return this.graph;
+	}
+
+	/**
+	 * Returns the current game state
+	 * @return the state
+	 */
+	public GameState getState() {
+		return state;
+	}
+
+	/**
+	 * Set The Current Game State
+	 * @param state the current game state to set
+	 */
+	public void setState(GameState state) {
+		this.state = state;
+		update();
 	}
 }

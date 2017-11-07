@@ -8,6 +8,23 @@ package risk.utils.constants;
  * @author hcanta
  *
  */
-public class RiskEnum {
-
+public class RiskEnum 
+{
+	/**
+	 * The Game State  enum
+	 * @author hcanta
+	 */
+	public static enum GameState
+	{
+		IDLE, STARTUP, REINFORCE, ATTACK, FORTIFY
+	}
+	
+	/**
+	 * The colors that can be assigned to a player 
+	 * @author hcanta
+	 */
+	public static enum PlayerColors
+	{
+		red, yellow, brown, black, pink, green
+	}
 }

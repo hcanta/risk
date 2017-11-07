@@ -267,8 +267,5 @@ public class Continent
 			territories.get(n_territory).clear();
 			this.territories.remove(n_territory);
 		}
-		
 	}
-
-
 }

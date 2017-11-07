@@ -3,6 +3,7 @@
  */
 package risk.game;
 
+import risk.model.maputils.RiskBoard;
 import risk.views.GameView;
 
 /**
@@ -18,8 +19,9 @@ public class Driver {
 	 */
 	public static void main(String[] args) 
 	{
+		RiskBoard.ProperInstance(true);
 		GameView gamev = new GameView();
-		gamev.launch();
+		RiskBoard.ProperInstance(true).addObserver(gamev);
 
 	}
 

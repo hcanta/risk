@@ -8,6 +8,8 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -23,7 +25,7 @@ import risk.views.ui.StatePanel;
  *The Game View Class generates the overall JFrame for the game.
  * @author hcanta
  */
-public class GameView 
+public class GameView implements Observer
 {
 	/**
 	 * The main Frame to be displayed
@@ -32,7 +34,7 @@ public class GameView
 	/**
 	 * A label that contains the picture background
 	 */
-	final JLabel backGround = new JLabel(new ImageIcon(
+	final static JLabel backGround = new JLabel(new ImageIcon(
 			((new ImageIcon("img/g1.png").getImage().getScaledInstance(RiskIntegers.GAME_WIDTH - RiskIntegers.GAME_OFFSET,
 					 RiskIntegers.GAME_HEIGHT - RiskIntegers.GAME_OFFSET -30, java.awt.Image.SCALE_SMOOTH)))));
 	
@@ -76,7 +78,7 @@ public class GameView
 		
 		riskMenu = new RiskMenu();
 		historyActionListener();
-		
+		loadAndPlayActionListener();
 	    top = new JPanel();
 	    center = new JPanel();
 	    bottom = new StatePanel();
@@ -152,16 +154,33 @@ public class GameView
 				GameView.gFrame.repaint();
 				GameView.gFrame.validate();
 			}  
-		});
-			
+		});	
 	}
 	
 	/**
-	 * Display the Frame and launch the Game
+	 * This method add the action listener for the load and Play option from the riskMenu
 	 */
-	public void launch() 
+	private void loadAndPlayActionListener()
 	{
-		// TODO Auto-generated method stub
+		GameView.riskMenu.menuItemOpenMap.addActionListener(new ActionListener()
+		{
+		
+			public void actionPerformed(ActionEvent e)
+			{
+				GameView.backGround.setVisible(false);
+				GameView.gFrame.repaint();
+				GameView.gFrame.validate();
+			}  
+		});	
+			
+	}
+	
+
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		this.bottom.update(arg0, arg1);
+		GameView.gFrame.repaint();
+		GameView.gFrame.validate();
 		
 	}
 }

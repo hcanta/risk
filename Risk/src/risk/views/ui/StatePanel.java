@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import risk.model.maputils.RiskBoard;
 import risk.utils.constants.RiskIntegers;
 import risk.utils.constants.RiskStrings;
 
@@ -85,6 +86,29 @@ public class StatePanel extends JPanel implements Observer
 	public void update(Observable arg0, Object arg1) 
 	{
 		// TODO Auto-generated method stub
+		RiskBoard board = (RiskBoard) arg0;
+		
+		switch(board.getState())
+		{
+			case REINFORCE:
+				reinforceON();
+				break;
+			case ATTACK: 
+				attackON();
+				break;
+			case FORTIFY:
+				fortifyON();
+				break;
+			case IDLE:
+				turnOff();
+				break;
+			case STARTUP:
+				turnOff();
+				break;
+			default:
+				turnOff();
+				break;
+		}
 		
 	}
 	
@@ -107,13 +131,7 @@ public class StatePanel extends JPanel implements Observer
 		attackLabel =  new JLabel(new ImageIcon(
 				((new ImageIcon(RiskStrings.ATTACK_OFF).getImage().getScaledInstance(RiskIntegers.PLAYER_PHASE_WIDTH, RiskIntegers.PLAYER_PHASE_HEIGHT, java.awt.Image.SCALE_SMOOTH)))));
 		
-		reinforceLabel.setVisible(true);
-		attackLabel.setVisible(true);
-		fortifyLabel.setVisible(true);
-		
-		bottomPanel.add(reinforceLabel);
-		bottomPanel.add(attackLabel);
-		bottomPanel.add(fortifyLabel);
+		addPlayerStateLabel();
 	}
 	
 	/**
@@ -135,13 +153,7 @@ public class StatePanel extends JPanel implements Observer
 		attackLabel =  new JLabel(new ImageIcon(
 				((new ImageIcon(RiskStrings.ATTACK_ON).getImage().getScaledInstance(RiskIntegers.PLAYER_PHASE_WIDTH, RiskIntegers.PLAYER_PHASE_HEIGHT, java.awt.Image.SCALE_SMOOTH)))));
 		
-		reinforceLabel.setVisible(true);
-		attackLabel.setVisible(true);
-		fortifyLabel.setVisible(true);
-		
-		bottomPanel.add(reinforceLabel);
-		bottomPanel.add(attackLabel);
-		bottomPanel.add(fortifyLabel);
+		addPlayerStateLabel();
 	}
 	
 	/**
@@ -163,13 +175,7 @@ public class StatePanel extends JPanel implements Observer
 		attackLabel =  new JLabel(new ImageIcon(
 				((new ImageIcon(RiskStrings.ATTACK_OFF).getImage().getScaledInstance(RiskIntegers.PLAYER_PHASE_WIDTH, RiskIntegers.PLAYER_PHASE_HEIGHT, java.awt.Image.SCALE_SMOOTH)))));
 		
-		reinforceLabel.setVisible(true);
-		attackLabel.setVisible(true);
-		fortifyLabel.setVisible(true);
-		
-		bottomPanel.add(reinforceLabel);
-		bottomPanel.add(attackLabel);
-		bottomPanel.add(fortifyLabel);
+		addPlayerStateLabel();
 	}
 	
 	/**
@@ -190,7 +196,14 @@ public class StatePanel extends JPanel implements Observer
 				((new ImageIcon(RiskStrings.FORTIFY_OFF).getImage().getScaledInstance(RiskIntegers.PLAYER_PHASE_WIDTH, RiskIntegers.PLAYER_PHASE_HEIGHT, java.awt.Image.SCALE_SMOOTH)))));
 		attackLabel =  new JLabel(new ImageIcon(
 				((new ImageIcon(RiskStrings.ATTACK_OFF).getImage().getScaledInstance(RiskIntegers.PLAYER_PHASE_WIDTH, RiskIntegers.PLAYER_PHASE_HEIGHT, java.awt.Image.SCALE_SMOOTH)))));
-		
+
+		 addPlayerStateLabel();
+	}
+	/**
+	 * Adds or add back the player labels 
+	 */
+	private void addPlayerStateLabel()
+	{
 		reinforceLabel.setVisible(true);
 		attackLabel.setVisible(true);
 		fortifyLabel.setVisible(true);
@@ -198,8 +211,6 @@ public class StatePanel extends JPanel implements Observer
 		bottomPanel.add(reinforceLabel);
 		bottomPanel.add(attackLabel);
 		bottomPanel.add(fortifyLabel);
-		
-		
 	}
 
 }
