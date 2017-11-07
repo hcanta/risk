@@ -8,16 +8,25 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+
+import risk.model.maputils.RiskBoard;
+import risk.utils.MapUtils;
 import risk.utils.constants.RiskIntegers;
+import risk.utils.constants.RiskStrings;
+import risk.views.ui.GraphDisplayPanel;
 import risk.views.ui.HistoryPanel;
+import risk.views.ui.MapSelector;
 import risk.views.ui.RiskMenu;
 import risk.views.ui.StatePanel;
 
@@ -46,11 +55,11 @@ public class GameView implements Observer
 	/**
 	 * The log/ history menu on the right
 	 */
-	private HistoryPanel textPanel;
+	private static HistoryPanel textPanel;
 	/**
 	 * Text scroller to be contained within the history panel
 	 */
-	private JScrollPane textScroller;
+	private static JScrollPane textScroller;
 	/**
 	 * The panel of the top of the frame
 	 */
@@ -58,7 +67,7 @@ public class GameView implements Observer
 	/**
 	 * Centered panel of the frame where the graphs will be displayed
 	 */
-	private JPanel center;
+	private static JPanel center;
 	/**
 	 * Bottom panel of the frame that contains the state panel
 	 */
@@ -167,9 +176,49 @@ public class GameView implements Observer
 		
 			public void actionPerformed(ActionEvent e)
 			{
-				GameView.backGround.setVisible(false);
-				GameView.gFrame.repaint();
-				GameView.gFrame.validate();
+				JFileChooser fileChooser =  MapSelector.getJFileChooser();
+				int result = fileChooser.showOpenDialog(GameView.gFrame);
+				
+				if (result == JFileChooser.APPROVE_OPTION) 
+				{
+					GameView.textPanel.addMessage("Attempting To Load Map");
+					RiskBoard.ProperInstance(false).update();
+					
+					File file = fileChooser.getSelectedFile();
+					if (!file.exists() && !file.isDirectory()) 
+					{
+						JOptionPane.showMessageDialog(null,
+								RiskStrings.INVALID_FILE_LOCATION
+										+ file.getAbsolutePath());
+						
+						GameView.textPanel.addMessage(RiskStrings.INVALID_FILE_LOCATION);
+						RiskBoard.ProperInstance(false).update();
+					}
+					else
+					{
+						GameView.textPanel.addMessage("file name is: " + file.getName());
+						RiskBoard.ProperInstance(false).update();
+						if(MapUtils.loadFile(file, false))
+						{
+							GameView.textPanel.addMessage("The Map File was properly loaded.");
+							RiskBoard.ProperInstance(false).update();
+							
+							GameView.center.remove(backGround);
+							GameView.center.add((new GraphDisplayPanel(RiskBoard.ProperInstance(false).getGraph()).getContentPane()));
+							GameView.gFrame.repaint();
+							GameView.gFrame.validate();
+						}
+						else
+						{
+							GameView.textPanel.addMessage("The Map File was invalid.");
+							GameView.center.removeAll();
+							GameView.center.add(backGround);
+							RiskBoard.ProperInstance(false).update();
+							RiskBoard.ProperInstance(false).clear();
+						}
+						
+					}
+				}
 			}  
 		});	
 			
@@ -179,6 +228,11 @@ public class GameView implements Observer
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		this.bottom.update(arg0, arg1);
+		GameView.textPanel.update();
+		GameView.textScroller.validate();
+		GameView.textScroller.repaint();
+		;
+		
 		GameView.gFrame.repaint();
 		GameView.gFrame.validate();
 		

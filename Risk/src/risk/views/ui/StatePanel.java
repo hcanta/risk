@@ -85,7 +85,7 @@ public class StatePanel extends JPanel implements Observer
 	@Override
 	public void update(Observable arg0, Object arg1) 
 	{
-		// TODO Auto-generated method stub
+		
 		RiskBoard board = (RiskBoard) arg0;
 		
 		switch(board.getState())
@@ -100,9 +100,11 @@ public class StatePanel extends JPanel implements Observer
 				fortifyON();
 				break;
 			case IDLE:
+				stateLabel.setText("Welcome To Risk!");
 				turnOff();
 				break;
 			case STARTUP:
+				stateLabel.setText("Start Up Phase In Progress");
 				turnOff();
 				break;
 			default:

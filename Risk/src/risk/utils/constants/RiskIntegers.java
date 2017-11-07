@@ -45,8 +45,28 @@ public class RiskIntegers
 	public static final int INITIAL_OWNER = Integer.MIN_VALUE;
 	
 	/**
-	 * The size of a cell on the graph displayed
+	 * The size of a cell on the graph displayed on the X axis
 	 */
-	public static final int GRAPH_CELL_DIMENTION = 20;
+	public static final int GRAPH_CELL_DIMENTION_X = 80;
+	
+	/**
+	 * The size of a cell on the graph displayed on the Y axis
+	 */
+	public static final int GRAPH_CELL_DIMENTION_Y = 15;
+	
+	/**
+	 * x Offset Of center Of Cells
+	 */
+	public static final int GRAPH_CELL_X_OFFSET = 95;
+	
+	/**
+	 * y Offset Of center Of Cells
+	 */
+	public static final int GRAPH_CELL_Y_OFFSET = 50;
+
+	/**
+	 * Number Of Cells per Rows on the graph to be displayed
+	 */
+	public static final int CELL_PER_ROWS = 5;
 
 }

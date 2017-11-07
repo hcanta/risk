@@ -9,6 +9,7 @@ import java.util.Observable;
 
 import com.mxgraph.view.mxGraph;
 
+import risk.utils.MapUtils;
 import risk.utils.constants.RiskEnum.GameState;
 import risk.utils.constants.RiskIntegers;
 
@@ -27,6 +28,7 @@ public class RiskBoard extends Observable
 	 */
 	private mxGraph graph;
 	
+
 	/**
 	 * The Owner of the Board
 	 */
@@ -52,9 +54,9 @@ public class RiskBoard extends Observable
 	private static RiskBoard TestInstance = new RiskBoard();
 	
 	/**
-	 * Returns the Proper Riskboard one for play or the one for testing/debugging
+	 * Returns the Proper Risk board one for play or the one for testing/debugging
 	 * @param debug set to true for debugging or testing
-	 * @return The proper risboard
+	 * @return The proper risk board
 	 */
 	public static RiskBoard ProperInstance(boolean debug)
 	{
@@ -77,6 +79,7 @@ public class RiskBoard extends Observable
 		ownerID = RiskIntegers.INITIAL_OWNER;
 		continents = new HashMap<String, Continent>();
 		this.graph = mxGraph;
+		
 		setState(GameState.IDLE);
 	}
 	
@@ -378,6 +381,7 @@ public class RiskBoard extends Observable
 	 */
 	public void update()
 	{
+		setChanged();
 		notifyObservers(this);
 	}
 	
@@ -406,4 +410,59 @@ public class RiskBoard extends Observable
 		this.state = state;
 		update();
 	}
+	/**
+	 * Check if the current Game Map is Valid or not
+	 * @return True/false is the GameMap Valid or not
+	 */
+	public boolean validateMap() 
+	{
+		boolean valid = true;
+		if(!(this.continents.keySet().size()>=1))
+			return false;
+		if((this.getTerritories().size())< 2)
+			return false;
+		ArrayList<String> n_continents = new ArrayList<String>();
+		for(int i =0; i< this.continents.keySet().size(); i++)
+		{
+			if(n_continents.contains((String)this.continents.keySet().toArray()[i]))
+			{
+				return false;
+			}
+			else
+			{
+				n_continents.add((String)this.continents.keySet().toArray()[i]);
+			}
+		}
+		n_continents.clear();
+		for(String continent : this.continents.keySet())
+		{
+			valid = this.continents.get(continent).validateContinent();
+			if(!valid)
+				return false;
+		}
+		update();
+		return valid && validateMapHelper();
+	}
+	
+	/**
+	 * This is a helper function to see if we re dealing with a connected Graph or not
+	 * @return True/false is the GameMap Valid or not
+	 */
+	private boolean validateMapHelper()
+	{
+		ArrayList<String> territories = this.getTerritories();
+		int[][] adjMatrix = new int[territories.size()][territories.size()];
+		
+		for(int i = 0; i < territories.size(); i ++)
+		{
+			for(int j =0; j< territories.size(); j++)
+			{
+				adjMatrix[i][j]= this.getTerritory(territories.get(i)).getNeighbours().contains(territories.get(j)) ? 1 : 0;				
+			}
+		}
+		System.out.println( "territories "+ territories.size());
+		System.out.println("count "+MapUtils.performTraversal(adjMatrix));
+		return MapUtils.performTraversal(adjMatrix) == territories.size();
+	}
+	
 }

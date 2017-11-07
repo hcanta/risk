@@ -86,4 +86,14 @@ public class RiskStrings
 	 * String path to the fortify off image
 	 */
 	public static final String FORTIFY_OFF ="img/fortify_off.png";
+	
+	/**
+	 * Title of the dialog box when we try to load a map
+	 */
+	public static final String CONQUEST_FILECHOOSER_DIALOG_TITLE = "Conquest Game .MAP File";
+
+	/**
+	 * Error message if an invalid file location was passed during loading of files
+	 */
+	public static final String INVALID_FILE_LOCATION = "ERROR: Unable to find .Map file in the system. \n Please paste a new .map file at the required location.";;
 }

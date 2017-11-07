@@ -19,9 +19,9 @@ public class Driver {
 	 */
 	public static void main(String[] args) 
 	{
-		RiskBoard.ProperInstance(true);
+		RiskBoard.ProperInstance(false);
 		GameView gamev = new GameView();
-		RiskBoard.ProperInstance(true).addObserver(gamev);
+		RiskBoard.ProperInstance(false).addObserver(gamev);
 
 	}
 

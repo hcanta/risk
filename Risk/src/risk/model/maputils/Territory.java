@@ -80,8 +80,8 @@ public class Territory {
 		if(graph!= null)
 		{
 			Object parent = graph.getDefaultParent();
-			vertex = graph.insertVertex(parent, null, " ", this.xCoord, this.yCoord, RiskIntegers.GRAPH_CELL_DIMENTION,
-					RiskIntegers.GRAPH_CELL_DIMENTION);
+			vertex = graph.insertVertex(parent, null, name, this.xCoord, this.yCoord, RiskIntegers.GRAPH_CELL_DIMENTION_X,
+					RiskIntegers.GRAPH_CELL_DIMENTION_Y);
 		}
 	}
 	
@@ -296,5 +296,23 @@ public class Territory {
 			RiskBoard.ProperInstance(graph == null).getTerritory(this.neighbours.get(i)).removeNeighbours(this.territoryName);
 		}
 		this.neighbours.clear();
+	}
+	
+	/**
+	 * This method checks if we re dealing with a valid territory or not
+	 * @return True/False Is the territory valid or not
+	 */
+	public boolean validateTerritory() {
+		if(this.neighbours.size()< 1)
+			return false;
+		
+		for(String neighbour : this.neighbours)
+		{
+			if(RiskBoard.ProperInstance(graph == null).getTerritory(neighbour) == null)
+				return false;
+			if(!RiskBoard.ProperInstance(graph == null).getTerritory(neighbour).getNeighbours().contains(this.territoryName))
+				return false;
+		}
+		return true;
 	}
 }

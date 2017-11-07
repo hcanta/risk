@@ -4,9 +4,6 @@
 package risk.views.ui;
 
 import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
-
 import javax.swing.JTextArea;
 
 /**
@@ -14,7 +11,7 @@ import javax.swing.JTextArea;
  * State And step taken throughout the game
  * @author hcanta
  */
-public class HistoryPanel extends JTextArea implements Observer
+public class HistoryPanel extends JTextArea
 {
 	
 	/**
@@ -39,12 +36,23 @@ public class HistoryPanel extends JTextArea implements Observer
 	}
 	
 	/**
+	 * Add a string to the History panel to be displayed
+	 * @param msg The message to be added
+	 */
+	public void addMessage(String msg)
+	{
+		this.fTextLog.add(msg);
+	}
+	
+	/**
 	 * Updates the content of the Text to be displayed
 	 */
-	@Override
-	public void update(Observable arg0, Object arg1) 
+	public void update() 
 	{	
 		refreshText();
+		this.setVisible(true);
+		this.validate();
+		this.repaint();
 	}
 		
 	/**
@@ -55,7 +63,7 @@ public class HistoryPanel extends JTextArea implements Observer
 		StringBuilder toPrint = new StringBuilder();
 		for (String text : fTextLog)
 		{
-			toPrint.append( text + "\n");
+			toPrint.append(" "+text + "\n");
 		}
 		this.setText(toPrint.toString());
 	}

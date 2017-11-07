@@ -268,4 +268,35 @@ public class Continent
 			this.territories.remove(n_territory);
 		}
 	}
+	
+	/**
+	 * This method checks if we re dealing with a valid continent or not
+	 * @return True/False Is the continent valid or not
+	 */
+	public boolean validateContinent() 
+	{
+		boolean valid = true;
+		if(!(this.territories.keySet().size()>=1))
+			return false;
+		ArrayList<String> n_territories = new ArrayList<String>();
+		for(int i =0; i< this.territories.keySet().size(); i++)
+		{
+			if(n_territories.contains((String)this.territories.keySet().toArray()[i]))
+			{
+				return false;
+			}
+			else
+			{
+				n_territories.add((String)this.territories.keySet().toArray()[i]);
+			}
+		}
+		n_territories.clear();
+		for(String territory : this.territories.keySet())
+		{
+			valid = this.territories.get(territory).validateTerritory();
+			if(!valid)
+				return false;
+		}
+		return valid;
+	}
 }
