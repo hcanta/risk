@@ -117,7 +117,7 @@ public class Continent
 		String n_name = name.toLowerCase();
 		if(!territories.containsKey(n_name))
 		{
-			territories.put(n_name, new Territory(n_name,this.continentName));
+			territories.put(n_name, new Territory(n_name,this.continentName,this.graph, 0, 0));
 		}
 	}
 	
@@ -131,7 +131,7 @@ public class Continent
 		String n_name = name.toLowerCase();
 		if(!territories.containsKey(n_name))
 		{
-			territories.put(n_name, new Territory(n_name,this.continentName, neighbours));
+			territories.put(n_name, new Territory(n_name,this.continentName, neighbours,this.graph, 0, 0));
 		}
 		
 	}

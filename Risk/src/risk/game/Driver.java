@@ -20,8 +20,11 @@ public class Driver {
 	public static void main(String[] args) 
 	{
 		RiskBoard.ProperInstance(false);
-		GameView gamev = new GameView();
-		RiskBoard.ProperInstance(false).addObserver(gamev);
+		GameView gamev = new GameView();RiskBoard.ProperInstance(false).addObserver(gamev);
+		@SuppressWarnings("unused")
+		GameEngine engine = new GameEngine(gamev, false);
+		
+		
 
 	}
 

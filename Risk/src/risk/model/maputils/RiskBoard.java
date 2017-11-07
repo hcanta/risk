@@ -199,7 +199,7 @@ public class RiskBoard extends Observable
 	 */
 	public void clear()
 	{
-		this.ownerID = Integer.MIN_VALUE;
+		this.ownerID = RiskIntegers.INITIAL_OWNER;
 		for(String value: continents.keySet())
 		{
 			continents.get(value).clear();
@@ -438,10 +438,15 @@ public class RiskBoard extends Observable
 		{
 			valid = this.continents.get(continent).validateContinent();
 			if(!valid)
+			{
+				System.out.println("here 4: " + continent);
 				return false;
+			}
 		}
-		update();
-		return valid && validateMapHelper();
+		boolean result  = valid && validateMapHelper();
+		if(result)
+			update();
+		return result;
 	}
 	
 	/**
@@ -464,4 +469,18 @@ public class RiskBoard extends Observable
 		return MapUtils.performTraversal(adjMatrix) == territories.size();
 	}
 	
+	/**
+	 * Given a continent and a territory removes said territory
+	 * @param continentName The continent to which the territory belongs
+	 * @param territoryName the territory to be removed
+	 */
+	public void removeTerritory(String continentName, String territoryName) {
+		String c_name = continentName.toLowerCase();
+		String t_name = territoryName.toLowerCase();
+		if(continents.containsKey(c_name))
+		{
+			continents.get(c_name).removeTerritory(t_name);
+		}
+		
+	}
 }

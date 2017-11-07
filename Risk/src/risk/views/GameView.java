@@ -204,6 +204,8 @@ public class GameView implements Observer
 							RiskBoard.ProperInstance(false).update();
 							
 							GameView.center.removeAll();
+							GameView.center.repaint();
+							GameView.center.validate();
 							GameView.center.add((new GraphDisplayPanel(RiskBoard.ProperInstance(false).getGraph()).getContentPane()));
 							GameView.gFrame.repaint();
 							GameView.gFrame.validate();
@@ -212,16 +214,37 @@ public class GameView implements Observer
 						{
 							GameView.textPanel.addMessage("The Map File was invalid.");
 							GameView.center.removeAll();
+							GameView.center.repaint();
+							GameView.center.validate();
 							GameView.center.add(backGround);
+							GameView.center.repaint();
+							GameView.center.validate();
 							RiskBoard.ProperInstance(false).update();
 							RiskBoard.ProperInstance(false).clear();
 						}
-						
 					}
 				}
 			}  
 		});	
 			
+	}
+	
+	/**
+	 * Returns the History panel of the gameView
+	 * @return The history panel of the gameView
+	 */
+	public HistoryPanel getHistoryPanel()
+	{
+		return textPanel;
+	}
+	
+	/**
+	 * Returns the RiskMenu of the Game View
+	 * @return The risk Menu of the GameView
+	 */
+	public RiskMenu getRiskMenu()
+	{
+		return riskMenu;
 	}
 	
 
@@ -231,10 +254,19 @@ public class GameView implements Observer
 		GameView.textPanel.update();
 		GameView.textScroller.validate();
 		GameView.textScroller.repaint();
-		;
+		
 		
 		GameView.gFrame.repaint();
 		GameView.gFrame.validate();
 		
+	}
+
+	/**
+	 * Returns the JFrame of the Game View
+	 * @return The Jframe
+	 */
+	public JFrame getFrame() {
+	
+		return GameView.gFrame;
 	}
 }

@@ -42,6 +42,7 @@ public class HistoryPanel extends JTextArea
 	public void addMessage(String msg)
 	{
 		this.fTextLog.add(msg);
+		update();
 	}
 	
 	/**

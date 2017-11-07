@@ -6,6 +6,7 @@ package risk.utils;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Stack;
 
@@ -133,6 +134,28 @@ public class MapUtils
 		}
 		
 		return count;
+	}
+
+	/**
+	 * Save the Map to a .map file
+	 * @param filename the name of the file where the risk board will be saved
+	 *@param debug set to true for debugging or testing
+	 * @throws IOException Could not open/write to file
+	 */
+	public static void saveMap(String filename, boolean debug) throws IOException
+	{
+		String n_filename = "Maps\\"+filename + ".map";
+		FileWriter fw = new FileWriter(n_filename);
+		
+		fw.write("[Map]\n");
+		fw.write("author = team1\n\n");
+		fw.write("[Continents]\n");
+		fw.write(RiskBoard.ProperInstance(debug).continentsToString());
+		fw.write("\n[Territories]\n");
+		
+		fw.write(RiskBoard.ProperInstance(debug).territoriesToString());
+		
+		fw.close();
 	}
 
 }
