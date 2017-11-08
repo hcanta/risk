@@ -33,6 +33,11 @@ import risk.views.ui.MapSelector;
  * @version 2.2
  */
 public class GameEngine {
+	
+	/**
+	 * Number of times cards were exchange
+	 */
+	private int cardExchangeCount;
 
 	/**
 	 * The Scanner object to read from standard input
@@ -62,6 +67,7 @@ public class GameEngine {
 	 */
 	public GameEngine(GameView gamev, boolean debug) 
 	{
+		this.cardExchangeCount = 0;
 		this.gamev = gamev;
 		this.debug = debug;
 		if(gamev !=null)
@@ -960,6 +966,17 @@ public class GameEngine {
 	 */
 	private boolean isGameOver() {
 		return RiskBoard.ProperInstance(debug).isGameOver();
+	}
+	
+	/**
+	 * Returns the amount of armies when the cards are exchanged
+	 * @return amount of armies
+	 */
+	private int getArmiesFromCardExchange()
+	{
+		int armies = 0;
+		this.cardExchangeCount ++;
+		return armies;
 	}
 
 }
