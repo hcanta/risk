@@ -1,6 +1,0 @@
-
-/**
- * @author hcanta
- * 
- */
-package risk;

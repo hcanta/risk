@@ -1,32 +1,31 @@
+/**
+ * The game package holds the driver and the Game Engine
+ */
 package risk.game;
 
-import java.io.File;
-import java.io.IOException;
+import risk.model.RiskBoard;
+import risk.views.GameView;
 
-import risk.ui.Game;
-import risk.util.map.editor.Utilities;
-
+/**
+ * The driver holds the main method too launch the game
+ * @author hcanta
+ *
+ */
 public class Driver {
 
 	/**
-	 * Main Method of the class that creates the Game Instance and starts the
-	 * game.
-	 * 
-	 * @param new_args
-	 *            contains the supplied command-line arguments as an array of
-	 *            String objects
+	 * Main Method. the Game Engine is initiated there.
+	 * @param args (No arguments are needed to lunch the game
 	 */
-	public static void main(String new_args[]) 
+	public static void main(String[] args) 
 	{
+		RiskBoard.ProperInstance(false);
+		GameView gamev = new GameView();RiskBoard.ProperInstance(false).addObserver(gamev);
+		@SuppressWarnings("unused")
+		GameEngine engine = new GameEngine(gamev, false);
 		
-		try {
-			Utilities.loadFile(new File("D:\\OneDrive\\Soen6441\\Maps\\Atlantis.map"));
-			Utilities.saveMap("test");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		//Game.getInstance().start();
+		
+
 	}
 
 }
