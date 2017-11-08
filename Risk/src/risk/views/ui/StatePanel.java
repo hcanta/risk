@@ -91,12 +91,15 @@ public class StatePanel extends JPanel implements Observer
 		switch(board.getState())
 		{
 			case REINFORCE:
+				stateLabel.setText(board.getCurrentPlayer()+": Reinforcement Phase Phase In Progress");
 				reinforceON();
 				break;
-			case ATTACK: 
+			case ATTACK:
+				stateLabel.setText(board.getCurrentPlayer()+": Attack Phase Phase In Progress");
 				attackON();
 				break;
 			case FORTIFY:
+				stateLabel.setText(board.getCurrentPlayer()+": Fortification Phase Phase In Progress");
 				fortifyON();
 				break;
 			case IDLE:

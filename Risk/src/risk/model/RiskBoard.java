@@ -23,6 +23,10 @@ import risk.utils.constants.RiskIntegers;
 public class RiskBoard extends Observable
 {
 	/**
+	 * The current player turn
+	 */
+	private String currentPlayer;
+	/**
 	 * The state of the game
 	 */
 	private GameState state;
@@ -508,5 +512,21 @@ public class RiskBoard extends Observable
 	 */
 	public boolean isGameOver() {
 		return this.ownerID != RiskIntegers.INITIAL_OWNER;
+	}
+
+	/**
+	 * Get the current player name whose turn it is
+	 * @return the currentPlayer
+	 */
+	public String getCurrentPlayer() {
+		return currentPlayer;
+	}
+
+	/**
+	 * Set the current Player name
+	 * @param currentPlayer the currentPlayer name to set
+	 */
+	public void setCurrentPlayer(String currentPlayer) {
+		this.currentPlayer = currentPlayer;
 	}
 }

@@ -35,6 +35,10 @@ import risk.views.ui.MapSelector;
 public class GameEngine {
 
 	/**
+	 * The Scanner object to read from standard input
+	 */
+	private Scanner sc = new Scanner(System.in);
+	/**
 	 * Creates a mapping of player IDs to IPlayer Object
 	 */
 	private HashMap<Integer, IPlayer> players;
@@ -140,7 +144,7 @@ public class GameEngine {
 	{
 		RiskBoard.ProperInstance(debug).clear();
 		RiskBoard.ProperInstance(debug).setBoardName("Created Map");
-		Scanner sc = new Scanner(System.in);
+		
 		String str = "";
 		int nbContinent = 0;
 		while(nbContinent < 2)
@@ -255,7 +259,7 @@ public class GameEngine {
 			 RiskBoard.ProperInstance(this.debug).clear();
 		 }
 		
-		sc.close();
+		
 	}
 	/**
 	 * This function chooses the file to be edited or loaded
@@ -394,7 +398,7 @@ public class GameEngine {
 		 {
 			 System.out.println("The map is Invalid");
 		 }
-		 sc.close();
+		// sc.close();
 	}
 
 	/**
@@ -668,7 +672,7 @@ public class GameEngine {
 	{
 		players = new HashMap<Integer, IPlayer>();
 		playerTurnOrder = new ArrayList<Integer>();
-		Scanner sc = new Scanner(System.in);
+	
 		int nbPlayer = 0;
 		while(!(nbPlayer >=2 && nbPlayer <= 6))
 		{
@@ -702,7 +706,7 @@ public class GameEngine {
 			System.out.println("Territories Owned");
 			System.out.println(players.get(new Integer(i)).getTerritoriesOwnedWithArmies());
 		}
-		sc.close();
+		
 		
 	}
 	
@@ -813,6 +817,7 @@ public class GameEngine {
 		{
 			for(int i =0; i < this.playerTurnOrder.size(); i++)
 			{
+				RiskBoard.ProperInstance(debug).setCurrentPlayer(players.get(this.playerTurnOrder.get(i)).getName());
 				reinforcePhase(this.playerTurnOrder.get(i));
 				attackPhase(this.playerTurnOrder.get(i));
 				if(isGameOver())
@@ -834,17 +839,83 @@ public class GameEngine {
 	 * @param integer the id of the player
 	 */
 	private void fortifyPhase(Integer integer) {
-		// TODO Auto-generated method stub
+		
 		this.setState(GameState.FORTIFY);
 		//Player Object
 		if((int)integer == 0)
 		{
+			int option = 0;
+		
+			while(option!=2)
+			{
+				System.out.println("1-Attempt Fortification");
+				System.out.println("2-End fortification phase");
+
+				
+				option = sc.nextInt();
+				if(option == 2)
+				{
+					break;
+				}
+				else if(option == 1)
+				{
+					sc.nextLine();
+					System.out.print("Enter origin territory: ");
+					String origin = sc.nextLine();
+					System.out.print("Enter destination territory: ");
+					String destination = sc.nextLine();
+					System.out.print("Enter the number of armies to be moved: ");
+					int armies = sc.nextInt();
+					sc.nextLine();
+					if(players.get(new Integer(0)).fortify(origin, destination, armies))
+					{
+						System.out.println("Fortification was successful");
+					}
+					else
+					{
+						System.out.println("Fortification was not successful");
+					}
+				}
+			}
+			
 			
 		}
-		else //Robot Randomly picks a country and perform reinforce otherwise skip
-		{
-			
+		else //Robot Randomly picks a country and perform reinforce otherwise skip at the next iteration will be changed by strategy
+		{ 
+			String o1 = "";
+			String d1 = "";
+			for(String origin: players.get(integer).getTerritoriesOwned())
+			{
+				d1 = "";
+				o1 = origin;
+				for(String destination: players.get(integer).getTerritoriesOwned())
+				{
+					
+					if(!origin.equals(destination))
+					{
+						if(RiskBoard.ProperInstance(debug).getTerritory(o1).getNeighbours().contains(destination))
+						{
+							d1 = destination;
+							break;
+						}
+					}
+				}
+				if(d1.length() >0)
+				{
+					break;
+				}
+			}
+			if(d1.length() > 0)
+			{
+				players.get(integer).fortify(o1, d1, 1);
+			}
 		}
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			
+			e.printStackTrace();
+		} 
 		
 	}
 
@@ -855,6 +926,12 @@ public class GameEngine {
 	private void attackPhase(Integer integer) {
 		// TODO Auto-generated method stub
 		this.setState(GameState.ATTACK);
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			
+			e.printStackTrace();
+		} 
 		
 	}
 
@@ -865,6 +942,12 @@ public class GameEngine {
 	private void reinforcePhase(Integer integer) {
 		// TODO Auto-generated method stub
 		this.setState(GameState.REINFORCE);
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			
+			e.printStackTrace();
+		} 
 		
 	}
 
