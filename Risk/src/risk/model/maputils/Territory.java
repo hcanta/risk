@@ -208,7 +208,7 @@ public class Territory {
 	 */
 	public void setArmyOn(int armyOn) 
 	{
-		this.armyOn = armyOn;
+		this.armyOn = armyOn < 0 ? 0 : armyOn;
 	}
 	
 	
