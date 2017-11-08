@@ -1012,39 +1012,40 @@ public class GameEngine {
 					
 					
 				}
-				//Reinforce portion
 
-				int option = 0;
-			
-				while(option!=2)
+			}
+			//Reinforce portion
+
+			int option = 0;
+		
+			while(option!=2)
+			{
+				System.out.println("Number of armies to be placed: " + players.get(integer).getNbArmiesToBePlaced());
+				System.out.println("1-Attempt Reinforcement");
+				System.out.println("2-End fortification phase");
+
+				
+				option = sc.nextInt();
+				if(option == 2)
 				{
-					System.out.println("Number of armies to be placed: " + players.get(integer).getNbArmiesToBePlaced());
-					System.out.println("1-Attempt Reinforcement");
-					System.out.println("2-End fortification phase");
-
+					break;
+				}
+				else if(option == 1)
+				{
+					sc.nextLine();
+					System.out.print("Enter  territory to reinforce: ");
+					String territory = sc.nextLine();
+					System.out.print("Enter number of army to add: ");
+					int army = sc.nextInt();
+					sc.nextLine();
 					
-					option = sc.nextInt();
-					if(option == 2)
+					if(players.get(integer).reinforce(territory, army))
 					{
-						break;
+						System.out.println("Reinforcement was successful");
 					}
-					else if(option == 1)
+					else
 					{
-						sc.nextLine();
-						System.out.print("Enter  territory to reinforce: ");
-						String territory = sc.nextLine();
-						System.out.print("Enter number of army to add: ");
-						int army = sc.nextInt();
-						sc.nextLine();
-						
-						if(players.get(integer).reinforce(territory, army))
-						{
-							System.out.println("Reinforcement was successful");
-						}
-						else
-						{
-							System.out.println("Reinforcement was not successful");
-						}
+						System.out.println("Reinforcement was not successful");
 					}
 				}
 			}
