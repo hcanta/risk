@@ -7,3 +7,8 @@ risk.utils
 risk.utils.constants
 risk.views
 risk.views.ui
+test
+test.risk.game
+test.risk.game.cards
+test.risk.model
+test.risk.utils

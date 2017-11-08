@@ -190,6 +190,10 @@ public class PlayerModel implements IPlayer
 		if(this.territoriesOwned.contains(origin.toLowerCase().trim()) && 
 				this.territoriesOwned.contains(destination.toLowerCase().trim()))
 		{
+			if(!RiskBoard.ProperInstance(debug).getTerritory(origin).getNeighbours().contains(destination))
+			{
+				return false;
+			}
 			int armyOn1 = RiskBoard.ProperInstance(debug).getTerritory(origin).getArmyOn();
 			int armyOn2 = RiskBoard.ProperInstance(debug).getTerritory(destination).getArmyOn();
 			if( armyOn1 > armies)

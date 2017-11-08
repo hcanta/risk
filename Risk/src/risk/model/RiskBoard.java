@@ -438,7 +438,7 @@ public class RiskBoard extends Observable
 			valid = this.continents.get(continent).validateContinent();
 			if(!valid)
 			{
-				System.out.println("here 4: " + continent);
+				
 				return false;
 			}
 		}

@@ -75,6 +75,7 @@ public class GameEngine {
 	 */
 	public GameEngine(GameView gamev, boolean debug) 
 	{
+		this.players = new HashMap<Integer, IPlayer>();
 		rand = new Random();
 		this.cardExchangeCount = 0;
 		this.gamev = gamev;
@@ -686,7 +687,7 @@ public class GameEngine {
 	private void deploy()
 	{
 		players = new HashMap<Integer, IPlayer>();
-		playerTurnOrder = new ArrayList<Integer>();
+		
 	
 		int nbPlayer = 0;
 		while(!(nbPlayer >=2 && nbPlayer <= 6))
@@ -697,11 +698,6 @@ public class GameEngine {
 		
 		sc.nextLine();
 		createBots(nbPlayer);
-		for(int i=0; i< nbPlayer; ++i)
-		{
-			playerTurnOrder.add(new Integer(i));
-		}
-		Collections.shuffle(playerTurnOrder);
 		String str ="";
 		while(str.length() == 0)
 		{
@@ -710,6 +706,8 @@ public class GameEngine {
 		}
 		
 		addHumanPlayer(str);
+		Collections.shuffle(playerTurnOrder);
+
 		setArmiesforPlayers();
 		System.out.println("Random Assignement of countries");
 		randomAssignTerritories();
@@ -732,6 +730,11 @@ public class GameEngine {
 	public void addHumanPlayer(String name)
 	{
 		players.put(new Integer(0),new PlayerModel(name, PlayerColors.values()[0], (short)(0), debug));
+		playerTurnOrder = new ArrayList<Integer>();
+		for(int i=0; i< players.keySet().size(); ++i)
+		{
+			playerTurnOrder.add(new Integer(i));
+		}
 	}
 	
 	/**
@@ -941,196 +944,62 @@ public class GameEngine {
 	 * @param integer the id Of the Player
 	 */
 	private void attackPhase(Integer integer) {
-		
-		if((int)integer == 0)
+		this.setState(GameState.ATTACK);
+		if(canAttack(integer))
 		{
-			int option = 0;
-			boolean oneOnce = false;
-			while(option!=2)
+			if((int)integer == 0)
 			{
-				System.out.println("1-Attempt Attack");
-				System.out.println("2-End Attack phase");
-
-				
-				option = sc.nextInt();
-				if(option == 2)
+				int option = 0;
+				boolean oneOnce = false;
+				while(option!=2)
 				{
-					break;
-				}
-				else if(option == 1)
-				{
-					sc.nextLine();
-					System.out.print("Enter attacker territory: ");
-					String strAttacker = sc.nextLine();
-					Territory attacker = RiskBoard.ProperInstance(debug).getTerritory(strAttacker);
-					if(attacker.getArmyOn() > 1)
-					{
-						System.out.println("Here are the neighbours to "+strAttacker);
-						System.out.println(attacker.getNeighbours());
-						System.out.print("Enter defender: ");
-						String strDefender = sc.nextLine();
-						
-						Territory defender = RiskBoard.ProperInstance(debug).getTerritory(strDefender);
-						
-						System.out.println("there are "+attacker.getArmyOn()+" available for the attack\nHow many would you like to use ?");
-						int nbOfdiceRollAttacker = sc.nextInt();sc.nextLine();
-						if(attacker.getArmyOn()>= 4)
-						{
-							nbOfdiceRollAttacker = 3;
-						}
-						else if(attacker.getArmyOn() == 3)
-						{
-							nbOfdiceRollAttacker = 2;
-						}
-						else
-						{
-							nbOfdiceRollAttacker = 1;
-						}
-						
-						int[] attackerDices = new int[nbOfdiceRollAttacker];
-						for(int i=0; i< attackerDices.length;i++)
-						{
-							attackerDices[i] = rand.nextInt(6) + 1;
-						}
-						Arrays.sort(attackerDices);
-						int nbOfdiceRollDefender;
+					System.out.println("1-Attempt Attack");
+					System.out.println("2-End Attack phase");
+	
 					
-						nbOfdiceRollDefender = 0;
-						if(defender.getArmyOn()>= 2)
+					option = sc.nextInt();
+					if(option == 2)
+					{
+						break;
+					}
+					else if(option == 1)
+					{
+						sc.nextLine();
+						System.out.print("Enter attacker territory: ");
+						String strAttacker = sc.nextLine();
+						Territory attacker = RiskBoard.ProperInstance(debug).getTerritory(strAttacker);
+						if(attacker.getArmyOn() > 1)
 						{
-							nbOfdiceRollDefender = 2;
-						}
-						else
-						{
-							nbOfdiceRollDefender = 1;
-						}
-						
-						
-						
-						int[] defenderDices = new int[nbOfdiceRollDefender];
-						for(int i=0; i< defenderDices.length;i++)
-						{
-							defenderDices[i] = rand.nextInt(6) + 1;
-						}
-						Arrays.sort(defenderDices);
-						int attackerVictories = 0;
-						int defenderVictories = 0;
-						if(defenderDices.length > attackerDices.length)
-						{
-							for(int i = 0; i<defenderDices.length -1 ; i++)
+							System.out.println("Here are the neighbours to "+strAttacker);
+							System.out.println(attacker.getNeighbours());
+							System.out.print("Enter defender: ");
+							String strDefender = sc.nextLine();
+							
+							Territory defender = RiskBoard.ProperInstance(debug).getTerritory(strDefender);
+							System.out.println("Attacking country: " +attacker.getTerritoryName()+" Defending country: "+defender.getTerritoryName());
+							System.out.println("there are "+attacker.getArmyOn()+" available for the attack\nHow many would you like to use ?");
+							int nbOfdiceRollAttacker = sc.nextInt();sc.nextLine();
+							if(attacker.getArmyOn()>= 4)
 							{
-								int attackerIndex = attackerDices.length -1 -i;
-								int defenderIndex = defenderDices.length -1 -i;
-								if(attackerIndex>=0)
-								{
-									if(defenderDices[defenderIndex]>attackerDices[attackerIndex])
-									{
-										defenderVictories++;
-									}
-									else
-									{
-										attackerVictories++;
-									}
-								}
+								nbOfdiceRollAttacker = 3;
 							}
-						}
-						else
-						{
-							for(int i = 0; i<attackerDices.length -1 ; i++)
+							else if(attacker.getArmyOn() == 3)
 							{
-								int attackerIndex = attackerDices.length -1 -i;
-								int defenderIndex = defenderDices.length -1 -i;
-								if(defenderIndex>=0)
-								{
-									if(defenderDices[defenderIndex]>attackerDices[attackerIndex])
-									{
-										defenderVictories++;
-									}
-									else
-									{
-										attackerVictories++;
-									}
-								}
+								nbOfdiceRollAttacker = 2;
 							}
-						}
-						defender.setArmyOn(defender.getArmyOn() - attackerVictories);
-						attacker.setArmyOn(attacker.getArmyOn() - defenderVictories);
-						if(defender.getArmyOn() == 0)
-						{
-							if(!oneOnce)
+							else
 							{
-								int typeIndex = rand.nextInt(CardType.values().length);
-								CardType type = CardType.values()[typeIndex];
-								int nameIndex = rand.nextInt(RiskBoard.ProperInstance(debug).getTerritories().size());
-								String cardName = RiskBoard.ProperInstance(debug).getTerritories().get(nameIndex);
-								players.get(new Integer(attacker.getOwnerID())).getHand().add(new Card(type,cardName));
-								oneOnce = true;
-								this.gamev.getHistoryPanel().addMessage(players.get(integer).getName()+" has conquered a territory\n and won a card");
-								RiskBoard.ProperInstance(this.debug).update();
+								nbOfdiceRollAttacker = 1;
 							}
 							
-							defender.setOwnerID(attacker.getOwnerID());
-							RiskBoard.ProperInstance(this.debug).update();
-							if(RiskBoard.ProperInstance(debug).getContinent(defender.getContinentName()).getOwnerID() == attacker.getOwnerID())
+							int[] attackerDices = new int[nbOfdiceRollAttacker];
+							for(int i=0; i< attackerDices.length;i++)
 							{
-								players.get(integer).incrementArmiesBy(RiskBoard.ProperInstance(debug).getContinent(defender.getContinentName()).getContinentBonus());
-								this.gamev.getHistoryPanel().addMessage(players.get(integer).getName()+" has  conquered a continent\n and won a card");
-								RiskBoard.ProperInstance(this.debug).update();
+								attackerDices[i] = rand.nextInt(6) + 1;
 							}
+							Arrays.sort(attackerDices);
+							int nbOfdiceRollDefender;
 						
-						}
-					}
-					else
-					{
-						System.out.println("Not enough armies to perform an attack");
-					}
-				}
-			}
-			
-		}
-		else //Robot Randomly picks a country  belonging to it, and attack one of the neighbors
-		{
-			boolean oneOnce = false;
-			int countryindex = 0;
-			for(String origin: players.get(integer).getTerritoriesOwned())
-			{
-				Territory attacker = RiskBoard.ProperInstance(debug).getTerritory(origin);
-				countryindex=  rand.nextInt(attacker.getNeighbours().size());
-				if(!players.get(integer).getTerritoriesOwned().contains(attacker.getNeighbours().get(countryindex)))
-				{
-					
-					Territory defender =  RiskBoard.ProperInstance(debug).getTerritory(attacker.getNeighbours().get(countryindex));
-					if(attacker.getArmyOn() >=2 )
-					{
-						int nbOfdiceRollAttacker = 0;
-						if(attacker.getArmyOn()>= 4)
-						{
-							nbOfdiceRollAttacker = 3;
-						}
-						else if(attacker.getArmyOn() == 3)
-						{
-							nbOfdiceRollAttacker = 2;
-						}
-						else
-						{
-							nbOfdiceRollAttacker = 1;
-						}
-						
-						int[] attackerDices = new int[nbOfdiceRollAttacker];
-						for(int i=0; i< attackerDices.length;i++)
-						{
-							attackerDices[i] = rand.nextInt(6) + 1;
-						}
-						Arrays.sort(attackerDices);
-						int nbOfdiceRollDefender;
-						if(defender.getOwnerID() == 0 && defender.getArmyOn()>= 2)
-						{
-							System.out.print("How many dices would you like to roll 1 or 2? ");
-							nbOfdiceRollDefender = sc.nextInt();
-							sc.nextLine();
-						}
-						else
-						{
 							nbOfdiceRollDefender = 0;
 							if(defender.getArmyOn()>= 2)
 							{
@@ -1140,87 +1009,258 @@ public class GameEngine {
 							{
 								nbOfdiceRollDefender = 1;
 							}
-						}
-						
-						
-						int[] defenderDices = new int[nbOfdiceRollDefender];
-						for(int i=0; i< defenderDices.length;i++)
-						{
-							defenderDices[i] = rand.nextInt(6) + 1;
-						}
-						Arrays.sort(defenderDices);
-						int attackerVictories = 0;
-						int defenderVictories = 0;
-						if(defenderDices.length > attackerDices.length)
-						{
-							for(int i = 0; i<defenderDices.length -1 ; i++)
+							
+							
+							
+							int[] defenderDices = new int[nbOfdiceRollDefender];
+							for(int i=0; i< defenderDices.length;i++)
 							{
-								int attackerIndex = attackerDices.length -1 -i;
-								int defenderIndex = defenderDices.length -1 -i;
-								if(attackerIndex>=0)
+								defenderDices[i] = rand.nextInt(6) + 1;
+							}
+							Arrays.sort(defenderDices);
+							
+							System.out.println(players.get(new Integer(attacker.getOwnerID())).getName()+" rolled: ");
+							System.out.println(Arrays.toString(attackerDices));
+							System.out.println(players.get(new Integer(defender.getOwnerID())).getName()+" rolled: ");
+							System.out.println(Arrays.toString(defenderDices));
+							this.gamev.getHistoryPanel().addMessage(players.get(new Integer(attacker.getOwnerID())).getName()+" rolled: ");
+							this.gamev.getHistoryPanel().addMessage(Arrays.toString(attackerDices));
+							this.gamev.getHistoryPanel().addMessage(players.get(new Integer(defender.getOwnerID())).getName()+" rolled: ");
+							this.gamev.getHistoryPanel().addMessage(Arrays.toString(defenderDices));
+							
+							RiskBoard.ProperInstance(this.debug).update();
+							int attackerVictories = 0;
+							int defenderVictories = 0;
+							if(defenderDices.length > attackerDices.length)
+							{
+								for(int i = 0; i<defenderDices.length -1 ; i++)
 								{
-									if(defenderDices[defenderIndex]>attackerDices[attackerIndex])
+									int attackerIndex = attackerDices.length -1 -i;
+									int defenderIndex = defenderDices.length -1 -i;
+									if(attackerIndex>=0)
 									{
-										defenderVictories++;
-									}
-									else
-									{
-										attackerVictories++;
+										if(defenderDices[defenderIndex]>attackerDices[attackerIndex])
+										{
+											defenderVictories++;
+										}
+										else
+										{
+											attackerVictories++;
+										}
 									}
 								}
+							}
+							else
+							{
+								for(int i = 0; i<attackerDices.length -1 ; i++)
+								{
+									int attackerIndex = attackerDices.length -1 -i;
+									int defenderIndex = defenderDices.length -1 -i;
+									if(defenderIndex>=0)
+									{
+										if(defenderDices[defenderIndex]>attackerDices[attackerIndex])
+										{
+											defenderVictories++;
+										}
+										else
+										{
+											attackerVictories++;
+										}
+									}
+								}
+							}
+							defender.setArmyOn(defender.getArmyOn() - attackerVictories);
+							attacker.setArmyOn(attacker.getArmyOn() - defenderVictories);
+							if(defender.getArmyOn() == 0)
+							{
+								if(!oneOnce)
+								{
+									int typeIndex = rand.nextInt(CardType.values().length);
+									CardType type = CardType.values()[typeIndex];
+									int nameIndex = rand.nextInt(RiskBoard.ProperInstance(debug).getTerritories().size());
+									String cardName = RiskBoard.ProperInstance(debug).getTerritories().get(nameIndex);
+									players.get(new Integer(attacker.getOwnerID())).getHand().add(new Card(type,cardName));
+									oneOnce = true;
+									this.gamev.getHistoryPanel().addMessage(players.get(integer).getName()+" has conquered a territory\n and won a card");
+									RiskBoard.ProperInstance(this.debug).update();
+								}
+								
+								players.get(new Integer(defender.getOwnerID())).removeTerritory(defender.getTerritoryName());
+								defender.setOwnerID(attacker.getOwnerID());
+								players.get(new Integer(attacker.getOwnerID())).addTerritory(defender.getTerritoryName());
+								RiskBoard.ProperInstance(this.debug).update();
+								if(RiskBoard.ProperInstance(debug).getContinent(defender.getContinentName()).getOwnerID() == attacker.getOwnerID())
+								{
+									players.get(integer).incrementArmiesBy(RiskBoard.ProperInstance(debug).getContinent(defender.getContinentName()).getContinentBonus());
+									this.gamev.getHistoryPanel().addMessage(players.get(integer).getName()+" has  conquered a continent\n and won a card");
+									RiskBoard.ProperInstance(this.debug).update();
+									if(isGameOver())
+									{
+										break;
+									}
+								}
+								players.get(new Integer(attacker.getOwnerID())).fortify(attacker.getTerritoryName(), defender.getTerritoryName(), attackerVictories);
+							
 							}
 						}
 						else
 						{
-							for(int i = 0; i<attackerDices.length -1 ; i++)
-							{
-								int attackerIndex = attackerDices.length -1 -i;
-								int defenderIndex = defenderDices.length -1 -i;
-								if(defenderIndex>=0)
-								{
-									if(defenderDices[defenderIndex]>attackerDices[attackerIndex])
-									{
-										defenderVictories++;
-									}
-									else
-									{
-										attackerVictories++;
-									}
-								}
-							}
-						}
-						defender.setArmyOn(defender.getArmyOn() - attackerVictories);
-						attacker.setArmyOn(attacker.getArmyOn() - defenderVictories);
-						if(defender.getArmyOn() == 0)
-						{
-							if(!oneOnce)
-							{
-								int typeIndex = rand.nextInt(CardType.values().length);
-								CardType type = CardType.values()[typeIndex];
-								int nameIndex = rand.nextInt(RiskBoard.ProperInstance(debug).getTerritories().size());
-								String cardName = RiskBoard.ProperInstance(debug).getTerritories().get(nameIndex);
-								players.get(new Integer(attacker.getOwnerID())).getHand().add(new Card(type,cardName));
-								oneOnce = true;
-								this.gamev.getHistoryPanel().addMessage(players.get(integer).getName()+" has conquered a territory\n and won a card");
-								RiskBoard.ProperInstance(this.debug).update();
-							}
-							
-							defender.setOwnerID(attacker.getOwnerID());
-							RiskBoard.ProperInstance(this.debug).update();
-							if(RiskBoard.ProperInstance(debug).getContinent(defender.getContinentName()).getOwnerID() == attacker.getOwnerID())
-							{
-								players.get(integer).incrementArmiesBy(RiskBoard.ProperInstance(debug).getContinent(defender.getContinentName()).getContinentBonus());
-								this.gamev.getHistoryPanel().addMessage(players.get(integer).getName()+" has  conquered a continent\n and won a card");
-								RiskBoard.ProperInstance(this.debug).update();
-							}
-							
+							System.out.println("Not enough armies to perform an attack");
 						}
 					}
 				}
+				
 			}
-			
+			else //Robot Randomly picks a country  belonging to it, and attack one of the neighbors
+			{
+				boolean oneOnce = false;
+				int countryindex = 0;
+				for(String origin: players.get(integer).getTerritoriesOwned())
+				{
+					Territory attacker = RiskBoard.ProperInstance(debug).getTerritory(origin);
+					countryindex=  rand.nextInt(attacker.getNeighbours().size());
+					if(!players.get(integer).getTerritoriesOwned().contains(attacker.getNeighbours().get(countryindex)))
+					{
+						
+						Territory defender =  RiskBoard.ProperInstance(debug).getTerritory(attacker.getNeighbours().get(countryindex));
+						if(attacker.getArmyOn() >=2 )
+						{
+							System.out.println("Attacking country: " +attacker.getTerritoryName()+" Defending country: "+defender.getTerritoryName());
+							int nbOfdiceRollAttacker = 0;
+							if(attacker.getArmyOn()>= 4)
+							{
+								nbOfdiceRollAttacker = 3;
+							}
+							else if(attacker.getArmyOn() == 3)
+							{
+								nbOfdiceRollAttacker = 2;
+							}
+							else
+							{
+								nbOfdiceRollAttacker = 1;
+							}
+							
+							int[] attackerDices = new int[nbOfdiceRollAttacker];
+							for(int i=0; i< attackerDices.length;i++)
+							{
+								attackerDices[i] = rand.nextInt(6) + 1;
+							}
+							Arrays.sort(attackerDices);
+							int nbOfdiceRollDefender;
+							if(defender.getOwnerID() == 0 && defender.getArmyOn()>= 2)
+							{
+								System.out.print("How many dices would you like to roll 1 or 2? ");
+								nbOfdiceRollDefender = sc.nextInt();
+								sc.nextLine();
+							}
+							else
+							{
+								nbOfdiceRollDefender = 0;
+								if(defender.getArmyOn()>= 2)
+								{
+									nbOfdiceRollDefender = 2;
+								}
+								else
+								{
+									nbOfdiceRollDefender = 1;
+								}
+							}
+							
+							
+							int[] defenderDices = new int[nbOfdiceRollDefender];
+							for(int i=0; i< defenderDices.length;i++)
+							{
+								defenderDices[i] = rand.nextInt(6) + 1;
+							}
+							Arrays.sort(defenderDices);
+							System.out.println(players.get(new Integer(attacker.getOwnerID())).getName()+" rolled: ");
+							System.out.println(Arrays.toString(attackerDices));
+							System.out.println(players.get(new Integer(defender.getOwnerID())).getName()+" rolled: ");
+							System.out.println(Arrays.toString(defenderDices));
+							this.gamev.getHistoryPanel().addMessage(players.get(new Integer(attacker.getOwnerID())).getName()+" rolled: ");
+							this.gamev.getHistoryPanel().addMessage(Arrays.toString(attackerDices));
+							this.gamev.getHistoryPanel().addMessage(players.get(new Integer(defender.getOwnerID())).getName()+" rolled: ");
+							this.gamev.getHistoryPanel().addMessage(Arrays.toString(defenderDices));
+							int attackerVictories = 0;
+							int defenderVictories = 0;
+							if(defenderDices.length > attackerDices.length)
+							{
+								for(int i = 0; i<defenderDices.length -1 ; i++)
+								{
+									int attackerIndex = attackerDices.length -1 -i;
+									int defenderIndex = defenderDices.length -1 -i;
+									if(attackerIndex>=0)
+									{
+										if(defenderDices[defenderIndex]>attackerDices[attackerIndex])
+										{
+											defenderVictories++;
+										}
+										else
+										{
+											attackerVictories++;
+										}
+									}
+								}
+							}
+							else
+							{
+								for(int i = 0; i<attackerDices.length -1 ; i++)
+								{
+									int attackerIndex = attackerDices.length -1 -i;
+									int defenderIndex = defenderDices.length -1 -i;
+									if(defenderIndex>=0)
+									{
+										if(defenderDices[defenderIndex]>attackerDices[attackerIndex])
+										{
+											defenderVictories++;
+										}
+										else
+										{
+											attackerVictories++;
+										}
+									}
+								}
+							}
+							defender.setArmyOn(defender.getArmyOn() - attackerVictories);
+							attacker.setArmyOn(attacker.getArmyOn() - defenderVictories);
+							if(defender.getArmyOn() == 0)
+							{
+								if(!oneOnce)
+								{
+									int typeIndex = rand.nextInt(CardType.values().length);
+									CardType type = CardType.values()[typeIndex];
+									int nameIndex = rand.nextInt(RiskBoard.ProperInstance(debug).getTerritories().size());
+									String cardName = RiskBoard.ProperInstance(debug).getTerritories().get(nameIndex);
+									players.get(new Integer(attacker.getOwnerID())).getHand().add(new Card(type,cardName));
+									oneOnce = true;
+									this.gamev.getHistoryPanel().addMessage(players.get(integer).getName()+" has conquered a territory\n and won a card");
+									RiskBoard.ProperInstance(this.debug).update();
+								}
+								
+								players.get(new Integer(defender.getOwnerID())).removeTerritory(defender.getTerritoryName());
+								defender.setOwnerID(attacker.getOwnerID());
+								players.get(new Integer(attacker.getOwnerID())).addTerritory(defender.getTerritoryName());
+								RiskBoard.ProperInstance(this.debug).update();
+								if(RiskBoard.ProperInstance(debug).getContinent(defender.getContinentName()).getOwnerID() == attacker.getOwnerID())
+								{
+									players.get(integer).incrementArmiesBy(RiskBoard.ProperInstance(debug).getContinent(defender.getContinentName()).getContinentBonus());
+									this.gamev.getHistoryPanel().addMessage(players.get(integer).getName()+" has  conquered a continent\n and won a card");
+									RiskBoard.ProperInstance(this.debug).update();
+									if(isGameOver())
+									{
+										break;
+									}
+								}
+								players.get(new Integer(attacker.getOwnerID())).fortify(attacker.getTerritoryName(), defender.getTerritoryName(), attackerVictories);
+								
+							}
+						}
+					}
+				}
+				
+			}
 		}
-		this.setState(GameState.ATTACK);
+
 		try {
 			Thread.sleep(2500);
 		} catch (InterruptedException e) {
@@ -1231,11 +1271,33 @@ public class GameEngine {
 	}
 
 	/**
+	 * Checks if the player with the owner ID integer can Attack
+	 * @param integer owner/player ID
+	 * @return can attack true/false
+	 */
+	public boolean canAttack(Integer integer) {
+		
+		for(int i =0; i < players.get(integer).getTerritoriesOwned().size(); i++)
+		{
+			String territory =  players.get(integer).getTerritoriesOwned().get(i);
+			for(int  j =0; j <RiskBoard.ProperInstance(debug).getTerritory(territory).getNeighbours().size(); j++)
+			{
+				String neighbor = RiskBoard.ProperInstance(debug).getTerritory(territory).getNeighbours().get(j);
+				if(RiskBoard.ProperInstance(debug).getTerritory(territory).getArmyOn() > 1 && RiskBoard.ProperInstance(debug).getTerritory(neighbor).getOwnerID() != (int)integer)
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * The reinforcement phase
 	 * @param integer The id of the player
 	 */
 	private void reinforcePhase(Integer integer) {
-		
+		this.setState(GameState.REINFORCE);
 		int newArmies =(int)(players.get(integer).getTerritoriesOwned().size() < 9 ?3 :players.get(integer).getTerritoriesOwned().size()/3);
 		this.gamev.getHistoryPanel().addMessage(players.get(integer).getName()+" has\n "+players.get(integer).getTerritoriesOwned().size()+" territories");
 		this.gamev.getHistoryPanel().addMessage("Army received: " +newArmies);
@@ -1369,7 +1431,7 @@ public class GameEngine {
 			}
 			
 		}
-		this.setState(GameState.REINFORCE);
+		
 		try {
 			Thread.sleep(2500);
 		} catch (InterruptedException e) {
@@ -1408,6 +1470,24 @@ public class GameEngine {
 			armies = 15  + ((this.cardExchangeCount - 6)*5);
 		}
 		return armies;
+	}
+
+	/**
+	 * The number of players currently playing
+	 * @return The number of players currently playing
+	 */
+	public int getNumberOfPlayers() {
+		
+		return this.players.keySet().size();
+	}
+
+	/**
+	 * Returns the IPlayer object corresponding to the playerID given by index
+	 * @param index the Player ID
+	 * @return The IPlayer object
+	 */
+	public IPlayer getPlayer(int index) {
+		return this.players.get(new Integer(index));
 	}
 
 }
