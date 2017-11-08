@@ -911,7 +911,7 @@ public class GameEngine {
 			}
 		}
 		try {
-			Thread.sleep(3000);
+			Thread.sleep(2500);
 		} catch (InterruptedException e) {
 			
 			e.printStackTrace();
@@ -927,7 +927,7 @@ public class GameEngine {
 		// TODO Auto-generated method stub
 		this.setState(GameState.ATTACK);
 		try {
-			Thread.sleep(3000);
+			Thread.sleep(2500);
 		} catch (InterruptedException e) {
 			
 			e.printStackTrace();
@@ -941,9 +941,12 @@ public class GameEngine {
 	 */
 	private void reinforcePhase(Integer integer) {
 		// TODO Auto-generated method stub
+		
+		players.get(integer).incrementArmiesBy((int)(players.get(integer).getTerritoriesOwned().size()/3));
+		
 		this.setState(GameState.REINFORCE);
 		try {
-			Thread.sleep(3000);
+			Thread.sleep(2500);
 		} catch (InterruptedException e) {
 			
 			e.printStackTrace();
