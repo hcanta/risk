@@ -5,6 +5,7 @@ package risk.model;
 
 import java.util.ArrayList;
 
+import risk.game.cards.Hand;
 import risk.model.playerutils.IPlayer;
 import risk.utils.constants.RiskEnum.PlayerColors;
 
@@ -16,6 +17,10 @@ import risk.utils.constants.RiskEnum.PlayerColors;
 public class PlayerModel implements IPlayer
 {
 
+	/**
+	 * The hand of the player
+	 */
+	private Hand hand;
 	/**
 	 * The Player Name
 	 */
@@ -54,6 +59,7 @@ public class PlayerModel implements IPlayer
 	 */
 	public PlayerModel(String name, PlayerColors color, short turnID, boolean debug) 
 	{
+		this.hand = new Hand();
 		this.playerName=name;
 		this.turnID = turnID;
 		this.color = color;
@@ -202,9 +208,10 @@ public class PlayerModel implements IPlayer
 	/**
 	 * Augments that mount of armies on a territory by 1 Player Model Implementation
 	 * @param territory The territory to reinforce
+	 * @return was the reinforcement successful or not
 	 */
 	@Override
-	public void reinforce(String territory) {
+	public boolean reinforce(String territory) {
 		if(this.territoriesOwned.contains(territory.toLowerCase().trim()) )
 		{
 			int armyOn = RiskBoard.ProperInstance(debug).getTerritory(territory).getArmyOn();
@@ -213,9 +220,11 @@ public class PlayerModel implements IPlayer
 			{
 				RiskBoard.ProperInstance(debug).getTerritory(territory).setArmyOn(armyOn + 1);
 				this.nbArmiesToBePlaced --;
+				return true;
 				
 			}
 		}
+		return false;
 		
 	}
 
@@ -265,22 +274,16 @@ public class PlayerModel implements IPlayer
 		return array;
 	}
 
-	/**
-	 * Exchanges cards own by a player for armies to be added Player Model Implementation
-	 */
-	@Override
-	public void exchangeCards() {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 	/**
 	 * Augments that mount of armies on a territory by army . Player Model Implementation
 	 * @param territory The territory to reinforce
 	 * @param army number of armies to reinforce the territory by
+	 * @return was the reinforcement successful or not
 	 */
 	@Override
-	public void reinforce(String territory, int army) {
+	public boolean reinforce(String territory, int army) {
 		if(this.territoriesOwned.contains(territory.toLowerCase().trim()) )
 		{
 			int armyOn = RiskBoard.ProperInstance(debug).getTerritory(territory).getArmyOn();
@@ -289,10 +292,22 @@ public class PlayerModel implements IPlayer
 			{
 				RiskBoard.ProperInstance(debug).getTerritory(territory).setArmyOn(armyOn + 1);
 				this.nbArmiesToBePlaced -= army;
+				return true;
 				
 			}
 		}
+		return false;
 		
+	}
+
+	/**
+	 * Returns the hand of the player, PlayerModel Implementation
+	 * @return the hand of the player
+	 */
+	@Override
+	public Hand getHand() {
+		
+		return this.hand;
 	}
 
 }

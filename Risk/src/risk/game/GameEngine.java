@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Random;
@@ -16,6 +17,7 @@ import java.util.Scanner;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
+import risk.game.cards.Card;
 import risk.model.PlayerModel;
 import risk.model.RiskBoard;
 import risk.model.playerutils.IPlayer;
@@ -34,6 +36,10 @@ import risk.views.ui.MapSelector;
  */
 public class GameEngine {
 	
+	/**
+	 * Random Generator for the class
+	 */
+	private Random rand;
 	/**
 	 * Number of times cards were exchange
 	 */
@@ -67,6 +73,7 @@ public class GameEngine {
 	 */
 	public GameEngine(GameView gamev, boolean debug) 
 	{
+		rand = new Random();
 		this.cardExchangeCount = 0;
 		this.gamev = gamev;
 		this.debug = debug;
@@ -803,7 +810,7 @@ public class GameEngine {
 	 */
 	public void placeRemainingArmies()
 	{
-		Random rand = new Random();
+		
 		for(int i = 0; i < this.playerTurnOrder.size(); i++)
 		{
 			while(players.get(playerTurnOrder.get(i)).getNbArmiesToBePlaced() > 0)
@@ -946,10 +953,136 @@ public class GameEngine {
 	 * @param integer The id of the player
 	 */
 	private void reinforcePhase(Integer integer) {
-		// TODO Auto-generated method stub
+		
 		
 		players.get(integer).incrementArmiesBy((int)(players.get(integer).getTerritoriesOwned().size()/3));
-		
+		//Player Object
+		if((int)integer == 0)
+		{
+			int extra = 0;
+			boolean mustExchange = false;
+			boolean exchange = false;
+			if(players.get(integer).getHand().mustTurnInCards() || players.get(integer).getHand().canTurnInCards())
+			{
+				if(players.get(integer).getHand().mustTurnInCards())
+				{
+					mustExchange = true;
+					exchange = true;
+					this.gamev.getHistoryPanel().addMessage(players.get(integer).getName()+" Must Turn In Cards");
+				}
+				
+				if(!mustExchange && players.get(integer).getHand().canTurnInCards())
+				{
+					System.out.println("Do You whish to exchange cards ? 0 for No 1 for yes ");
+					int opt = sc.nextInt();
+					sc.nextLine();
+					exchange = 1 == opt;
+				}
+				if(exchange)
+				{
+					this.gamev.getHistoryPanel().addMessage("Card Exchange in progress");
+					RiskBoard.ProperInstance(debug).update();
+					System.out.println("Here are the cards that you own");
+					System.out.println(players.get(integer).getHand().toString());
+					System.out.println("First index of card to be traded");
+					int id1 = sc.nextInt();
+					System.out.println("Second index of card to be traded");
+					int id2 = sc.nextInt();
+					System.out.println("third index of card to be traded");
+					int id3 = sc.nextInt();
+					int iArr[] = {id1, id2, id3};
+					Arrays.sort(iArr);
+					Card card1 = players.get(integer).getHand().getCards().get(id1);
+					Card card2 = players.get(integer).getHand().getCards().get(id2);
+					Card card3 = players.get(integer).getHand().getCards().get(id3);
+					if(players.get(integer).getTerritoriesOwned().contains(card1.getTerritory())
+							||players.get(integer).getTerritoriesOwned().contains(card2.getTerritory())
+							||players.get(integer).getTerritoriesOwned().contains(card3.getTerritory())
+							)
+					{
+						extra = 2;
+						this.gamev.getHistoryPanel().addMessage("One of the card traded\n shows a country occupied\n by player 2 extra armies ");
+						RiskBoard.ProperInstance(debug).update();
+					}
+					players.get(integer).getHand().removeCardsFromHand(iArr[0], iArr[1], iArr[2]);
+					this.gamev.getHistoryPanel().addMessage("Cards Were traded");
+					RiskBoard.ProperInstance(debug).update();
+					players.get(integer).incrementArmiesBy(extra);
+					players.get(integer).incrementArmiesBy(getArmiesFromCardExchange());
+					
+					
+				}
+				//Reinforce portion
+
+				int option = 0;
+			
+				while(option!=2)
+				{
+					System.out.println("Number of armies to be placed: " + players.get(integer).getNbArmiesToBePlaced());
+					System.out.println("1-Attempt Reinforcement");
+					System.out.println("2-End fortification phase");
+
+					
+					option = sc.nextInt();
+					if(option == 2)
+					{
+						break;
+					}
+					else if(option == 1)
+					{
+						sc.nextLine();
+						System.out.print("Enter  territory to reinforce: ");
+						String territory = sc.nextLine();
+						System.out.print("Enter number of army to add: ");
+						int army = sc.nextInt();
+						sc.nextLine();
+						
+						if(players.get(integer).reinforce(territory, army))
+						{
+							System.out.println("Reinforcement was successful");
+						}
+						else
+						{
+							System.out.println("Reinforcement was not successful");
+						}
+					}
+				}
+			}
+			
+		}
+		else // Robot object
+		{
+			int extra = 0;
+			if(players.get(integer).getHand().mustTurnInCards() || players.get(integer).getHand().canTurnInCards())
+			{
+				if(players.get(integer).getHand().mustTurnInCards())
+				{
+					this.gamev.getHistoryPanel().addMessage(players.get(integer).getName()+" Must Turn In Cards");
+				}
+				Card card1 = players.get(integer).getHand().getCards().get(0);
+				Card card2 = players.get(integer).getHand().getCards().get(1);
+				Card card3 = players.get(integer).getHand().getCards().get(2);
+				if(players.get(integer).getTerritoriesOwned().contains(card1.getTerritory())
+						||players.get(integer).getTerritoriesOwned().contains(card2.getTerritory())
+						||players.get(integer).getTerritoriesOwned().contains(card3.getTerritory())
+						)
+				{
+					extra = 2;
+					this.gamev.getHistoryPanel().addMessage("One of the card traded\n shows a country occupied\n by player 2 extra armies ");
+				}
+				players.get(integer).getHand().removeCardsFromHand(0, 1, 2);
+				this.gamev.getHistoryPanel().addMessage("Cards Were traded");
+				RiskBoard.ProperInstance(debug).update();
+				players.get(integer).incrementArmiesBy(extra);
+				players.get(integer).incrementArmiesBy(getArmiesFromCardExchange());
+			}
+			while(players.get(integer).getNbArmiesToBePlaced() > 0)
+			{
+				int index = rand.nextInt(players.get(integer).nbTerritoriesOwned());
+				players.get(integer).reinforce(players.get(integer).getTerritoriesOwned().get(index));
+			}
+			
+		}
 		this.setState(GameState.REINFORCE);
 		try {
 			Thread.sleep(2500);
@@ -976,6 +1109,18 @@ public class GameEngine {
 	{
 		int armies = 0;
 		this.cardExchangeCount ++;
+		if(this.cardExchangeCount <= 5)
+		{
+			armies = this.cardExchangeCount * 2 + 2;
+		}
+		else if(this.cardExchangeCount == 6)
+		{
+			armies = 15;
+		}
+		else
+		{
+			armies = 15  + ((this.cardExchangeCount - 6)*5);
+		}
 		return armies;
 	}
 

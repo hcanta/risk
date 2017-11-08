@@ -27,4 +27,14 @@ public class RiskEnum
 	{
 		red, yellow, brown, green,  pink, purple
 	}
+	
+	/**
+	 * The Different type Card Possible
+	 * @author hcanta
+	 */
+	public static enum CardType
+	{
+		Infantry, Calvary, Artillery
+	}
+	
 }

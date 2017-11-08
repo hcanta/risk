@@ -5,6 +5,7 @@ package risk.model.playerutils;
 
 import java.util.ArrayList;
 
+import risk.game.cards.Hand;
 import risk.utils.constants.RiskEnum.PlayerColors;
 
 /**
@@ -77,7 +78,7 @@ public interface IPlayer
 	 * @param origin The origin territory
 	 * @param destination The destination territory
 	 * @param armies The number of armies to be moved
-	 * @return was the fortification sucessful or not
+	 * @return was the fortification successful or not
 	 */
 	public boolean fortify(String origin, String destination, int armies);
 	
@@ -85,15 +86,17 @@ public interface IPlayer
 	/**
 	 * Augments that mount of armies on a territory by 1 
 	 * @param territory The territory to reinforce
+	 * @return was the reinforcement successful or not
 	 */
-	public void reinforce(String territory);
+	public boolean reinforce(String territory);
 	
 	/**
 	 * Augments that mount of armies on a territory by army 
 	 * @param territory The territory to reinforce
 	 * @param army nb of armies to reinforce the territory by
+	 * @return was the reinforcement successful or not
 	 */
-	public void reinforce(String territory, int army);
+	public boolean reinforce(String territory, int army);
 
 	/**
 	 * Increments the amount of armies to be placed by the given amount
@@ -121,8 +124,9 @@ public interface IPlayer
 	
 	
 	/**
-	 * Exchanges cards own by a player for armies to be added
+	 * Returns the Hand of the player
+	 * @return the Hand of the player
 	 */
-	public void exchangeCards();
+	public Hand getHand();
 
 }

@@ -1,13 +1,16 @@
+/**
+ * The game cards package holds the implementation of the cards object
+ */
 package risk.game.cards;
 
-/**
- * Allows the creation of Risk Hand objects used to handle the cards held by a player.
- * @author Mohammad Akif Beg
- * @version 1.0
- **/
 
 import java.util.ArrayList;
-
+/**
+ * This class is for the card that is being used in the game.
+ * @author Mohammad Akif Beg
+ * @author hcanta
+ * @version 2.2
+ **/
 public class Hand {
 
 	private boolean condition;
@@ -15,7 +18,7 @@ public class Hand {
 	private ArrayList<Card> hand;
 
 	/**
-	 * No argument constructor. Instantiate Deck.
+	 * No argument constructor. Instantiate the hand.
 	 **/
 	public Hand() {
 	
@@ -24,17 +27,21 @@ public class Hand {
 	
 	/**
 	 * Adds the card to the hand of the player 
+	 * @param card The card to be added
 	 **/
 	public void add(Card card) {
 	
 		hand.add(card);
 	}
 	/**
-	 * Removes the cards at the given indices from the hand
-	 **/
+	 *  Removes the cards at the given indices from the hand This assumes that the index are given in ascending number
+	 * @param index1 Index of the first card to be removed
+	 * @param index2 Index of the second card to be removed
+	 * @param index3 Index of the third card to be removed
+	 */
 	public void removeCardsFromHand(int index1, int index2, int index3) {
 	
-		if (canTurnInCards(index1, index2, index3) == true) {
+		if (canTurnInCards()) {
 			hand.remove(index3);
 			hand.remove(index2);
 			hand.remove(index1);
@@ -46,27 +53,18 @@ public class Hand {
 	
 	/**
 	 * returns true if the player can turn in cards
+	 * @return True/False can the card be turned in
 	 **/
-	public boolean canTurnInCards(int index1, int index2, int index3) {
+	public boolean canTurnInCards() {
 	
 		condition = false;
 		
-		if (hand.size() >= 3) {
-			if (hand.get(index1).getType().equals(hand.get(index2).getType()) && hand.get(index1).getType().equals(hand.get(index3).getType())) {
-			//If all three cards have the same type
-				condition = true;
-				
-			} else if (
-				!hand.get(index1).getType().equals(hand.get(index2).getType()) && !hand.get(index1).getType().equals(hand.get(index3).getType()) && !hand.get(index2).getType().equals(hand.get(index3).getType())) {
-			//If all three cards have different types
-				condition = true;
-			}
-		}
-		return condition;
+		return (hand.size() >= 3);
 	}
 
 	/**
 	 * Returns true if the player must turn in cards
+	 * @return true/false must the card be turned in 
 	 **/
 	public boolean mustTurnInCards() {
 	
@@ -80,9 +78,27 @@ public class Hand {
 
 	/**
 	 * Returns the hand
+	 * @return the ArrayList of cards (the hand)
 	 **/
 	public ArrayList<Card> getCards() {
 		return hand;
+	}
+	
+	/**
+	 * Creates a string representation of the hand
+	 * @return a string representation of the hand
+	 */
+	public String toString()
+	{
+		StringBuffer str = new StringBuffer();
+		str.append("");
+		for(int i =0;  i< this.hand.size(); i++)
+		{
+			str.append(""+i +" "+this.hand.get(i).getNameAndType()+"\n");
+		}
+			
+		return str.toString();
+		
 	}
 
 	
