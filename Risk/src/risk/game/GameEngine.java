@@ -823,6 +823,7 @@ public class GameEngine {
 			while(players.get(playerTurnOrder.get(i)).getNbArmiesToBePlaced() > 0)
 			{
 				int index = rand.nextInt(players.get(playerTurnOrder.get(i)).nbTerritoriesOwned());
+				
 				players.get(playerTurnOrder.get(i)).reinforce(players.get(playerTurnOrder.get(i)).getTerritoriesOwned().get(index));
 			}
 		}
