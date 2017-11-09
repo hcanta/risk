@@ -1,0 +1,61 @@
+[Map]
+author = team1
+
+[Continents]
+africa=3
+north america=5
+asia=7
+south america=2
+australia=2
+europe=5
+
+[Territories]
+egypt,0,0,africa,southern europe,north africa,middle east,east africa
+south africa,0,0,africa,congo,east africa,madagascar
+madagascar,0,0,africa,east africa,south africa
+east africa,0,0,africa,egypt,middle east,congo,north africa,south africa,madagascar
+north africa,0,0,africa,brazil,western europe,southern europe,egypt,east africa,congo
+congo,0,0,africa,north africa,east africa,south africa
+
+greenland,0,0,north america,northwest territory,ontario,quebec,iceland
+central america,0,0,north america,western united states,eastern united states,venezuala
+ontario,0,0,north america,northwest territory,alberta,greenland,quebec,western united states,eastern united states
+alaska,0,0,north america,northwest territory,alberta,kamchatka
+western united states,0,0,north america,alberta,ontario,eastern united states,central america
+northwest territory,0,0,north america,alaska,alberta,ontario,greenland
+quebec,0,0,north america,greenland,ontario,eastern united states
+eastern united states,0,0,north america,ontario,quebec,western united states,central america
+alberta,0,0,north america,alaska,northwest territory,ontario,western united states
+
+china,0,0,asia,ural,siberia,mongolia,siam,india,afghanistan
+middle east,0,0,asia,ukraine,afghanistan,india,southern europe,egypt,east africa
+japan,0,0,asia,kamchatka,mongolia
+yatusk,0,0,asia,siberia,irkutsk,kamchatka
+siam,0,0,asia,china,india,indonesia
+afghanistan,0,0,asia,ural,china,india,middle east,ukraine
+mongolia,0,0,asia,siberia,irkutsk,japan,china,kamchatka
+irkutsk,0,0,asia,siberia,yatusk,kamchatka,mongolia
+india,0,0,asia,china,siam,afghanistan,middle east
+ural,0,0,asia,siberia,china,afghanistan,ukraine
+siberia,0,0,asia,yatusk,irkutsk,mongolia,china,ural
+kamchatka,0,0,asia,yatusk,irkutsk,japan,alaska,mongolia
+
+venezuala,0,0,south america,central america,peru,brazil
+brazil,0,0,south america,venezuala,peru,argentina,north africa
+argentina,0,0,south america,peru,brazil
+peru,0,0,south america,venezuala,brazil,argentina
+
+eastern australia,0,0,australia,western australia,new guinea
+new guinea,0,0,australia,indonesia,western australia,eastern australia
+indonesia,0,0,australia,siam,new guinea,western australia
+western australia,0,0,australia,indonesia,new guinea,eastern australia
+
+scandinavia,0,0,europe,iceland,great britain,northern europe,ukraine
+western europe,0,0,europe,great britain,northern europe,southern europe,north africa
+ukraine,0,0,europe,ural,afghanistan,middle east,southern europe,northern europe,scandinavia
+iceland,0,0,europe,greenland,great britain,scandinavia
+great britain,0,0,europe,iceland,scandinavia,western europe,northern europe
+northern europe,0,0,europe,great britain,scandinavia,ukraine,southern europe,western europe
+southern europe,0,0,europe,northern europe,ukraine,middle east,egypt,north africa,western europe
+
+

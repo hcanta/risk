@@ -1,0 +1,17 @@
+[Map]
+author=anon
+warn=yes
+image=USA.bmp
+wrap=no
+scroll=horizontal
+
+[Continents]
+Mexico=2
+Northwest U.S.=3
+
+
+[Territories]
+Baja California,105,385,Mexico,Western Mexico
+Western Mexico,175,385,Mexico,Baja California
+Eastern Mexico,275,425,Northwest,WEastern
+WEastern Mexico,25,425,Northwest,Eastern
