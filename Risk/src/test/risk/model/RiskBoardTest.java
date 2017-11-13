@@ -24,7 +24,9 @@ public class RiskBoardTest {
 		RiskBoard.ProperInstance(true).clear();
 		MapUtils.loadFile(new File("Maps/World.map"),true);
 	}
-
+	/**
+	 * This function runs before the test cases.
+	 */
 	@Test
 	public void testAddContinent() {
 		Assert.assertFalse(RiskBoard.ProperInstance(true).getContinents().contains("testcontinent"));
@@ -32,7 +34,9 @@ public class RiskBoardTest {
 		Assert.assertTrue(RiskBoard.ProperInstance(true).getContinents().contains("testcontinent"));
 		
 	}
-
+	/**
+	 * This function runs as the test case 1.
+	 */
 	@Test
 	public void testRemoveContinent() {		
 		Assert.assertTrue(RiskBoard.ProperInstance(true).getContinents().contains("europe"));
