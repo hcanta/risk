@@ -34,7 +34,9 @@ public class RiskBoardTest {
 		Assert.assertTrue(RiskBoard.ProperInstance(true).getContinents().contains("testcontinent"));
 		
 	}
-
+	/**
+	 * This function runs as the test case 1.
+	 */
 	@Test
 	public void testRemoveContinent() {		
 		Assert.assertTrue(RiskBoard.ProperInstance(true).getContinents().contains("europe"));
