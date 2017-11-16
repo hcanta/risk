@@ -48,6 +48,7 @@ public class CardTest {
 	 */
 	@Test
 	public void testGetName() {
+		
 		assertEquals(testObject.getTerritoryName(),testCard.getTerritory());
 	}
 
@@ -56,6 +57,7 @@ public class CardTest {
 	 */
 	@Test
 	public void testGetType() {
+		
 		testCard.getType();
 		assertEquals(typeCard,testCard.getType().name());
 	}

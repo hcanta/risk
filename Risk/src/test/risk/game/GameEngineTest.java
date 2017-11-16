@@ -25,12 +25,17 @@ public class GameEngineTest {
 	 * player object
 	 */
 	private IPlayer player;
+	
 	/**
 	 * Are we debugging
 	 */
 	private boolean debug;
 	
+	/**
+	 * GameEngine object
+	 */
 	private GameEngine engine;
+	
 	/**
 	 * Creates the RiskBoard and GameEngine instances for debugging.
 	 * this function runs before every test case.
@@ -94,6 +99,7 @@ public class GameEngineTest {
 	 */
 	@Test
 	public void testRandomAssign() {
+		
 		risk.model.RiskBoard.ProperInstance(debug).clear();
 		MapUtils.loadFile(new File("Maps/World.map"),debug);
 		
