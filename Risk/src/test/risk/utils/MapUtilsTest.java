@@ -76,7 +76,7 @@ public class MapUtilsTest {
 	}
 
 	/**
-	 * the test case testing the laod file to be invalid
+	 * the test case testing the load file to be invalid
 	 */
 	@Test 
 	public void testLoadFileInValid() {
@@ -86,19 +86,27 @@ public class MapUtilsTest {
 		Assert.assertTrue(MapUtils.loadFile(new File("Maps/Atlantis.map"),true));
 	}
 	
+	/**
+	 * to check the loaded file invalid and disconnected.
+	 */
 	@Test 
 	public void testLoadFileInValidDisconnected() {
 		RiskBoard.ProperInstance(true).clear();
 		Assert.assertFalse(MapUtils.loadFile(new File("Maps/Disconnected.map"),true));
 
 	}
-	
+	/**
+	 * to check the disconnected matrix.	
+	 */
 	@Test 
 	public void testDisconnectedMatrix() {
 		
 		Assert.assertFalse(MapUtils.performTraversal(disconnected) == 3);
 	}
 	
+	/**
+	 * testing the connected matrix
+	 */
 	@Test 
 	public void testConnectedMatrix() {
 		
