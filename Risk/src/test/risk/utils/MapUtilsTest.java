@@ -28,6 +28,10 @@ public class MapUtilsTest {
 	 */
 	private int[][] disconnected;
 	@Before
+	/**
+	 * teh before test case of the connected and disconnected.
+	 * @throws Exception
+	 */
 	public void setUp() throws Exception 
 	{
 		RiskBoard.ProperInstance(true).clear();
@@ -36,6 +40,9 @@ public class MapUtilsTest {
 		disconnected = new int[][]{{0,1,0},{1,0,0},{0,0,0}};
 	}
 	
+	/**
+	 * test case checks the saved file.
+	 */
 	@Test
 	public void testSaveFile()
 	{
