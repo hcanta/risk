@@ -25,7 +25,7 @@ public class RiskBoardTest {
 		MapUtils.loadFile(new File("Maps/World.map"),true);
 	}
 	/**
-	 * This function runs before the test cases.
+	 * This function runs before the test cases.is to test the added continent.
 	 */
 	@Test
 	public void testAddContinent() {
@@ -35,7 +35,7 @@ public class RiskBoardTest {
 		
 	}
 	/**
-	 * This function runs as the test case 1.
+	 * This function runs as the test case 1.it is to test if teh continent is removed.
 	 */
 	@Test
 	public void testRemoveContinent() {		
@@ -45,6 +45,9 @@ public class RiskBoardTest {
 				
 	}
 
+	/**
+	 * this is to test the added territory.
+	 */
 	@Test
 	public void testAddTerritoryStringString() 
 	{
@@ -54,6 +57,10 @@ public class RiskBoardTest {
 		
 	}
 
+	/**
+	 * here the validation of the map is been done.
+	 * if the map is proper.
+	 */
 	@Test
 	public void testValidateMap() {
 		Assert.assertTrue(RiskBoard.ProperInstance(true).validateMap());
@@ -63,7 +70,9 @@ public class RiskBoardTest {
 		Assert.assertFalse(MapUtils.loadFile(new File("Maps/invalidUSA.map"),true));
 		Assert.assertFalse(MapUtils.loadFile(new File("Maps/invalidWorld.map"),true));
 	}
-
+	/**
+	 * this test case checks the removed map.
+	 */
 	@Test
 	public void testRemoveTerritory() {
 		Assert.assertTrue(RiskBoard.ProperInstance(true).getContinent("europe").containsTerritory("iceland"));
