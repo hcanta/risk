@@ -60,6 +60,9 @@ public class MapUtilsTest {
 		Assert.assertTrue(RiskBoard.ProperInstance(true).getContinents().contains("europe"));
 	}
 
+	/**
+	 * the test case checking the loaded file.
+	 */
 	@Test
 	public void testLoadFileValid() {
 		Assert.assertTrue(RiskBoard.ProperInstance(true).getContinents().contains("europe"));
@@ -71,7 +74,10 @@ public class MapUtilsTest {
 		Assert.assertTrue(RiskBoard.ProperInstance(true).getContinents().contains("kala"));
 		Assert.assertTrue(RiskBoard.ProperInstance(true).validateMap());
 	}
-	
+
+	/**
+	 * the test case testing the laod file to be invalid
+	 */
 	@Test 
 	public void testLoadFileInValid() {
 		RiskBoard.ProperInstance(true).clear();
