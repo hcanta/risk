@@ -135,17 +135,19 @@ public class GameEngine {
 				{
 					gamev.getHistoryPanel().addMessage("\n Loading  Map Mode");
 
-					loadMapHelper(true);
-					RiskBoard.ProperInstance(debug).update();
-					setState(GameState.STARTUP);
-					Thread thread = new Thread(new Runnable() {
-				         @Override
-				         public void run() {
-				             deploy();
-				             play();
-				         }
-					});
-					thread.start();
+					if(loadMapHelper(true))
+					{
+						RiskBoard.ProperInstance(debug).update();
+						setState(GameState.STARTUP);
+						Thread thread = new Thread(new Runnable() {
+					         @Override
+					         public void run() {
+					             deploy();
+					             play();
+					         }
+						});
+						thread.start();
+					}
 					
 			
 				}
@@ -277,11 +279,12 @@ public class GameEngine {
 		
 		
 	}
-	/**
+/**
 	 * This function chooses the file to be edited or loaded
 	 * @param load are we loading to play or to edit
+	 * @return was the file properly loaded or not
 	 */
-	private void loadMapHelper(boolean load)
+	private boolean loadMapHelper(boolean load)
 	{
 		JFileChooser fileChooser =  MapSelector.getJFileChooser();
 		int result = fileChooser.showOpenDialog(this.gamev.getFrame());
@@ -300,6 +303,7 @@ public class GameEngine {
 				
 				this.gamev.getHistoryPanel().addMessage(RiskStrings.INVALID_FILE_LOCATION);
 				RiskBoard.ProperInstance(this.debug).update();
+				
 			}
 			else
 			{
@@ -318,6 +322,7 @@ public class GameEngine {
 						this.gamev.getCenter().repaint();
 						this.gamev.getCenter().validate();
 					}
+					return true;
 					
 				}
 				else
@@ -335,11 +340,12 @@ public class GameEngine {
 						this.gamev.getCenter().repaint();
 						this.gamev.getCenter().validate();
 					}
+					
 				}
 			}
 		}
+		return false;
 	}  
-	
 	
 	/**
 	 * Edit the Map That was Loaded

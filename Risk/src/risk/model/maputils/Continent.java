@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 import com.mxgraph.view.mxGraph;
 
+import risk.utils.MapUtils;
 import risk.utils.constants.RiskIntegers;
 
 /**
@@ -298,6 +299,22 @@ public class Continent
 			if(!valid)
 				return false;
 		}
+		int[][] matrix = new int [territories.keySet().size()][territories.keySet().size()];
+		for(int i =0; i<territories.keySet().size(); i++ )
+		{
+			for(int j =0; j<territories.keySet().size(); j++ )
+			{
+				if(i!=j)
+				{
+					String neighbour = (String) territories.keySet().toArray()[j];
+					if(territories.get(territories.keySet().toArray()[i]).getNeighbours().contains(neighbour))
+					{
+						matrix[i][j] = 1;
+					}
+				}
+			}
+		}
+		valid = MapUtils.performTraversal(matrix)==territories.keySet().size();
 		return valid;
 	}
 	
