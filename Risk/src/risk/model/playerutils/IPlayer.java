@@ -128,5 +128,10 @@ public interface IPlayer
 	 * @return the Hand of the player
 	 */
 	public Hand getHand();
+	/**
+	 * Checks if the player can perform a reinforce attack
+	 * @return True /false
+	 */
+	public boolean canReinforce();
 
 }

@@ -314,4 +314,13 @@ public class PlayerModel implements IPlayer
 		return this.hand;
 	}
 
+	/**
+	 * Checks if the player can perform a reinforce attack. Player Model Implementation
+	 * @return True /false
+	 */
+	@Override
+	public boolean canReinforce() {
+		return this.nbArmiesToBePlaced > 0;
+	}
+
 }
