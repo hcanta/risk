@@ -242,7 +242,7 @@ public class GameView implements Observer
 		this.bottom.update(obj, param);
 		String stateString = "Current State: "+ ((RiskBoard)obj).getState().name();		
 		GameView.historyTextPanel.addMessage(stateString);
-		GameView.historyTextPanel.update();
+		GameView.historyTextPanel.update(obj,param);
 		GameView.historyTextScroller.validate();
 		GameView.historyTextScroller.repaint();
 		

@@ -12,7 +12,9 @@ import com.mxgraph.view.mxGraph;
 import risk.model.maputils.Continent;
 import risk.model.maputils.Territory;
 import risk.utils.MapUtils;
+import risk.utils.Tuple;
 import risk.utils.constants.RiskEnum.GameState;
+import risk.utils.constants.RiskEnum.RiskEvent;
 import risk.utils.constants.RiskIntegers;
 
 /**
@@ -377,11 +379,13 @@ public class RiskBoard extends Observable
 	
 	/**
 	 * This function is used to notify the observers
+	 * @param event The event that triggered the notification to the observers
 	 */
-	public void update()
+	public void update(RiskEvent event)
 	{
-		setChanged();
-		notifyObservers(this);
+		this.setChanged();
+		Tuple <RiskBoard, RiskEvent> pair = new Tuple<RiskBoard, RiskEvent>(this,event);
+		this.notifyObservers(pair);
 	}
 	
 	/**
@@ -407,7 +411,7 @@ public class RiskBoard extends Observable
 	 */
 	public void setState(GameState state) {
 		this.state = state;
-		update();
+		update(RiskEvent.StateChange);
 	}
 	/**
 	 * Check if the current Game Map is Valid or not
@@ -444,7 +448,7 @@ public class RiskBoard extends Observable
 		}
 		boolean result  = valid && validateMapHelper();
 		if(result)
-			update();
+			update(RiskEvent.GeneralUpdate);
 		return result;
 	}
 	

@@ -4,6 +4,9 @@
 package risk.views.ui;
 
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
+
 import javax.swing.JTextArea;
 
 /**
@@ -11,7 +14,7 @@ import javax.swing.JTextArea;
  * State And step taken throughout the game, as well as the info on the various countries
  * @author hcanta
  */
-public class SidePanel extends JTextArea
+public class SidePanel extends JTextArea implements Observer
 {
 	
 	/**
@@ -43,13 +46,14 @@ public class SidePanel extends JTextArea
 	public void addMessage(String msg)
 	{
 		this.fTextLog.add(msg);
-		update();
+		
 	}
 	
 	/**
 	 * Updates the content of the Text to be displayed
 	 */
-	public void update() 
+	@Override
+	public void update(Observable arg0, Object arg1) 
 	{	
 		refreshText();
 		this.setVisible(true);
@@ -68,5 +72,15 @@ public class SidePanel extends JTextArea
 			toPrint.append(" "+text + "\n");
 		}
 		this.setText(toPrint.toString());
-	}	
+	}
+	
+	/**
+	 * Clear the message Lists
+	 */
+	public void clearMessages()
+	{
+		this.fTextLog.clear();
+	}
+
+		
 }

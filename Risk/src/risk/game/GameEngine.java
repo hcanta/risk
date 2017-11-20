@@ -26,6 +26,7 @@ import risk.utils.MapUtils;
 import risk.utils.constants.RiskEnum.CardType;
 import risk.utils.constants.RiskEnum.GameState;
 import risk.utils.constants.RiskEnum.PlayerColors;
+import risk.utils.constants.RiskEnum.RiskEvent;
 import risk.utils.constants.RiskStrings;
 import risk.views.GameView;
 import risk.views.ui.GraphDisplayPanel;
@@ -144,7 +145,7 @@ public class GameEngine {
 
 					if(loadMapHelper(true))
 					{
-						board.update();
+						board.update(RiskEvent.HistoryUpdate);
 						setState(GameState.STARTUP);
 						Thread thread = new Thread(new Runnable() {
 					         @Override
@@ -299,7 +300,7 @@ public class GameEngine {
 		if (result == JFileChooser.APPROVE_OPTION) 
 		{
 			this.gamev.getHistoryPanel().addMessage("Attempting To Load Map");
-			board.update();
+			board.update(RiskEvent.HistoryUpdate);
 			
 			File file = fileChooser.getSelectedFile();
 			if (!file.exists() && !file.isDirectory()) 
@@ -309,17 +310,17 @@ public class GameEngine {
 								+ file.getAbsolutePath());
 				
 				this.gamev.getHistoryPanel().addMessage(RiskStrings.INVALID_FILE_LOCATION);
-				board.update();
+				board.update(RiskEvent.HistoryUpdate);
 				
 			}
 			else
 			{
 				this.gamev.getHistoryPanel().addMessage("file name is: " + file.getName());
-				board.update();
+				board.update(RiskEvent.HistoryUpdate);
 				if(MapUtils.loadFile(file, this.debug))
 				{
 					this.gamev.getHistoryPanel().addMessage("The Map File was properly loaded.");
-					board.update();
+					board.update(RiskEvent.HistoryUpdate);
 					if(load)
 					{
 						this.gamev.getCenter().removeAll();
@@ -335,7 +336,7 @@ public class GameEngine {
 				else
 				{
 					this.gamev.getHistoryPanel().addMessage("The Map File was invalid.");
-					board.update();
+					board.update(RiskEvent.HistoryUpdate);
 					board.clear();
 					if(load)
 					{
@@ -798,7 +799,7 @@ public class GameEngine {
 		{
 			this.gamev.getHistoryPanel().addMessage(""+players.keySet().size()+" players,\n Armies assigned : "+nbArmiesToBePlaced);
 		}
-		board.update();
+		board.update(RiskEvent.GeneralUpdate);
 		return nbArmiesToBePlaced;
 	}
 	
@@ -818,7 +819,7 @@ public class GameEngine {
 			players.get(player).decrementArmies();
 			board.getTerritory(countries.get(i)).setOwnerID(players.get(player).getTurnID());
 			board.getTerritory(countries.get(i)).setArmyOn(1);
-			board.update();
+			board.update(RiskEvent.CountryUpdate);
 			try {
 				Thread.sleep(200);
 			} catch (InterruptedException e) {
@@ -861,7 +862,7 @@ public class GameEngine {
 					this.setState(GameState.IDLE);
 					this.gamev.getHistoryPanel().addMessage("The Game is Over");
 					this.gamev.getHistoryPanel().addMessage("winner: "+ this.players.get(new Integer(board.getOwnerID())).getName());
-					board.update();
+					board.update(RiskEvent.GeneralUpdate);
 					return;
 				}
 					
@@ -1044,7 +1045,7 @@ public class GameEngine {
 							this.gamev.getHistoryPanel().addMessage(players.get(new Integer(defender.getOwnerID())).getName()+" rolled: ");
 							this.gamev.getHistoryPanel().addMessage(Arrays.toString(defenderDices));
 							
-							board.update();
+							board.update(RiskEvent.HistoryUpdate);
 							int attackerVictories = 0;
 							int defenderVictories = 0;
 							if(defenderDices.length > attackerDices.length)
@@ -1098,18 +1099,19 @@ public class GameEngine {
 									players.get(new Integer(attacker.getOwnerID())).getHand().add(new Card(type,cardName));
 									oneOnce = true;
 									this.gamev.getHistoryPanel().addMessage(players.get(integer).getName()+" has conquered a territory\n and won a card");
-									board.update();
+									board.update(RiskEvent.HistoryUpdate);
+									board.update(RiskEvent.CountryUpdate);
 								}
 								
 								players.get(new Integer(defender.getOwnerID())).removeTerritory(defender.getTerritoryName());
 								defender.setOwnerID(attacker.getOwnerID());
 								players.get(new Integer(attacker.getOwnerID())).addTerritory(defender.getTerritoryName());
-								board.update();
+								board.update(RiskEvent.CountryUpdate);
 								if(board.getContinent(defender.getContinentName()).getOwnerID() == attacker.getOwnerID())
 								{
 									players.get(integer).incrementArmiesBy(board.getContinent(defender.getContinentName()).getContinentBonus());
 									this.gamev.getHistoryPanel().addMessage(players.get(integer).getName()+" has  conquered a continent\n and won a card");
-									board.update();
+									board.update(RiskEvent.HistoryUpdate);
 									if(isGameOver())
 									{
 										break;
@@ -1250,18 +1252,19 @@ public class GameEngine {
 									players.get(new Integer(attacker.getOwnerID())).getHand().add(new Card(type,cardName));
 									oneOnce = true;
 									this.gamev.getHistoryPanel().addMessage(players.get(integer).getName()+" has conquered a territory\n and won a card");
-									board.update();
+									board.update(RiskEvent.CountryUpdate);
+									board.update(RiskEvent.HistoryUpdate);
 								}
 								
 								players.get(new Integer(defender.getOwnerID())).removeTerritory(defender.getTerritoryName());
 								defender.setOwnerID(attacker.getOwnerID());
 								players.get(new Integer(attacker.getOwnerID())).addTerritory(defender.getTerritoryName());
-								board.update();
+								board.update(RiskEvent.CountryUpdate);
 								if(board.getContinent(defender.getContinentName()).getOwnerID() == attacker.getOwnerID())
 								{
 									players.get(integer).incrementArmiesBy(board.getContinent(defender.getContinentName()).getContinentBonus());
 									this.gamev.getHistoryPanel().addMessage(players.get(integer).getName()+" has  conquered a continent\n and won a card");
-									board.update();
+									board.update(RiskEvent.HistoryUpdate);
 									if(isGameOver())
 									{
 										break;
@@ -1317,7 +1320,7 @@ public class GameEngine {
 		int newArmies =(int)(players.get(integer).getTerritoriesOwned().size() < 9 ?3 :players.get(integer).getTerritoriesOwned().size()/3);
 		this.gamev.getHistoryPanel().addMessage(players.get(integer).getName()+" has\n "+players.get(integer).getTerritoriesOwned().size()+" territories");
 		this.gamev.getHistoryPanel().addMessage("Army received: " +newArmies);
-		board.update();
+		board.update(RiskEvent.GeneralUpdate);
 		players.get(integer).incrementArmiesBy(newArmies);
 		//Player Object
 		if((int)integer == 0)
@@ -1344,7 +1347,8 @@ public class GameEngine {
 				if(exchange)
 				{
 					this.gamev.getHistoryPanel().addMessage("Card Exchange in progress");
-					board.update();
+					board.update(RiskEvent.HistoryUpdate);
+					board.update(RiskEvent.CardTrade);
 					System.out.println("Here are the cards that you own");
 					System.out.println(players.get(integer).getHand().toString());
 					System.out.println("First index of card to be traded");
@@ -1365,11 +1369,12 @@ public class GameEngine {
 					{
 						extra = 2;
 						this.gamev.getHistoryPanel().addMessage("One of the card traded\n shows a country occupied\n by player 2 extra armies ");
-						board.update();
+						board.update(RiskEvent.HistoryUpdate);
 					}
 					players.get(integer).getHand().removeCardsFromHand(iArr[0], iArr[1], iArr[2]);
 					this.gamev.getHistoryPanel().addMessage("Cards Were traded");
-					board.update();
+					board.update(RiskEvent.HistoryUpdate);
+					board.update(RiskEvent.CardTrade);
 					players.get(integer).incrementArmiesBy(extra);
 					players.get(integer).incrementArmiesBy(getArmiesFromCardExchange());
 					
@@ -1436,7 +1441,8 @@ public class GameEngine {
 				}
 				players.get(integer).getHand().removeCardsFromHand(0, 1, 2);
 				this.gamev.getHistoryPanel().addMessage("Cards Were traded");
-				board.update();
+				board.update(RiskEvent.HistoryUpdate);
+				board.update(RiskEvent.CardTrade);
 				players.get(integer).incrementArmiesBy(extra);
 				players.get(integer).incrementArmiesBy(getArmiesFromCardExchange());
 			}

@@ -37,4 +37,13 @@ public class RiskEnum
 		Infantry, Calvary, Artillery
 	}
 	
+	/**
+	 * The different events that can cause a change and a notifications to the observers
+	 * @author hcanta
+	 */
+	public static enum RiskEvent
+	{
+		StateChange, GeneralUpdate, HistoryUpdate, CountryUpdate, CardTrade
+	}
+	
 }
