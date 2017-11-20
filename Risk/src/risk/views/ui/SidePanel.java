@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import javax.swing.JTextArea;
 
 /**
- * The History Panel  extends JTextArea Implements Observer It is used to log and display the History of the various
- * State And step taken throughout the game
+ * The Side Panel  extends JTextArea Implements Observer It is used to log and display the History of the various
+ * State And step taken throughout the game, as well as the info on the various countries
  * @author hcanta
  */
-public class HistoryPanel extends JTextArea
+public class SidePanel extends JTextArea
 {
 	
 	/**
@@ -26,13 +26,14 @@ public class HistoryPanel extends JTextArea
 	
 
 	/**
-	* Constructor for the History Panel
+	* Constructor for the Side Panel
 	*/
-	public HistoryPanel() 
+	public SidePanel() 
 	{
 		super(10, 25);
 		this.setVisible(true);
 	    fTextLog = new ArrayList<String>();	
+	    this.setEditable(false);
 	}
 	
 	/**
@@ -67,20 +68,5 @@ public class HistoryPanel extends JTextArea
 			toPrint.append(" "+text + "\n");
 		}
 		this.setText(toPrint.toString());
-	}
-
-	/**
-	 * Returns The last Message That was entered in the history panel
-	 * @return The last message entered 
-	 */
-	public String getLastMessage() {
-		if(this.fTextLog.size() == 0)
-		{
-			return "";
-		}
-		return this.fTextLog.get(this.fTextLog.size() - 1);
-	}
-
-	
-
+	}	
 }

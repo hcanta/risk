@@ -60,14 +60,20 @@ public class GameEngine {
 	 * Contains the order in which the players will play
 	 */
 	private ArrayList<Integer> playerTurnOrder;
+	
 	/**
-	 * Set to true if we re debugging or not
+	 * The board on which the game is played
 	 */
-	private boolean debug;
+	private RiskBoard board;
 	/**
 	 * The Game View
 	 */
 	private GameView gamev;
+	
+	/**
+	 * Set to true if in debugging mode false otherwise
+	 */
+	private boolean debug;
 	/**
 	 *Constructor Of the Game Engine
 	 *@param gamev The game View
@@ -80,6 +86,7 @@ public class GameEngine {
 		this.cardExchangeCount = 0;
 		this.gamev = gamev;
 		this.debug = debug;
+		board = RiskBoard.ProperInstance(debug);
 		if(gamev !=null)
 		{
 			addMenuItemActionListener();
@@ -99,7 +106,7 @@ public class GameEngine {
 	 */
 	private void addMenuItemActionListener()
 	{
-		this.gamev.getRiskMenu().menuItemCreateMap.addActionListener(new ActionListener()
+		this.gamev.getRiskMenu().getMenuItemCreatetMap().addActionListener(new ActionListener()
 		{
 		
 			public void actionPerformed(ActionEvent e)
@@ -115,7 +122,7 @@ public class GameEngine {
 			}
 		});
 		
-		this.gamev.getRiskMenu().menuItemEditMap.addActionListener(new ActionListener(){
+		this.gamev.getRiskMenu().getMenuItemEditMap().addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent e)
 				{
 					gamev.getHistoryPanel().addMessage("\n Entering Edit Map Mode");
@@ -137,7 +144,7 @@ public class GameEngine {
 
 					if(loadMapHelper(true))
 					{
-						RiskBoard.ProperInstance(debug).update();
+						board.update();
 						setState(GameState.STARTUP);
 						Thread thread = new Thread(new Runnable() {
 					         @Override
@@ -160,8 +167,8 @@ public class GameEngine {
 	 */
 	public void createMap() 
 	{
-		RiskBoard.ProperInstance(debug).clear();
-		RiskBoard.ProperInstance(debug).setBoardName("Created Map");
+		board.clear();
+		board.setBoardName("Created Map");
 		
 		String str = "";
 		int nbContinent = 0;
@@ -177,7 +184,7 @@ public class GameEngine {
 			System.out.print("Please Enter the name of the " + i +" continent: " );
 			str = sc.nextLine();
 			str = str.toLowerCase().trim();
-			if(str.length()== 0 || !RiskBoard.ProperInstance(this.debug).getContinents().contains(str))
+			if(str.length()== 0 || !board.getContinents().contains(str))
 			{
 				while(bonus <= 0)
 				{
@@ -185,7 +192,7 @@ public class GameEngine {
 					bonus = sc.nextInt();
 				}
 				sc.nextLine();
-				RiskBoard.ProperInstance(this.debug).addContinent(str, bonus);
+				board.addContinent(str, bonus);
 				bonus = 0;
 				str = "";
 			}
@@ -197,16 +204,16 @@ public class GameEngine {
 		}
 		
 		System.out.println("The folowing continents were created");
-		System.out.println(RiskBoard.ProperInstance(this.debug).continentsToString());
+		System.out.println(board.continentsToString());
 		
 		int nbCountries;
 		for(int i =0; i<nbContinent;i++)
 		{
-			System.out.println("\nContinent: " + RiskBoard.ProperInstance(this.debug).getContinents().get(i));
+			System.out.println("\nContinent: " + board.getContinents().get(i));
 			nbCountries = 0;
 			while(nbCountries <= 0)
 			{
-				System.out.print("Please Enter the number of territories for " +RiskBoard.ProperInstance(this.debug).getContinents().get(i)+": ");
+				System.out.print("Please Enter the number of territories for " +board.getContinents().get(i)+": ");
 				
 				nbCountries = sc.nextInt();
 			}
@@ -231,7 +238,7 @@ public class GameEngine {
 				sc.nextLine();
 				str = "";
 				
-				RiskBoard.ProperInstance(this.debug).addTerritory(RiskBoard.ProperInstance(this.debug).getContinents().get(i), country);
+				board.addTerritory(board.getContinents().get(i), country);
 				for(int k =0; k <nbNeighbours; k++)
 				{
 					while(str.length()==0)
@@ -241,15 +248,15 @@ public class GameEngine {
 						
 						
 					}
-					RiskBoard.ProperInstance(this.debug).getTerritory(country).addNeighbours(str);
+					board.getTerritory(country).addNeighbours(str);
 					str= "";
 				}
 				
 			}
 		}
-		 System.out.println(RiskBoard.ProperInstance(this.debug).toString());
+		 System.out.println(board.toString());
 		 
-		 boolean valid = RiskBoard.ProperInstance(this.debug).validateMap();
+		 boolean valid = board.validateMap();
 		 
 		 if(valid)
 		 {
@@ -264,7 +271,7 @@ public class GameEngine {
 				MapUtils.saveMap(str, debug);
 				this.gamev.getHistoryPanel().addMessage("\n Done");
 				System.out.println("Done");
-				RiskBoard.ProperInstance(this.debug).clear();
+				board.clear();
 			} catch (IOException e) {
 				
 				e.printStackTrace();
@@ -274,7 +281,7 @@ public class GameEngine {
 		 {
 			 this.gamev.getHistoryPanel().addMessage("\n The Map is Invalid");
 			 System.out.println("The map is Invalid");
-			 RiskBoard.ProperInstance(this.debug).clear();
+			 board.clear();
 		 }
 		
 		
@@ -292,7 +299,7 @@ public class GameEngine {
 		if (result == JFileChooser.APPROVE_OPTION) 
 		{
 			this.gamev.getHistoryPanel().addMessage("Attempting To Load Map");
-			RiskBoard.ProperInstance(this.debug).update();
+			board.update();
 			
 			File file = fileChooser.getSelectedFile();
 			if (!file.exists() && !file.isDirectory()) 
@@ -302,17 +309,17 @@ public class GameEngine {
 								+ file.getAbsolutePath());
 				
 				this.gamev.getHistoryPanel().addMessage(RiskStrings.INVALID_FILE_LOCATION);
-				RiskBoard.ProperInstance(this.debug).update();
+				board.update();
 				
 			}
 			else
 			{
 				this.gamev.getHistoryPanel().addMessage("file name is: " + file.getName());
-				RiskBoard.ProperInstance(this.debug).update();
+				board.update();
 				if(MapUtils.loadFile(file, this.debug))
 				{
 					this.gamev.getHistoryPanel().addMessage("The Map File was properly loaded.");
-					RiskBoard.ProperInstance(this.debug).update();
+					board.update();
 					if(load)
 					{
 						this.gamev.getCenter().removeAll();
@@ -328,8 +335,8 @@ public class GameEngine {
 				else
 				{
 					this.gamev.getHistoryPanel().addMessage("The Map File was invalid.");
-					RiskBoard.ProperInstance(this.debug).update();
-					RiskBoard.ProperInstance(this.debug).clear();
+					board.update();
+					board.clear();
 					if(load)
 					{
 						
@@ -396,7 +403,7 @@ public class GameEngine {
 			
 			
 		}
-		boolean valid = RiskBoard.ProperInstance(this.debug).validateMap();
+		boolean valid = board.validateMap();
 		 if(valid)
 		 {
 			 str = "";
@@ -439,7 +446,7 @@ public class GameEngine {
 			System.out.print("Please enter the name of the continent to which the first territory belongs: " );
 			continent1=sc.nextLine();
 			continent1= continent1.toLowerCase().trim();
-			if(!RiskBoard.ProperInstance(this.debug).containsContinent(continent1))
+			if(!board.containsContinent(continent1))
 			{
 				System.out.print("This continent Does not exist");
 				continent1 = "";
@@ -454,7 +461,7 @@ public class GameEngine {
 				System.out.print("Please enter the name of the continent to which the second territory belongs: " );
 				continent2=sc.nextLine();
 				continent2= continent2.toLowerCase().trim();
-				if(!RiskBoard.ProperInstance(this.debug).containsContinent(continent2))
+				if(!board.containsContinent(continent2))
 				{
 					System.out.print("This continent Does not exist");
 					continent2 = "";
@@ -470,7 +477,7 @@ public class GameEngine {
 					ter1 =sc.nextLine();
 					ter1.toLowerCase().trim();
 					
-					if(!RiskBoard.ProperInstance(this.debug).getContinent(continent1).getTerritories().contains(ter1))
+					if(!board.getContinent(continent1).getTerritories().contains(ter1))
 					{
 						System.out.println("This territory does not belong to the map");
 						ter1 = "";
@@ -482,14 +489,14 @@ public class GameEngine {
 					ter2 =sc.nextLine();
 					ter2.toLowerCase().trim();
 					
-					if(!RiskBoard.ProperInstance(this.debug).getContinent(continent2).getTerritories().contains(ter2))
+					if(!board.getContinent(continent2).getTerritories().contains(ter2))
 					{
 						System.out.println("This territory does not belong to the map");
 						ter2 = "";
 					}
 				}
-				RiskBoard.ProperInstance(this.debug).getContinent(continent1).getTerritory(ter1).removeNeighbours(ter2);
-				RiskBoard.ProperInstance(this.debug).getContinent(continent2).getTerritory(ter2).removeNeighbours(ter1);
+				board.getContinent(continent1).getTerritory(ter1).removeNeighbours(ter2);
+				board.getContinent(continent2).getTerritory(ter2).removeNeighbours(ter1);
 				
 				
 			}
@@ -513,7 +520,7 @@ public class GameEngine {
 			System.out.print("Please enter the name of the continent to which the first territory belongs: " );
 			continent1=sc.nextLine();
 			continent1= continent1.toLowerCase().trim();
-			if(!RiskBoard.ProperInstance(this.debug).containsContinent(continent1))
+			if(!board.containsContinent(continent1))
 			{
 				System.out.print("This continent Does not exist");
 				continent1 = "";
@@ -528,7 +535,7 @@ public class GameEngine {
 				System.out.print("Please enter the name of the continent to which the second territory belongs: " );
 				continent2=sc.nextLine();
 				continent2= continent2.toLowerCase().trim();
-				if(!RiskBoard.ProperInstance(this.debug).containsContinent(continent2))
+				if(!board.containsContinent(continent2))
 				{
 					System.out.print("This continent Does not exist");
 					continent2 = "";
@@ -544,7 +551,7 @@ public class GameEngine {
 					ter1 =sc.nextLine();
 					ter1.toLowerCase().trim();
 					
-					if(!RiskBoard.ProperInstance(this.debug).getContinent(continent1).getTerritories().contains(ter1))
+					if(!board.getContinent(continent1).getTerritories().contains(ter1))
 					{
 						System.out.println("This territory does not belong to the map");
 						ter1 = "";
@@ -556,14 +563,14 @@ public class GameEngine {
 					ter2 =sc.nextLine();
 					ter2.toLowerCase().trim();
 					
-					if(!RiskBoard.ProperInstance(this.debug).getContinent(continent2).getTerritories().contains(ter2))
+					if(!board.getContinent(continent2).getTerritories().contains(ter2))
 					{
 						System.out.println("This territory does not belong to the map");
 						ter2 = "";
 					}
 				}
-				RiskBoard.ProperInstance(this.debug).getContinent(continent1).getTerritory(ter1).addNeighbours(ter2);
-				RiskBoard.ProperInstance(this.debug).getContinent(continent2).getTerritory(ter2).addNeighbours(ter1);
+				board.getContinent(continent1).getTerritory(ter1).addNeighbours(ter2);
+				board.getContinent(continent2).getTerritory(ter2).addNeighbours(ter1);
 				
 				
 			}
@@ -582,7 +589,7 @@ public class GameEngine {
 			System.out.print("Please enter the name of the continent to which the country need to be removed belong: " );
 			continent=sc.nextLine();
 			continent= continent.toLowerCase().trim();
-			if(!RiskBoard.ProperInstance(this.debug).containsContinent(continent))
+			if(!board.containsContinent(continent))
 			{
 				System.out.print("This continent Does not exist");
 				continent = "";
@@ -600,7 +607,7 @@ public class GameEngine {
 				country = country.toLowerCase().trim();
 			}
 			
-			RiskBoard.ProperInstance(this.debug).removeTerritory(continent, country);
+			board.removeTerritory(continent, country);
 		}
 		
 	}
@@ -617,7 +624,7 @@ public class GameEngine {
 			System.out.print("Please enter the name of the continent to which the country need to be added: " );
 			continent=sc.nextLine();
 			continent= continent.toLowerCase().trim();
-			if(!RiskBoard.ProperInstance(this.debug).containsContinent(continent))
+			if(!board.containsContinent(continent))
 			{
 				System.out.print("This continent Does not exist");
 				continent = "";
@@ -635,7 +642,7 @@ public class GameEngine {
 				country = country.toLowerCase().trim();
 			}
 			
-			RiskBoard.ProperInstance(this.debug).addTerritory(continent, country);
+			board.addTerritory(continent, country);
 		}
 		
 	}
@@ -651,7 +658,7 @@ public class GameEngine {
 			System.out.print("Please enter the name of the continent to be removed: " );
 			str=sc.nextLine();
 		}
-		RiskBoard.ProperInstance(this.debug).removeContinent(str);
+		board.removeContinent(str);
 	}
 
 	/**
@@ -675,7 +682,7 @@ public class GameEngine {
 			bonus=sc.nextInt();
 		}
 		sc.nextLine();
-		RiskBoard.ProperInstance(this.debug).addContinent(str, bonus);
+		board.addContinent(str, bonus);
 	}
 	
 	/**
@@ -684,7 +691,7 @@ public class GameEngine {
 	 */
 	private void setState(GameState state)
 	{
-		RiskBoard.ProperInstance(this.debug).setState(state);
+		board.setState(state);
 	}
 	
 	/**
@@ -787,8 +794,11 @@ public class GameEngine {
 		{
 			players.get(new Integer(i)).setNbArmiesToBePlaced(nbArmiesToBePlaced);
 		}
-		this.gamev.getHistoryPanel().addMessage(""+players.keySet().size()+" players,\n Armies assigned : "+nbArmiesToBePlaced);
-		RiskBoard.ProperInstance(debug).update();
+		if(gamev != null)
+		{
+			this.gamev.getHistoryPanel().addMessage(""+players.keySet().size()+" players,\n Armies assigned : "+nbArmiesToBePlaced);
+		}
+		board.update();
 		return nbArmiesToBePlaced;
 	}
 	
@@ -797,7 +807,7 @@ public class GameEngine {
 	 */
 	public void randomAssignTerritories()
 	{
-		ArrayList<String> countries = RiskBoard.ProperInstance(debug).getTerritories();
+		ArrayList<String> countries = board.getTerritories();
 		Collections.shuffle(countries);
 		
 
@@ -806,9 +816,9 @@ public class GameEngine {
 			Integer player = new Integer(i%this.playerTurnOrder.size());			
 			players.get(player).addTerritory(countries.get(i));
 			players.get(player).decrementArmies();
-			RiskBoard.ProperInstance(debug).getTerritory(countries.get(i)).setOwnerID(players.get(player).getTurnID());
-			RiskBoard.ProperInstance(debug).getTerritory(countries.get(i)).setArmyOn(1);
-			RiskBoard.ProperInstance(debug).update();
+			board.getTerritory(countries.get(i)).setOwnerID(players.get(player).getTurnID());
+			board.getTerritory(countries.get(i)).setArmyOn(1);
+			board.update();
 			try {
 				Thread.sleep(200);
 			} catch (InterruptedException e) {
@@ -843,15 +853,15 @@ public class GameEngine {
 		{
 			for(int i =0; i < this.playerTurnOrder.size(); i++)
 			{
-				RiskBoard.ProperInstance(debug).setCurrentPlayer(players.get(this.playerTurnOrder.get(i)).getName());
+				board.setCurrentPlayer(players.get(this.playerTurnOrder.get(i)).getName());
 				reinforcePhase(this.playerTurnOrder.get(i));
 				attackPhase(this.playerTurnOrder.get(i));
 				if(isGameOver())
 				{
 					this.setState(GameState.IDLE);
 					this.gamev.getHistoryPanel().addMessage("The Game is Over");
-					this.gamev.getHistoryPanel().addMessage("winner: "+ this.players.get(new Integer(RiskBoard.ProperInstance(debug).getOwnerID())).getName());
-					RiskBoard.ProperInstance(debug).update();
+					this.gamev.getHistoryPanel().addMessage("winner: "+ this.players.get(new Integer(board.getOwnerID())).getName());
+					board.update();
 					return;
 				}
 					
@@ -919,7 +929,7 @@ public class GameEngine {
 					
 					if(!origin.equals(destination))
 					{
-						if(RiskBoard.ProperInstance(debug).getTerritory(o1).getNeighbours().contains(destination))
+						if(board.getTerritory(o1).getNeighbours().contains(destination))
 						{
 							d1 = destination;
 							break;
@@ -973,7 +983,7 @@ public class GameEngine {
 						sc.nextLine();
 						System.out.print("Enter attacker territory: ");
 						String strAttacker = sc.nextLine();
-						Territory attacker = RiskBoard.ProperInstance(debug).getTerritory(strAttacker);
+						Territory attacker = board.getTerritory(strAttacker);
 						if(attacker.getArmyOn() > 1)
 						{
 							System.out.println("Here are the neighbours to "+strAttacker);
@@ -981,7 +991,7 @@ public class GameEngine {
 							System.out.print("Enter defender: ");
 							String strDefender = sc.nextLine();
 							
-							Territory defender = RiskBoard.ProperInstance(debug).getTerritory(strDefender);
+							Territory defender = board.getTerritory(strDefender);
 							System.out.println("Attacking country: " +attacker.getTerritoryName()+" Defending country: "+defender.getTerritoryName());
 							System.out.println("there are "+attacker.getArmyOn()+" available for the attack\nHow many would you like to use ?");
 							int nbOfdiceRollAttacker = sc.nextInt();sc.nextLine();
@@ -1034,7 +1044,7 @@ public class GameEngine {
 							this.gamev.getHistoryPanel().addMessage(players.get(new Integer(defender.getOwnerID())).getName()+" rolled: ");
 							this.gamev.getHistoryPanel().addMessage(Arrays.toString(defenderDices));
 							
-							RiskBoard.ProperInstance(this.debug).update();
+							board.update();
 							int attackerVictories = 0;
 							int defenderVictories = 0;
 							if(defenderDices.length > attackerDices.length)
@@ -1083,23 +1093,23 @@ public class GameEngine {
 								{
 									int typeIndex = rand.nextInt(CardType.values().length);
 									CardType type = CardType.values()[typeIndex];
-									int nameIndex = rand.nextInt(RiskBoard.ProperInstance(debug).getTerritories().size());
-									String cardName = RiskBoard.ProperInstance(debug).getTerritories().get(nameIndex);
+									int nameIndex = rand.nextInt(board.getTerritories().size());
+									String cardName = board.getTerritories().get(nameIndex);
 									players.get(new Integer(attacker.getOwnerID())).getHand().add(new Card(type,cardName));
 									oneOnce = true;
 									this.gamev.getHistoryPanel().addMessage(players.get(integer).getName()+" has conquered a territory\n and won a card");
-									RiskBoard.ProperInstance(this.debug).update();
+									board.update();
 								}
 								
 								players.get(new Integer(defender.getOwnerID())).removeTerritory(defender.getTerritoryName());
 								defender.setOwnerID(attacker.getOwnerID());
 								players.get(new Integer(attacker.getOwnerID())).addTerritory(defender.getTerritoryName());
-								RiskBoard.ProperInstance(this.debug).update();
-								if(RiskBoard.ProperInstance(debug).getContinent(defender.getContinentName()).getOwnerID() == attacker.getOwnerID())
+								board.update();
+								if(board.getContinent(defender.getContinentName()).getOwnerID() == attacker.getOwnerID())
 								{
-									players.get(integer).incrementArmiesBy(RiskBoard.ProperInstance(debug).getContinent(defender.getContinentName()).getContinentBonus());
+									players.get(integer).incrementArmiesBy(board.getContinent(defender.getContinentName()).getContinentBonus());
 									this.gamev.getHistoryPanel().addMessage(players.get(integer).getName()+" has  conquered a continent\n and won a card");
-									RiskBoard.ProperInstance(this.debug).update();
+									board.update();
 									if(isGameOver())
 									{
 										break;
@@ -1123,12 +1133,12 @@ public class GameEngine {
 				int countryindex = 0;
 				for(String origin: players.get(integer).getTerritoriesOwned())
 				{
-					Territory attacker = RiskBoard.ProperInstance(debug).getTerritory(origin);
+					Territory attacker = board.getTerritory(origin);
 					countryindex=  rand.nextInt(attacker.getNeighbours().size());
 					if(!players.get(integer).getTerritoriesOwned().contains(attacker.getNeighbours().get(countryindex)))
 					{
 						
-						Territory defender =  RiskBoard.ProperInstance(debug).getTerritory(attacker.getNeighbours().get(countryindex));
+						Territory defender =  board.getTerritory(attacker.getNeighbours().get(countryindex));
 						if(attacker.getArmyOn() >=2 )
 						{
 							System.out.println("Attacking country: " +attacker.getTerritoryName()+" Defending country: "+defender.getTerritoryName());
@@ -1235,23 +1245,23 @@ public class GameEngine {
 								{
 									int typeIndex = rand.nextInt(CardType.values().length);
 									CardType type = CardType.values()[typeIndex];
-									int nameIndex = rand.nextInt(RiskBoard.ProperInstance(debug).getTerritories().size());
-									String cardName = RiskBoard.ProperInstance(debug).getTerritories().get(nameIndex);
+									int nameIndex = rand.nextInt(board.getTerritories().size());
+									String cardName = board.getTerritories().get(nameIndex);
 									players.get(new Integer(attacker.getOwnerID())).getHand().add(new Card(type,cardName));
 									oneOnce = true;
 									this.gamev.getHistoryPanel().addMessage(players.get(integer).getName()+" has conquered a territory\n and won a card");
-									RiskBoard.ProperInstance(this.debug).update();
+									board.update();
 								}
 								
 								players.get(new Integer(defender.getOwnerID())).removeTerritory(defender.getTerritoryName());
 								defender.setOwnerID(attacker.getOwnerID());
 								players.get(new Integer(attacker.getOwnerID())).addTerritory(defender.getTerritoryName());
-								RiskBoard.ProperInstance(this.debug).update();
-								if(RiskBoard.ProperInstance(debug).getContinent(defender.getContinentName()).getOwnerID() == attacker.getOwnerID())
+								board.update();
+								if(board.getContinent(defender.getContinentName()).getOwnerID() == attacker.getOwnerID())
 								{
-									players.get(integer).incrementArmiesBy(RiskBoard.ProperInstance(debug).getContinent(defender.getContinentName()).getContinentBonus());
+									players.get(integer).incrementArmiesBy(board.getContinent(defender.getContinentName()).getContinentBonus());
 									this.gamev.getHistoryPanel().addMessage(players.get(integer).getName()+" has  conquered a continent\n and won a card");
-									RiskBoard.ProperInstance(this.debug).update();
+									board.update();
 									if(isGameOver())
 									{
 										break;
@@ -1286,10 +1296,10 @@ public class GameEngine {
 		for(int i =0; i < players.get(integer).getTerritoriesOwned().size(); i++)
 		{
 			String territory =  players.get(integer).getTerritoriesOwned().get(i);
-			for(int  j =0; j <RiskBoard.ProperInstance(debug).getTerritory(territory).getNeighbours().size(); j++)
+			for(int  j =0; j <board.getTerritory(territory).getNeighbours().size(); j++)
 			{
-				String neighbor = RiskBoard.ProperInstance(debug).getTerritory(territory).getNeighbours().get(j);
-				if(RiskBoard.ProperInstance(debug).getTerritory(territory).getArmyOn() > 1 && RiskBoard.ProperInstance(debug).getTerritory(neighbor).getOwnerID() != (int)integer)
+				String neighbor = board.getTerritory(territory).getNeighbours().get(j);
+				if(board.getTerritory(territory).getArmyOn() > 1 && board.getTerritory(neighbor).getOwnerID() != (int)integer)
 				{
 					return true;
 				}
@@ -1307,7 +1317,7 @@ public class GameEngine {
 		int newArmies =(int)(players.get(integer).getTerritoriesOwned().size() < 9 ?3 :players.get(integer).getTerritoriesOwned().size()/3);
 		this.gamev.getHistoryPanel().addMessage(players.get(integer).getName()+" has\n "+players.get(integer).getTerritoriesOwned().size()+" territories");
 		this.gamev.getHistoryPanel().addMessage("Army received: " +newArmies);
-		RiskBoard.ProperInstance(debug).update();
+		board.update();
 		players.get(integer).incrementArmiesBy(newArmies);
 		//Player Object
 		if((int)integer == 0)
@@ -1334,7 +1344,7 @@ public class GameEngine {
 				if(exchange)
 				{
 					this.gamev.getHistoryPanel().addMessage("Card Exchange in progress");
-					RiskBoard.ProperInstance(debug).update();
+					board.update();
 					System.out.println("Here are the cards that you own");
 					System.out.println(players.get(integer).getHand().toString());
 					System.out.println("First index of card to be traded");
@@ -1355,11 +1365,11 @@ public class GameEngine {
 					{
 						extra = 2;
 						this.gamev.getHistoryPanel().addMessage("One of the card traded\n shows a country occupied\n by player 2 extra armies ");
-						RiskBoard.ProperInstance(debug).update();
+						board.update();
 					}
 					players.get(integer).getHand().removeCardsFromHand(iArr[0], iArr[1], iArr[2]);
 					this.gamev.getHistoryPanel().addMessage("Cards Were traded");
-					RiskBoard.ProperInstance(debug).update();
+					board.update();
 					players.get(integer).incrementArmiesBy(extra);
 					players.get(integer).incrementArmiesBy(getArmiesFromCardExchange());
 					
@@ -1426,7 +1436,7 @@ public class GameEngine {
 				}
 				players.get(integer).getHand().removeCardsFromHand(0, 1, 2);
 				this.gamev.getHistoryPanel().addMessage("Cards Were traded");
-				RiskBoard.ProperInstance(debug).update();
+				board.update();
 				players.get(integer).incrementArmiesBy(extra);
 				players.get(integer).incrementArmiesBy(getArmiesFromCardExchange());
 			}
@@ -1452,7 +1462,7 @@ public class GameEngine {
 	 * @return true/false is the game over or not
 	 */
 	private boolean isGameOver() {
-		return RiskBoard.ProperInstance(debug).isGameOver();
+		return board.isGameOver();
 	}
 	
 	/**

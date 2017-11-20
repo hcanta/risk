@@ -11,8 +11,8 @@ import risk.views.GameView;
  * @author hcanta
  *
  */
-public class Driver {
-
+public class Driver 
+{
 	/**
 	 * Main Method. the Game Engine is initiated there.
 	 * @param args (No arguments are needed to lunch the game
@@ -23,9 +23,5 @@ public class Driver {
 		GameView gamev = new GameView();RiskBoard.ProperInstance(false).addObserver(gamev);
 		@SuppressWarnings("unused")
 		GameEngine engine = new GameEngine(gamev, false);
-		
-		
-
 	}
-
 }

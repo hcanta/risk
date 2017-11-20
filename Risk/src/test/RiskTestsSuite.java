@@ -1,5 +1,5 @@
 /**
- * This Package contains the testcases and test suite
+ * This Package contains the test cases and test suite
  */
 package test;
 

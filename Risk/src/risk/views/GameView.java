@@ -19,8 +19,8 @@ import javax.swing.JScrollPane;
 
 import risk.model.RiskBoard;
 import risk.utils.constants.RiskIntegers;
-import risk.views.ui.HistoryPanel;
 import risk.views.ui.RiskMenu;
+import risk.views.ui.SidePanel;
 import risk.views.ui.StatePanel;
 
 /**
@@ -49,11 +49,21 @@ public class GameView implements Observer
 	/**
 	 * The log/ history menu on the right
 	 */
-	private static HistoryPanel textPanel;
+	private static SidePanel historyTextPanel;
+	
+	/**
+	 * The info on the various countries
+	 */
+	private static SidePanel countryTextPanel;
 	/**
 	 * Text scroller to be contained within the history panel
 	 */
-	private static JScrollPane textScroller;
+	private static JScrollPane historyTextScroller;
+	
+	/**
+	 * Text scroller to be contained within the country panel
+	 */
+	private static JScrollPane countryTextScroller;
 	/**
 	 * The panel of the top of the frame
 	 */
@@ -68,10 +78,15 @@ public class GameView implements Observer
 	private StatePanel bottom;
 	
 	/**
-	 * Pannel to the East of the frame
+	 * Panel to the East of the frame
 	 */
 	private JPanel east;
 	
+	
+	/**
+	 * Panel to the west of the frame
+	 */
+	private JPanel west;
 	
 	/**
 	* Constructor for the GameView object
@@ -81,17 +96,20 @@ public class GameView implements Observer
 		
 		riskMenu = new RiskMenu();
 		historyActionListener();
-		
+		countryActionListener();
 	    top = new JPanel();
 	    center = new JPanel();
 	    bottom = new StatePanel();
 	    east = new JPanel();
+	    west = new JPanel();
 	    
 	    bottom.setVisible(true);
 	    center.setBackground(Color.lightGray);
 	    center.setVisible(true);
 	    east.setVisible(true);
 	    east.setLayout(new GridLayout(1, 1));
+	    west.setVisible(true);
+	    west.setLayout(new GridLayout(1, 1));
 	    center.setLayout(new GridLayout(0, 1));
 	    
 	    top.setLayout(new GridLayout(0, 1));
@@ -113,17 +131,21 @@ public class GameView implements Observer
 	    gFrame.getContentPane().add(center, BorderLayout.CENTER);
 	    gFrame.setLocationRelativeTo(null);
 	    
-	    textPanel = new HistoryPanel();
+	    historyTextPanel = new SidePanel();
+	    countryTextPanel = new SidePanel();
 	    
-	    textScroller = new JScrollPane(textPanel);
-	    textScroller.setVisible(true);
+	    historyTextScroller = new JScrollPane(historyTextPanel);
+	    historyTextScroller.setVisible(true);
+	    historyTextScroller.setBackground(Color.WHITE);
 	    
-	    textScroller.setBackground(Color.WHITE);
+	    countryTextScroller = new JScrollPane(countryTextPanel);
+	    countryTextScroller.setVisible(true);
+	    countryTextScroller.setBackground(Color.WHITE);
 
-	    east.add(textScroller);
-	  
+	    east.add(historyTextScroller);
+	    west.add(countryTextScroller);
 	    gFrame.getContentPane().add(east, BorderLayout.EAST);
-	    
+	    gFrame.getContentPane().add(west, BorderLayout.WEST);
 	    gFrame.repaint();
 	    gFrame.validate();
 	}
@@ -133,41 +155,72 @@ public class GameView implements Observer
 	*/
 	private void historyActionListener()
 	{
-		GameView.riskMenu.loggerOff.addActionListener(new ActionListener()
+		GameView.riskMenu.getLoggerOff().addActionListener(new ActionListener()
 	    {
 
 			public void actionPerformed(ActionEvent e)
 			{
 				east.setVisible(false);
-				GameView.riskMenu.help.add(GameView.riskMenu.loggerOn);
-				GameView.riskMenu.help.remove(GameView.riskMenu.loggerOff);
+				GameView.riskMenu.help.add(GameView.riskMenu.getLoggerOn());
+				GameView.riskMenu.help.remove(GameView.riskMenu.getLoggerOff());
 				GameView.gFrame.repaint();
 				GameView.gFrame.validate();
 			}
 		});
 		
-		GameView.riskMenu.loggerOn.addActionListener(new ActionListener()
+		GameView.riskMenu.getLoggerOn().addActionListener(new ActionListener()
 		{
 		
 			public void actionPerformed(ActionEvent e)
 			{
 				east.setVisible(true);
-				GameView.riskMenu.help.remove(GameView.riskMenu.loggerOn);
-				GameView.riskMenu.help.add(GameView.riskMenu.loggerOff);
+				GameView.riskMenu.help.remove(GameView.riskMenu.getLoggerOn());
+				GameView.riskMenu.help.add(GameView.riskMenu.getLoggerOff());
 				GameView.gFrame.repaint();
 				GameView.gFrame.validate();
 			}  
 		});	
 	}
 	
+	/**
+	* This Method add the action Listener for the country Buttons in the risk menu object created within the constructor
+	*/
+	private void countryActionListener()
+	{
+		GameView.riskMenu.getcountryOff().addActionListener(new ActionListener()
+	    {
+
+			public void actionPerformed(ActionEvent e)
+			{
+				west.setVisible(false);
+				GameView.riskMenu.help.add(GameView.riskMenu.getcountryOn());
+				GameView.riskMenu.help.remove(GameView.riskMenu.getcountryOff());
+				GameView.gFrame.repaint();
+				GameView.gFrame.validate();
+			}
+		});
+		
+		GameView.riskMenu.getcountryOn().addActionListener(new ActionListener()
+		{
+		
+			public void actionPerformed(ActionEvent e)
+			{
+				west.setVisible(true);
+				GameView.riskMenu.help.remove(GameView.riskMenu.getcountryOn());
+				GameView.riskMenu.help.add(GameView.riskMenu.getcountryOff());
+				GameView.gFrame.repaint();
+				GameView.gFrame.validate();
+			}  
+		});	
+	}
 
 	/**
 	 * Returns the History panel of the gameView
 	 * @return The history panel of the gameView
 	 */
-	public HistoryPanel getHistoryPanel()
+	public SidePanel getHistoryPanel()
 	{
-		return textPanel;
+		return historyTextPanel;
 	}
 	
 	/**
@@ -187,12 +240,11 @@ public class GameView implements Observer
 	@Override
 	public void update(Observable obj, Object param) {
 		this.bottom.update(obj, param);
-		String stateString = "Current State: "+ ((RiskBoard)obj).getState().name();
-		if(!GameView.textPanel.getLastMessage().equals(stateString))
-			GameView.textPanel.addMessage(stateString);
-		GameView.textPanel.update();
-		GameView.textScroller.validate();
-		GameView.textScroller.repaint();
+		String stateString = "Current State: "+ ((RiskBoard)obj).getState().name();		
+		GameView.historyTextPanel.addMessage(stateString);
+		GameView.historyTextPanel.update();
+		GameView.historyTextScroller.validate();
+		GameView.historyTextScroller.repaint();
 		
 		
 		GameView.gFrame.repaint();

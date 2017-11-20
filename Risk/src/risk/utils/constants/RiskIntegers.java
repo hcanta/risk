@@ -12,7 +12,7 @@ public class RiskIntegers
 	/**
 	* Final width size of the playable game screen.
 	*/
-	public final static int GAME_WIDTH = 1000;
+	public final static int GAME_WIDTH = 1250;
 	  
 	/**
 	* Final height size of the playable game screen.

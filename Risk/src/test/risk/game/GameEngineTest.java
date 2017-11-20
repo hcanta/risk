@@ -13,7 +13,6 @@ import risk.game.GameEngine;
 import risk.model.RiskBoard;
 import risk.model.playerutils.IPlayer;
 import risk.utils.MapUtils;
-import risk.views.GameView;
 
 /**
  * 
@@ -35,12 +34,11 @@ public class GameEngineTest {
 	@Before
 	public void setUp() throws Exception 
 	{
-		debug = false;
+		debug = true;
 		
 		risk.model.RiskBoard.ProperInstance(debug);
-		GameView gamev = new GameView();risk.model.RiskBoard.ProperInstance(debug).addObserver(gamev);
-		gamev.getFrame().setVisible(debug);
-		this.engine = new GameEngine(gamev, debug);
+		
+		this.engine = new GameEngine(null, debug);
 		MapUtils.loadFile(new File("Maps/World.map"),debug);
 		engine.createBots(4);
 		engine.addHumanPlayer("human");

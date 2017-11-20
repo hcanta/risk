@@ -25,25 +25,34 @@ public class RiskMenu  extends JMenuBar
 	 * Generated Serial Version UID
 	 */
 	private static final long serialVersionUID = 5490475001080749877L;
+	
+	/**
+	 *country off menu item, the action listener need to be added in the class that uses it
+	 */
+	private final JMenuItem countryOff = new JMenuItem(RiskStrings.TOGGLE_COUNTRY_OFF);
+	/**
+	 *country on menu item, the action listener need to be added in the class that uses it
+	 */
+	private final JMenuItem countryOn = new JMenuItem(RiskStrings.TOGGLE_COUNTRY_ON);
 
 	/**
 	 *logger off menu item, the action listener need to be added in the class that uses it
 	 */
-	public final JMenuItem loggerOff = new JMenuItem(RiskStrings.TOGGLE_HISTORY_OFF);
+	private final JMenuItem loggerOff = new JMenuItem(RiskStrings.TOGGLE_HISTORY_OFF);
 	/**
 	 *logger on menu item, the action listener need to be added in the class that uses it
 	 */
-	public final JMenuItem loggerOn = new JMenuItem(RiskStrings.TOGGLE_HISTORY_ON);
+	private final JMenuItem loggerOn = new JMenuItem(RiskStrings.TOGGLE_HISTORY_ON);
 	
 	/**
 	 *create map menu item, the action listener need to be added in the class that uses it
 	 */
-	public final JMenuItem menuItemCreateMap = new JMenuItem(RiskStrings.MENU_ITEM_CREATE_MAP);
+	private final JMenuItem menuItemCreateMap = new JMenuItem(RiskStrings.MENU_ITEM_CREATE_MAP);
 	
 	/**
 	 *edit map menu item, the action listener need to be added in the class that uses it
 	 */
-	public final JMenuItem menuItemEditMap = new JMenuItem(RiskStrings.MENU_ITEM_EDIT_MAP);
+	private final JMenuItem menuItemEditMap = new JMenuItem(RiskStrings.MENU_ITEM_EDIT_MAP);
 	
 	/**
 	 *exit menu item.
@@ -83,11 +92,15 @@ public class RiskMenu  extends JMenuBar
 		menuFile.add(menuItemExit);
 		
 		help.add(loggerOff);
-		
+		help.add(countryOff);
 		
 	    loggerOn.setAccelerator(KeyStroke.getKeyStroke(72, 2));
 	    
 	    loggerOff.setAccelerator(KeyStroke.getKeyStroke(72, 2));
+	    
+	    countryOn.setAccelerator(KeyStroke.getKeyStroke(72, 1));
+	    
+	    countryOff.setAccelerator(KeyStroke.getKeyStroke(72, 1));
 	
 		
 		menuItemExit.addActionListener(new ActionListener()
@@ -97,6 +110,60 @@ public class RiskMenu  extends JMenuBar
 		        System.exit(0);
 		      }
 	    });		
+	}
+	
+	/**
+	 * Returns the Jmenu Item country off item
+	 * @return the country off item
+	 */
+	public JMenuItem getcountryOff()
+	{
+		return this.countryOff;
+	}
+	
+	/**
+	 * Returns the Jmenu Item country on item
+	 * @return the country on item
+	 */
+	public JMenuItem getcountryOn()
+	{
+		return this.countryOn;
+	}
+	
+	/**
+	 * Returns the Jmenu Item Logger off item
+	 * @return the logger off item
+	 */
+	public JMenuItem getLoggerOff()
+	{
+		return this.loggerOff;
+	}
+	
+	/**
+	 * Returns the Jmenu Item Logger on item
+	 * @return the logger on item
+	 */
+	public JMenuItem getLoggerOn()
+	{
+		return this.loggerOn;
+	}
+	
+	/**
+	 * Returns the Jmenu Item edit map item
+	 * @return the edit map on item
+	 */
+	public JMenuItem getMenuItemEditMap()
+	{
+		return this.menuItemEditMap;
+	}
+	
+	/**
+	 * Returns the Jmenu Item create map item
+	 * @return the create map on item
+	 */
+	public JMenuItem getMenuItemCreatetMap()
+	{
+		return this.menuItemCreateMap;
 	}
 
 }

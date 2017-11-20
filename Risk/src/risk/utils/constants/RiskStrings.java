@@ -95,5 +95,15 @@ public class RiskStrings
 	/**
 	 * Error message if an invalid file location was passed during loading of files
 	 */
-	public static final String INVALID_FILE_LOCATION = "ERROR: Unable to find .Map file in the system. \n Please paste a new .map file at the required location.";;
+	public static final String INVALID_FILE_LOCATION = "ERROR: Unable to find .Map file in the system. \n Please paste a new .map file at the required location.";
+
+	/**
+	 * Toggle Country String show
+	 */
+	public static final String TOGGLE_COUNTRY_OFF = "Show Country";
+	
+	/**
+	 * Toggle Country String hide
+	 */
+	public static final String TOGGLE_COUNTRY_ON = "HideCountry";
 }
