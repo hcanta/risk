@@ -1490,5 +1490,4 @@ public class GameEngine {
 	public IPlayer getPlayer(int index) {
 		return this.players.get(new Integer(index));
 	}
-
 }
