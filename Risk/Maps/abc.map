@@ -1,0 +1,19 @@
+[Map]
+author = team1
+
+[Continents]
+a=5
+b=5
+c=5
+
+[Territories]
+a1,0,0,a,a2,b1
+a2,0,0,a,a1,c1
+
+b2,0,0,b,b1,c2
+b1,0,0,b,b2,a1
+
+c1,0,0,c,a2,c2
+c2,0,0,c,c1,b2
+
+
