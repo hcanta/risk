@@ -3,16 +3,23 @@
  */
 package risk.game.cards;
 
+import java.io.Serializable;
+
 import risk.utils.constants.RiskEnum.CardType;
 
 /**
  * This class is for the card that is being used in the game.
- * @author Mohammad Akif Beg
  * @author hcanta
- * @version 2.0
+ * @author Akif
+ * @version 3.1
  **/
-public final class Card {
+public final class Card implements Serializable
+{
 
+	/**
+	 * Generated Version Serial UID
+	 */
+	private static final long serialVersionUID = 8007690005633224392L;
 	/**
 	 * The Card Type
 	 */

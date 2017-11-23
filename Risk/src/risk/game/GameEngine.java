@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -18,10 +19,10 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import risk.game.cards.Card;
-import risk.model.PlayerModel;
 import risk.model.RiskBoard;
 import risk.model.maputils.Territory;
 import risk.model.playerutils.IPlayer;
+import risk.model.playerutils.PlayerModel;
 import risk.utils.MapUtils;
 import risk.utils.constants.RiskEnum.CardType;
 import risk.utils.constants.RiskEnum.GameState;
@@ -35,10 +36,15 @@ import risk.views.ui.MapSelector;
 /**
  * The Implementation of the Game Engine
  * @author hcanta
- * @version 2.2
+ * @version 3.3
  */
-public class GameEngine {
+public class GameEngine implements Serializable 
+{
 	
+	/**
+	 * Generated Version UID
+	 */
+	private static final long serialVersionUID = 2572722777333878769L;
 	/**
 	 * Random Generator for the class
 	 */

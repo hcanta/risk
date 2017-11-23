@@ -6,6 +6,7 @@ package risk.views.ui;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.io.Serializable;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -18,7 +19,7 @@ import risk.utils.constants.RiskIntegers;
  * @author hcanta
  * @version 2.1
  */
-public class CardExchangePanel extends JPanel implements Observer
+public class CardExchangePanel extends JPanel implements Observer, Serializable
 {
 
 	/**

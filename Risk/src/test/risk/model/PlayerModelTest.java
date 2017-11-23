@@ -11,8 +11,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import risk.model.PlayerModel;
 import risk.model.RiskBoard;
+import risk.model.playerutils.PlayerModel;
 import risk.utils.MapUtils;
 import risk.utils.constants.RiskEnum.PlayerColors;
 /**

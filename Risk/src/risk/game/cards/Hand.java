@@ -4,14 +4,21 @@
 package risk.game.cards;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 /**
  * This class is for the card that is being used in the game.
- * @author Mohammad Akif Beg
  * @author hcanta
- * @version 2.2
+ * @author Akif
+ * @version 3.1
  **/
-public class Hand {
+public class Hand implements Serializable
+{
+
+	/**
+	 * Generated Version UID
+	 */
+	private static final long serialVersionUID = 44005035593304612L;
 
 	private boolean condition;
 	

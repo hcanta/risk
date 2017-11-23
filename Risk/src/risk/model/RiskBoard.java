@@ -1,5 +1,5 @@
 /**
- * The risk.model.maputils package contains the class implementing the territory The riskBoard and the continent classes
+ * The model package holds the board and the players
  */
 package risk.model;
 

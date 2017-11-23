@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serializable;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -29,8 +30,12 @@ import risk.views.ui.StatePanel;
  * @author hcanta
  * @version 2.3
  */
-public class GameView implements Observer
+public class GameView implements Observer, Serializable
 {
+	/**
+	 * Generated Serial Version UID
+	 */
+	private static final long serialVersionUID = -6643458269966204806L;
 	/**
 	 * The main Frame to be displayed
 	 */

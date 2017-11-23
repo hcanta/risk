@@ -1,12 +1,12 @@
 /**
  * The model package holds the driver and the Game Engine
  */
-package risk.model;
+package risk.model.playerutils;
 
 import java.util.ArrayList;
 
 import risk.game.cards.Hand;
-import risk.model.playerutils.IPlayer;
+import risk.model.RiskBoard;
 import risk.utils.constants.RiskEnum.PlayerColors;
 
 /**
