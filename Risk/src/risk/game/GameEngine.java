@@ -42,7 +42,7 @@ public class GameEngine implements Serializable
 {
 	
 	/**
-	 * Generated Version UID
+	 * Generated Serialization UID
 	 */
 	private static final long serialVersionUID = 2572722777333878769L;
 	/**

@@ -111,6 +111,7 @@ public class StatePanel extends JPanel implements Observer
 				turnOff();
 				break;
 			default:
+				stateLabel.setText("Welcome To Risk!");
 				turnOff();
 				break;
 		}
