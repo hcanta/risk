@@ -3,6 +3,7 @@
  */
 package risk.views.ui;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -11,6 +12,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
+import risk.utils.constants.RiskIntegers;
 import risk.utils.constants.RiskStrings;
 
 /**
@@ -64,21 +66,41 @@ public class RiskMenu  extends JMenuBar
 	public final JMenuItem menuItemOpenMap = new JMenuItem(RiskStrings.MENU_ITEM_OPEN_MAP);
 	
 	/**
+	 * Jmenu Item to save the Game
+	 */
+	private final JMenuItem saveGame = new JMenuItem(RiskStrings.SAVE_GAME);
+	
+	/**
+	 * Jmenu Item to load the Game
+	 */
+	private final JMenuItem loadGame = new JMenuItem(RiskStrings.LOAD_GAME);
+	
+	/**
+	 * Jmenu Item to Lunch a tournament
+	 */
+	private final JMenuItem tournament = new JMenuItem(RiskStrings.TOURNAMENT);
+	
+	/**
 	 * Help Menu contains a Read Me and logger info
 	 */
-	public final JMenu help;
+	private final JMenu help;
+	
+	/**
+	 * File Menu Jmenu container
+	 */
+	private JMenu menuFile;
 	/**
 	 * Constructor of the Risk Menu
 	 */
 	public RiskMenu() 
 	{
-		JMenu menuFile = new JMenu(RiskStrings.MENU_FILE);
+		menuFile = new JMenu(RiskStrings.MENU_FILE);
 		help = new JMenu(RiskStrings.MENU_HELP);
 		
 		
 		this.add(menuFile);
 		this.add(help);
-		
+		this.setPreferredSize(new Dimension(RiskIntegers.GAME_WIDTH, RiskIntegers.STATE_PANEL_HEIGHT/4));
 		
 		menuFile.add(menuItemCreateMap);
 		
@@ -88,7 +110,8 @@ public class RiskMenu  extends JMenuBar
 		
 		menuFile.add(menuItemOpenMap);
 		
-		
+		menuFile.add(saveGame);
+		menuFile.add(tournament);
 		menuFile.add(menuItemExit);
 		
 		help.add(loggerOff);
@@ -166,4 +189,45 @@ public class RiskMenu  extends JMenuBar
 		return this.menuItemCreateMap;
 	}
 
+	/**
+	 * Returns the JMenu Item to launch a tournament
+	 * @return the tournament the Jmenu Item
+	 */
+	public JMenuItem getTournament() {
+		return this.tournament;
+	}
+
+	/**
+	 * Returns the JMEnu Item to Load the Game
+	 * @return the loadGame  Jmenu Item
+	 */
+	public JMenuItem getLoadGame() {
+		return this.loadGame;
+	}
+
+	/**
+	 * Return the Jmenu Item to Save The game
+	 * @return the saveGame  Jmenu Item
+	 */
+	public JMenuItem getSaveGame() {
+		return this.saveGame;
+	}
+
+	/**
+	 * Returns the Help Jmenu
+	 * @return The Help Jmenu
+	 */
+	public JMenu getHelp() {
+		
+		return  this.help;
+	}
+
+	/**
+	 * Returns the File Jmenu
+	 * @return The File Jmenu
+	 */
+	public JMenu getFileMenu() {
+		
+		return  this.menuFile;
+	}
 }

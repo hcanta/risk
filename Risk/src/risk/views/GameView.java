@@ -19,6 +19,7 @@ import javax.swing.JScrollPane;
 
 import risk.model.RiskBoard;
 import risk.utils.constants.RiskIntegers;
+import risk.views.ui.CardExchangePanel;
 import risk.views.ui.RiskMenu;
 import risk.views.ui.SidePanel;
 import risk.views.ui.StatePanel;
@@ -89,6 +90,11 @@ public class GameView implements Observer
 	private JPanel west;
 	
 	/**
+	 * The Card Exchange Panel
+	 */
+	private CardExchangePanel cardPanel;
+	
+	/**
 	* Constructor for the GameView object
 	*/
 	public GameView()
@@ -102,6 +108,7 @@ public class GameView implements Observer
 	    bottom = new StatePanel();
 	    east = new JPanel();
 	    west = new JPanel();
+	    cardPanel = new CardExchangePanel();
 	    
 	    bottom.setVisible(true);
 	    center.setBackground(Color.lightGray);
@@ -112,10 +119,11 @@ public class GameView implements Observer
 	    west.setLayout(new GridLayout(1, 1));
 	    center.setLayout(new GridLayout(0, 1));
 	    
-	    top.setLayout(new GridLayout(0, 1));
-	    bottom.setLayout(new GridLayout(2, 1));;
+	    top.setLayout(new GridLayout(2, 0));
+	    bottom.setLayout(new GridLayout(2, 1));
 	    
-	    top.add(riskMenu);
+	    top.add(riskMenu, BorderLayout.NORTH);
+	    top.add(cardPanel, BorderLayout.SOUTH);
 	    center.add(backGround);
 	    
 	    gFrame = new JFrame("Game");
@@ -161,8 +169,8 @@ public class GameView implements Observer
 			public void actionPerformed(ActionEvent e)
 			{
 				east.setVisible(false);
-				GameView.riskMenu.help.add(GameView.riskMenu.getLoggerOn());
-				GameView.riskMenu.help.remove(GameView.riskMenu.getLoggerOff());
+				GameView.riskMenu.getHelp().add(GameView.riskMenu.getLoggerOn());
+				GameView.riskMenu.getHelp().remove(GameView.riskMenu.getLoggerOff());
 				GameView.gFrame.repaint();
 				GameView.gFrame.validate();
 			}
@@ -174,8 +182,8 @@ public class GameView implements Observer
 			public void actionPerformed(ActionEvent e)
 			{
 				east.setVisible(true);
-				GameView.riskMenu.help.remove(GameView.riskMenu.getLoggerOn());
-				GameView.riskMenu.help.add(GameView.riskMenu.getLoggerOff());
+				GameView.riskMenu.getHelp().remove(GameView.riskMenu.getLoggerOn());
+				GameView.riskMenu.getHelp().add(GameView.riskMenu.getLoggerOff());
 				GameView.gFrame.repaint();
 				GameView.gFrame.validate();
 			}  
@@ -193,8 +201,8 @@ public class GameView implements Observer
 			public void actionPerformed(ActionEvent e)
 			{
 				west.setVisible(false);
-				GameView.riskMenu.help.add(GameView.riskMenu.getcountryOn());
-				GameView.riskMenu.help.remove(GameView.riskMenu.getcountryOff());
+				GameView.riskMenu.getHelp().add(GameView.riskMenu.getcountryOn());
+				GameView.riskMenu.getHelp().remove(GameView.riskMenu.getcountryOff());
 				GameView.gFrame.repaint();
 				GameView.gFrame.validate();
 			}
@@ -206,8 +214,8 @@ public class GameView implements Observer
 			public void actionPerformed(ActionEvent e)
 			{
 				west.setVisible(true);
-				GameView.riskMenu.help.remove(GameView.riskMenu.getcountryOn());
-				GameView.riskMenu.help.add(GameView.riskMenu.getcountryOff());
+				GameView.riskMenu.getHelp().remove(GameView.riskMenu.getcountryOn());
+				GameView.riskMenu.getHelp().add(GameView.riskMenu.getcountryOff());
 				GameView.gFrame.repaint();
 				GameView.gFrame.validate();
 			}  

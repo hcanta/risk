@@ -105,5 +105,20 @@ public class RiskStrings
 	/**
 	 * Toggle Country String hide
 	 */
-	public static final String TOGGLE_COUNTRY_ON = "HideCountry";
+	public static final String TOGGLE_COUNTRY_ON = "Hide Country";
+
+	/**
+	 * Tournament String
+	 */
+	public static final String TOURNAMENT = "Tournament";
+	
+	/**
+	 * Save Game string
+	 */
+	public static final String SAVE_GAME= "Save Game";
+	
+	/**
+	 * Load Game String
+	 */
+	public static final String LOAD_GAME = "Load Game";
 }
