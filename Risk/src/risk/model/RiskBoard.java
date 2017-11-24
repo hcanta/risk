@@ -3,6 +3,7 @@
  */
 package risk.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Observable;
@@ -12,7 +13,6 @@ import com.mxgraph.view.mxGraph;
 import risk.model.maputils.Continent;
 import risk.model.maputils.Territory;
 import risk.utils.MapUtils;
-import risk.utils.Tuple;
 import risk.utils.constants.RiskEnum.GameState;
 import risk.utils.constants.RiskEnum.RiskEvent;
 import risk.utils.constants.RiskIntegers;
@@ -22,8 +22,12 @@ import risk.utils.constants.RiskIntegers;
  * @author hcanta
  * @version 2.4
  */
-public class RiskBoard extends Observable
+public class RiskBoard extends Observable implements Serializable
 {
+	/**
+	 * Generated Serial Version UID
+	 */
+	private static final long serialVersionUID = -9127407334280473749L;
 	/**
 	 * The current player turn
 	 */
@@ -203,7 +207,11 @@ public class RiskBoard extends Observable
 		this.ownerID = RiskIntegers.INITIAL_OWNER;
 		for(String value: continents.keySet())
 		{
-			continents.get(value).clear();
+			try
+			{
+				continents.get(value).clear();
+			}
+			catch(Exception e) {}
 		}
 		continents.clear();
 	}
@@ -384,8 +392,8 @@ public class RiskBoard extends Observable
 	public void update(RiskEvent event)
 	{
 		this.setChanged();
-		Tuple <RiskBoard, RiskEvent> pair = new Tuple<RiskBoard, RiskEvent>(this,event);
-		this.notifyObservers(pair);
+		
+		this.notifyObservers(event);
 	}
 	
 	/**

@@ -300,7 +300,11 @@ public class Territory {
 	{
 		for(int i =0; i< this.neighbours.size(); i ++)
 		{
-			RiskBoard.ProperInstance(graph == null).getTerritory(this.neighbours.get(i)).removeNeighbours(this.territoryName);
+			try
+			{
+				RiskBoard.ProperInstance(graph == null).getTerritory(this.neighbours.get(i)).removeNeighbours(this.territoryName);		
+			}
+			catch(Exception e){}
 		}
 		this.neighbours.clear();
 	}

@@ -14,12 +14,13 @@ import java.util.Observer;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import risk.model.RiskBoard;
+import risk.utils.constants.OtherConstants;
+import risk.utils.constants.RiskEnum;
 import risk.utils.constants.RiskIntegers;
+import risk.utils.constants.RiskStrings;
 import risk.views.ui.CardExchangePanel;
 import risk.views.ui.RiskMenu;
 import risk.views.ui.SidePanel;
@@ -40,12 +41,7 @@ public class GameView implements Observer, Serializable
 	 * The main Frame to be displayed
 	 */
 	private static JFrame gFrame;
-	/**
-	 * A label that contains the picture background
-	 */
-	public final static JLabel backGround = new JLabel(new ImageIcon(
-			((new ImageIcon("img/g1.png").getImage().getScaledInstance(RiskIntegers.GAME_WIDTH - RiskIntegers.GAME_OFFSET,
-					 RiskIntegers.GAME_HEIGHT - RiskIntegers.GAME_OFFSET -30, java.awt.Image.SCALE_SMOOTH)))));
+	
 	
 	/**
 	 * The top bar Menu
@@ -124,18 +120,18 @@ public class GameView implements Observer, Serializable
 	    west.setLayout(new GridLayout(1, 1));
 	    center.setLayout(new GridLayout(0, 1));
 	    
-	    top.setLayout(new GridLayout(2, 0));
+	    top.setLayout(new BorderLayout());
 	    bottom.setLayout(new GridLayout(2, 1));
 	    
 	    top.add(riskMenu, BorderLayout.NORTH);
 	    top.add(cardPanel, BorderLayout.SOUTH);
-	    center.add(backGround);
+	    center.add(OtherConstants.backGround);
 	    
-	    gFrame = new JFrame("Game");
+	    gFrame = new JFrame(RiskStrings.RISK);
 	    gFrame.setIconImage(new ImageIcon(("img/g1.png")).getImage());
 	    gFrame.setLayout(new BorderLayout());
 	    gFrame.setResizable(false);
-	    gFrame.setBackground(Color.white);
+	    gFrame.setBackground(Color.WHITE);
 	    
 	    gFrame.setVisible(true);
 	    gFrame.setSize(RiskIntegers.GAME_WIDTH, RiskIntegers.GAME_HEIGHT);
@@ -252,16 +248,33 @@ public class GameView implements Observer, Serializable
 	 */
 	@Override
 	public void update(Observable obj, Object param) {
-		this.bottom.update(obj, param);
-		String stateString = "Current State: "+ ((RiskBoard)obj).getState().name();		
-		GameView.historyTextPanel.addMessage(stateString);
-		GameView.historyTextPanel.update(obj,param);
-		GameView.historyTextScroller.validate();
-		GameView.historyTextScroller.repaint();
-		
+
+		switch((RiskEnum.RiskEvent)param)
+		{
+			case HistoryUpdate:
+				 historyUpdate(obj, param);
+				break;
+			case StateChange:
+				bottom.update(obj, param);
+				break;
+			default:
+				break;
+		}
 		
 		GameView.gFrame.repaint();
 		GameView.gFrame.validate();
+		
+	}
+	/**
+	 * This methodUpdate the history
+	 * @param obj The object Changed
+	 * @param param a parameter for possible observers
+	 */
+	private void historyUpdate(Observable obj, Object param)
+	{
+		GameView.historyTextPanel.update(obj,param);
+		GameView.historyTextScroller.validate();
+		GameView.historyTextScroller.repaint();
 		
 	}
 

@@ -24,10 +24,12 @@ import risk.model.maputils.Territory;
 import risk.model.playerutils.IPlayer;
 import risk.model.playerutils.PlayerModel;
 import risk.utils.MapUtils;
+import risk.utils.constants.OtherConstants;
 import risk.utils.constants.RiskEnum.CardType;
 import risk.utils.constants.RiskEnum.GameState;
 import risk.utils.constants.RiskEnum.PlayerColors;
 import risk.utils.constants.RiskEnum.RiskEvent;
+import risk.utils.constants.RiskIntegers;
 import risk.utils.constants.RiskStrings;
 import risk.views.GameView;
 import risk.views.ui.GraphDisplayPanel;
@@ -54,10 +56,7 @@ public class GameEngine implements Serializable
 	 */
 	private int cardExchangeCount;
 
-	/**
-	 * The Scanner object to read from standard input
-	 */
-	private Scanner sc = new Scanner(System.in);
+	
 	/**
 	 * Creates a mapping of player IDs to IPlayer Object
 	 */
@@ -118,7 +117,7 @@ public class GameEngine implements Serializable
 		
 			public void actionPerformed(ActionEvent e)
 			{
-				gamev.getHistoryPanel().addMessage("\n Entering Create Map Mode");
+				addToHistoryPanel("\n Entering Create Map Mode");
 				Thread thread = new Thread(new Runnable() {
 			         @Override
 			         public void run() {
@@ -132,7 +131,7 @@ public class GameEngine implements Serializable
 		this.gamev.getRiskMenu().getMenuItemEditMap().addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent e)
 				{
-					gamev.getHistoryPanel().addMessage("\n Entering Edit Map Mode");
+					addToHistoryPanel("\n Entering Edit Map Mode");
 					Thread thread = new Thread(new Runnable() {
 				         @Override
 				         public void run() {
@@ -147,17 +146,17 @@ public class GameEngine implements Serializable
 		this.gamev.getRiskMenu().menuItemOpenMap.addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent e)
 				{
-					gamev.getHistoryPanel().addMessage("\n Loading  Map Mode");
+					addToHistoryPanel("\n Loading  Map Mode");
 
 					if(loadMapHelper(true))
 					{
-						board.update(RiskEvent.HistoryUpdate);
+						
 						setState(GameState.STARTUP);
 						Thread thread = new Thread(new Runnable() {
 					         @Override
 					         public void run() {
-					             deploy();
-					             play();
+					             if(deploy(false))
+					            	 play();
 					         }
 						});
 						thread.start();
@@ -170,35 +169,83 @@ public class GameEngine implements Serializable
 	}
 	
 	/**
+	 * Adds a message to the history panel
+	 * @param message The message To be Added To the history panel
+	 */
+	private void addToHistoryPanel(String message)
+	{
+		gamev.getHistoryPanel().addMessage(message);
+		board.update(RiskEvent.HistoryUpdate);
+	}
+	
+	/**
 	 * Creates a Map from scratch with user input
 	 */
-	public void createMap() 
+	private void createMap() 
 	{
 		board.clear();
-		board.setBoardName("Created Map");
+		board.setBoardName(RiskStrings.CREATED_MAP);
 		
 		String str = "";
+		String input;
 		int nbContinent = 0;
+		
+		// Create the continents
+		addToHistoryPanel(RiskStrings.CREATE_CONTINENT);
 		while(nbContinent < 2)
 		{
-			System.out.print("How many continents would you like to create? please chose a number >= 2");
-			nbContinent = sc.nextInt();
+			
+			input =  (String)JOptionPane.showInputDialog(gamev.getFrame(),RiskStrings.CREATE_MAP_CONTINENT_QUERY, 
+					RiskStrings.MENU_ITEM_CREATE_MAP, JOptionPane.PLAIN_MESSAGE, null, null, "");
+			if(input == null)
+				return;
+			try
+			{
+				nbContinent = Integer.parseInt(input);
+			}
+			catch(Exception e)
+			{
+				JOptionPane.showMessageDialog(gamev.getFrame(),
+					   RiskStrings.PLEASE_NUMBER,
+					   RiskStrings.MENU_ITEM_CREATE_MAP,
+					    JOptionPane.WARNING_MESSAGE);
+			}        
 		}
-		sc.nextLine();
+		
 		int bonus = 0;
+		
+		// Name The continents and set their bonus
+		addToHistoryPanel(RiskStrings.CREATE_CONTINENT_BONUS);
 		for(int i =0; i<nbContinent; i++)
 		{
-			System.out.print("Please Enter the name of the " + i +" continent: " );
-			str = sc.nextLine();
+			
+			input =  (String)JOptionPane.showInputDialog(gamev.getFrame(), RiskStrings.PLEASE_NAME + (i+1) +RiskStrings.CONTINENT,
+					 RiskStrings.MENU_ITEM_CREATE_MAP, JOptionPane.PLAIN_MESSAGE, null, null, "");
+			if(input == null)
+				return;
+			str = input;
 			str = str.toLowerCase().trim();
 			if(str.length()== 0 || !board.getContinents().contains(str))
 			{
 				while(bonus <= 0)
 				{
-					System.out.print("Please enter a bonus for continent "+str+": ");
-					bonus = sc.nextInt();
+					input =  (String)JOptionPane.showInputDialog(gamev.getFrame(), RiskStrings.CONTINENT_BONUS + str,
+							 RiskStrings.MENU_ITEM_CREATE_MAP, JOptionPane.PLAIN_MESSAGE, null, null, "");
+					if(input == null)
+						return;
+					try
+					{
+						bonus = Integer.parseInt(input);
+					}
+					catch(Exception e)
+					{
+						JOptionPane.showMessageDialog(gamev.getFrame(),
+							   RiskStrings.PLEASE_NUMBER,
+							   RiskStrings.MENU_ITEM_CREATE_MAP,
+							    JOptionPane.WARNING_MESSAGE);
+					}   
 				}
-				sc.nextLine();
+				
 				board.addContinent(str, bonus);
 				bonus = 0;
 				str = "";
@@ -206,52 +253,95 @@ public class GameEngine implements Serializable
 			else
 			{
 				i--;
-				System.out.println("This continent name already exists or the name is invalid");
+				JOptionPane.showMessageDialog(gamev.getFrame(),
+						RiskStrings.INVALID_CONTINENT,
+					    RiskStrings.MENU_ITEM_CREATE_MAP,
+					    JOptionPane.ERROR_MESSAGE);
 			}
 		}
 		
-		System.out.println("The folowing continents were created");
-		System.out.println(board.continentsToString());
+		JOptionPane.showMessageDialog(gamev.getHistoryPanel(),
+				RiskStrings.CONTINENT_CREATED+"\n\n"+board.continentsToString());
 		
+		// Adding countries
+		this.addToHistoryPanel(RiskStrings.CREATE_TERRITORIES);
 		int nbCountries;
 		for(int i =0; i<nbContinent;i++)
 		{
-			System.out.println("\nContinent: " + board.getContinents().get(i));
+			
 			nbCountries = 0;
 			while(nbCountries <= 0)
 			{
-				System.out.print("Please Enter the number of territories for " +board.getContinents().get(i)+": ");
 				
-				nbCountries = sc.nextInt();
+				input =  (String)JOptionPane.showInputDialog(gamev.getFrame(), RiskStrings.TERRITORY_NUMBER_QUERY + board.getContinents().get(i),
+						 RiskStrings.MENU_ITEM_CREATE_MAP+" - "+RiskStrings.CONTINENT+": " + board.getContinents().get(i), 
+						 JOptionPane.PLAIN_MESSAGE, null, null, "");
+				if(input == null)
+					return;
+				try
+				{
+					nbCountries = Integer.parseInt(input);
+				}
+				catch(Exception e)
+				{
+					JOptionPane.showMessageDialog(gamev.getFrame(),
+						   RiskStrings.PLEASE_NUMBER,
+						   RiskStrings.MENU_ITEM_CREATE_MAP,
+						    JOptionPane.WARNING_MESSAGE);
+				}   
 			}
-			sc.nextLine();
+			
 			String country= "";
 			for(int j =0; j< nbCountries; j++)
 			{
 				country= "";
 				while(country.length()==0)
 				{
-					System.out.print("Please enter the name of the "+j+"th territory: ");
-					country = sc.nextLine().toLowerCase().trim();
+					input =  (String)JOptionPane.showInputDialog(gamev.getFrame(), RiskStrings.PLEASE_NAME + (j+1) +RiskStrings.TERRITORY,
+							 RiskStrings.MENU_ITEM_CREATE_MAP, JOptionPane.PLAIN_MESSAGE, null, null, "");
+					if(input == null)
+						return;
+					country = input;
+					country = country.toLowerCase().trim();
+					
 				}
 				
 				int nbNeighbours =0;
 				while(nbNeighbours <=0)
 				{
-					System.out.print("Please enter the number of neighbours for territory "+country+": ");
-					nbNeighbours = sc.nextInt();
 					
+					input =  (String)JOptionPane.showInputDialog(gamev.getFrame(), RiskStrings.TERRITORY_NEIGHBOUR_NUMBER_QUERY,
+							 RiskStrings.MENU_ITEM_CREATE_MAP+" - "+RiskStrings.TERRITORY+": " + country, 
+							 JOptionPane.PLAIN_MESSAGE, null, null, "");
+					if(input == null)
+						return;
+					try
+					{
+						nbNeighbours = Integer.parseInt(input);
+					}
+					catch(Exception e)
+					{
+						JOptionPane.showMessageDialog(gamev.getFrame(),
+							   RiskStrings.PLEASE_NUMBER,
+							   RiskStrings.MENU_ITEM_CREATE_MAP,
+							    JOptionPane.WARNING_MESSAGE);
+					}   
 				}
-				sc.nextLine();
-				str = "";
 				
+				str = "";
+
 				board.addTerritory(board.getContinents().get(i), country);
 				for(int k =0; k <nbNeighbours; k++)
 				{
 					while(str.length()==0)
 					{
-						System.out.print("Please enter the neighbour name for territory "+country+": ");
-						str = sc.nextLine().toLowerCase().trim();
+						input =  (String)JOptionPane.showInputDialog(gamev.getFrame(), RiskStrings.TERRITORY_NEIGHBOUR_NAME_QUERY,
+								 RiskStrings.MENU_ITEM_CREATE_MAP+" - "+RiskStrings.TERRITORY+": " + country, 
+								 JOptionPane.PLAIN_MESSAGE, null, null, "");
+						if(input == null)
+							return;
+						str = input;
+						str = input.toLowerCase().trim();
 						
 						
 					}
@@ -261,23 +351,30 @@ public class GameEngine implements Serializable
 				
 			}
 		}
-		 System.out.println(board.toString());
-		 
+		
+		 this.addToHistoryPanel("\n"+RiskStrings.VALIDATING_MAP);
 		 boolean valid = board.validateMap();
 		 
 		 if(valid)
 		 {
+			 this.addToHistoryPanel("\n"+RiskStrings.VALID_MAP);
 			 str = "";
 			 while(str.length() ==0)
 			 {
-				 System.out.print("The map is Valid please enter a name to save it: ");
-				 str = sc.nextLine().trim();
-				 this.gamev.getHistoryPanel().addMessage("\n The Map was saved: "+str);
+				input =  (String)JOptionPane.showInputDialog(gamev.getFrame(), RiskStrings.VALID_SAVE_MAP,
+						 RiskStrings.MENU_ITEM_CREATE_MAP+" - "+RiskStrings.SAVE_MAP, 
+						 JOptionPane.PLAIN_MESSAGE, null, null, "");
+				if(input == null)
+					return;
+				
+				 str = input.trim();
+				
 			 }
+			 this.addToHistoryPanel("\n"+RiskStrings.MAP_SAVED+str);
 			 try {
 				MapUtils.saveMap(str, debug);
-				this.gamev.getHistoryPanel().addMessage("\n Done");
-				System.out.println("Done");
+				this.addToHistoryPanel("\n"+RiskStrings.DONE);
+				
 				board.clear();
 			} catch (IOException e) {
 				
@@ -286,12 +383,12 @@ public class GameEngine implements Serializable
 		 }
 		 else
 		 {
-			 this.gamev.getHistoryPanel().addMessage("\n The Map is Invalid");
-			 System.out.println("The map is Invalid");
+			 this.addToHistoryPanel("\n"+RiskStrings.INVALID_MAP);
+			 JOptionPane.showMessageDialog(gamev.getHistoryPanel(),
+					 RiskStrings.INVALID_MAP);
+			
 			 board.clear();
 		 }
-		
-		
 	}
 /**
 	 * This function chooses the file to be edited or loaded
@@ -305,8 +402,8 @@ public class GameEngine implements Serializable
 		
 		if (result == JFileChooser.APPROVE_OPTION) 
 		{
-			this.gamev.getHistoryPanel().addMessage("Attempting To Load Map");
-			board.update(RiskEvent.HistoryUpdate);
+			this.addToHistoryPanel("Attempting To Load Map");
+			
 			
 			File file = fileChooser.getSelectedFile();
 			if (!file.exists() && !file.isDirectory()) 
@@ -315,18 +412,18 @@ public class GameEngine implements Serializable
 						RiskStrings.INVALID_FILE_LOCATION
 								+ file.getAbsolutePath());
 				
-				this.gamev.getHistoryPanel().addMessage(RiskStrings.INVALID_FILE_LOCATION);
-				board.update(RiskEvent.HistoryUpdate);
+				this.addToHistoryPanel(RiskStrings.INVALID_FILE_LOCATION);
+				
 				
 			}
 			else
 			{
-				this.gamev.getHistoryPanel().addMessage("file name is: " + file.getName());
-				board.update(RiskEvent.HistoryUpdate);
+				this.addToHistoryPanel("file name is: " + file.getName());
+				
 				if(MapUtils.loadFile(file, this.debug))
 				{
-					this.gamev.getHistoryPanel().addMessage("The Map File was properly loaded.");
-					board.update(RiskEvent.HistoryUpdate);
+					this.addToHistoryPanel("The Map File was properly loaded.");
+					
 					if(load)
 					{
 						this.gamev.getCenter().removeAll();
@@ -341,8 +438,8 @@ public class GameEngine implements Serializable
 				}
 				else
 				{
-					this.gamev.getHistoryPanel().addMessage("The Map File was invalid.");
-					board.update(RiskEvent.HistoryUpdate);
+					this.addToHistoryPanel("The Map File was invalid.");
+					
 					board.clear();
 					if(load)
 					{
@@ -350,7 +447,7 @@ public class GameEngine implements Serializable
 						this.gamev.getCenter().removeAll();
 						this.gamev.getCenter().repaint();
 						this.gamev.getCenter().validate();
-						this.gamev.getCenter().add(GameView.backGround);
+						this.gamev.getCenter().add(OtherConstants.backGround);
 						this.gamev.getCenter().repaint();
 						this.gamev.getCenter().validate();
 					}
@@ -416,14 +513,14 @@ public class GameEngine implements Serializable
 			 str = "";
 			 while(str.length() ==0)
 			 {
-				 gamev.getHistoryPanel().addMessage(" \n The Map was properly Edited");
+				 addToHistoryPanel(" \n The Map was properly Edited");
 				 System.out.print("The map is Valid please enter a name to save it: ");
 				 str = sc.nextLine().trim();
 				 
 			 }
 			 try {
 				MapUtils.saveMap(str, debug);
-				this.gamev.getHistoryPanel().addMessage("\n The Map was saved: "+str);
+				this.addToHistoryPanel("\n The Map was saved: "+str);
 				System.out.println("Done");
 			} catch (IOException e) {
 
@@ -699,48 +796,67 @@ public class GameEngine implements Serializable
 	private void setState(GameState state)
 	{
 		board.setState(state);
+		board.update(RiskEvent.StateChange);
+		this.addToHistoryPanel(RiskStrings.NEW_STATE + state.name());
 	}
 	
 	/**
 	 * This function is called during the startup phase in order to deploy the game
+	 * @param tournament are we in tournament mode or not
+	 * @return true false, was the deployment successful or not
 	 */
-	private void deploy()
+	private boolean deploy(boolean tournament)
 	{
 		players = new HashMap<Integer, IPlayer>();
-		
+		String input;
 	
 		int nbPlayer = 0;
 		while(!(nbPlayer >=2 && nbPlayer <= 6))
 		{
-			System.out.print("Please Set the Number of players between 2 and 6: ");
-			nbPlayer = sc.nextInt();
+			
+			input =  (String)JOptionPane.showInputDialog(gamev.getFrame(),RiskStrings.NUMBER_PLAYER, 
+					RiskStrings.RISK, JOptionPane.PLAIN_MESSAGE, null, null, "");
+			
+			if(input == null)
+				return false;
+			try
+			{
+				nbPlayer = Integer.parseInt(input);
+			}
+			catch(Exception e)
+			{
+				JOptionPane.showMessageDialog(gamev.getFrame(),
+					   RiskStrings.PLEASE_NUMBER,
+					   RiskStrings.MENU_ITEM_CREATE_MAP,
+					    JOptionPane.WARNING_MESSAGE);
+			}  			
 		}
 		
-		sc.nextLine();
-		createBots(nbPlayer);
-		String str ="";
-		while(str.length() == 0)
+		createBots(nbPlayer, tournament);
+		if(!tournament)
 		{
-			System.out.println("Please Enter your name");
-			str = sc.nextLine();
+			String str ="";
+			while(str.length() == 0)
+			{
+				input =  (String)JOptionPane.showInputDialog(gamev.getFrame(),RiskStrings.PLAYER_NAME, 
+						RiskStrings.RISK, JOptionPane.PLAIN_MESSAGE, null, null, "");
+				if(input == null)
+					return false;
+				str = input.trim();
+			}
+			
+			addHumanPlayer(str);
 		}
-		
-		addHumanPlayer(str);
 		Collections.shuffle(playerTurnOrder);
 
 		setArmiesforPlayers();
-		System.out.println("Random Assignement of countries");
+		this.addToHistoryPanel(RiskStrings.RANDOM_ASSIGNMENT);
 		randomAssignTerritories();
-		System.out.println("Placing Remaining armies");
+		this.addToHistoryPanel(RiskStrings.PLACE_REM_ARMIES);
+		pause();
 		placeRemainingArmies();
-		for(int i =0; i< players.keySet().size(); i++)
-		{
-			System.out.println(players.get(new Integer(i)).getName());
-			System.out.println("Territories Owned");
-			System.out.println(players.get(new Integer(i)).getTerritoriesOwnedWithArmies());
-		}
-		
-		
+		pause();
+		return true;
 	}
 	
 	/**
@@ -760,13 +876,21 @@ public class GameEngine implements Serializable
 	/**
 	 * Generates computer player
 	 * @param numberOfPlayers The Number of Players in the game
+	 * @param tournament  are we in tournament mode or not
 	 */
-	public void createBots(int numberOfPlayers)
+	public void createBots(int numberOfPlayers, boolean tournament)
 	{
+		if(!tournament)
+		{
 		players.clear();
-		for(short i = 1; i< numberOfPlayers; i++)
-		{			
-			players.put(new Integer(i), new PlayerModel("Computer "+ i, PlayerColors.values()[i], (short)(i),debug));
+			for(short i = 1; i< numberOfPlayers; i++)
+			{			
+				players.put(new Integer(i), new PlayerModel("Computer "+ i, PlayerColors.values()[i], (short)(i),debug));
+			}
+		}
+		else //Creating specific bots
+		{
+			
 		}
 	}
 	
@@ -803,7 +927,7 @@ public class GameEngine implements Serializable
 		}
 		if(gamev != null)
 		{
-			this.gamev.getHistoryPanel().addMessage(""+players.keySet().size()+" players,\n Armies assigned : "+nbArmiesToBePlaced);
+			this.addToHistoryPanel(""+players.keySet().size()+" players,\n Armies assigned : "+nbArmiesToBePlaced);
 		}
 		board.update(RiskEvent.GeneralUpdate);
 		return nbArmiesToBePlaced;
@@ -866,8 +990,8 @@ public class GameEngine implements Serializable
 				if(isGameOver())
 				{
 					this.setState(GameState.IDLE);
-					this.gamev.getHistoryPanel().addMessage("The Game is Over");
-					this.gamev.getHistoryPanel().addMessage("winner: "+ this.players.get(new Integer(board.getOwnerID())).getName());
+					this.addToHistoryPanel("The Game is Over");
+					this.addToHistoryPanel("winner: "+ this.players.get(new Integer(board.getOwnerID())).getName());
 					board.update(RiskEvent.GeneralUpdate);
 					return;
 				}
@@ -923,43 +1047,24 @@ public class GameEngine implements Serializable
 			
 			
 		}
-		else //Robot Randomly picks a country and perform reinforce otherwise skip at the next iteration will be changed by strategy
-		{ 
-			String o1 = "";
-			String d1 = "";
-			for(String origin: players.get(integer).getTerritoriesOwned())
-			{
-				d1 = "";
-				o1 = origin;
-				for(String destination: players.get(integer).getTerritoriesOwned())
-				{
-					
-					if(!origin.equals(destination))
-					{
-						if(board.getTerritory(o1).getNeighbours().contains(destination))
-						{
-							d1 = destination;
-							break;
-						}
-					}
-				}
-				if(d1.length() >0)
-				{
-					break;
-				}
-			}
-			if(d1.length() > 0)
-			{
-				players.get(integer).fortify(o1, d1, 1);
-			}
+		else 
+		{
+			pause();
 		}
+		
+	}
+	
+	/**
+	 * Pause before moving to next state or phase
+	 */
+	private void pause()
+	{
 		try {
-			Thread.sleep(2500);
+			Thread.sleep(RiskIntegers.PAUSE_DURATION);
 		} catch (InterruptedException e) {
 			
 			e.printStackTrace();
 		} 
-		
 	}
 
 	/**
@@ -1046,12 +1151,12 @@ public class GameEngine implements Serializable
 							System.out.println(Arrays.toString(attackerDices));
 							System.out.println(players.get(new Integer(defender.getOwnerID())).getName()+" rolled: ");
 							System.out.println(Arrays.toString(defenderDices));
-							this.gamev.getHistoryPanel().addMessage(players.get(new Integer(attacker.getOwnerID())).getName()+" rolled: ");
-							this.gamev.getHistoryPanel().addMessage(Arrays.toString(attackerDices));
-							this.gamev.getHistoryPanel().addMessage(players.get(new Integer(defender.getOwnerID())).getName()+" rolled: ");
-							this.gamev.getHistoryPanel().addMessage(Arrays.toString(defenderDices));
+							this.addToHistoryPanel(players.get(new Integer(attacker.getOwnerID())).getName()+" rolled: ");
+							this.addToHistoryPanel(Arrays.toString(attackerDices));
+							this.addToHistoryPanel(players.get(new Integer(defender.getOwnerID())).getName()+" rolled: ");
+							this.addToHistoryPanel(Arrays.toString(defenderDices));
 							
-							board.update(RiskEvent.HistoryUpdate);
+							
 							int attackerVictories = 0;
 							int defenderVictories = 0;
 							if(defenderDices.length > attackerDices.length)
@@ -1104,8 +1209,8 @@ public class GameEngine implements Serializable
 									String cardName = board.getTerritories().get(nameIndex);
 									players.get(new Integer(attacker.getOwnerID())).getHand().add(new Card(type,cardName));
 									oneOnce = true;
-									this.gamev.getHistoryPanel().addMessage(players.get(integer).getName()+" has conquered a territory\n and won a card");
-									board.update(RiskEvent.HistoryUpdate);
+									this.addToHistoryPanel(players.get(integer).getName()+" has conquered a territory\n and won a card");
+									
 									board.update(RiskEvent.CountryUpdate);
 								}
 								
@@ -1116,8 +1221,8 @@ public class GameEngine implements Serializable
 								if(board.getContinent(defender.getContinentName()).getOwnerID() == attacker.getOwnerID())
 								{
 									players.get(integer).incrementArmiesBy(board.getContinent(defender.getContinentName()).getContinentBonus());
-									this.gamev.getHistoryPanel().addMessage(players.get(integer).getName()+" has  conquered a continent\n and won a card");
-									board.update(RiskEvent.HistoryUpdate);
+									this.addToHistoryPanel(players.get(integer).getName()+" has  conquered a continent\n and won a card");
+									
 									if(isGameOver())
 									{
 										break;
@@ -1201,10 +1306,10 @@ public class GameEngine implements Serializable
 							System.out.println(Arrays.toString(attackerDices));
 							System.out.println(players.get(new Integer(defender.getOwnerID())).getName()+" rolled: ");
 							System.out.println(Arrays.toString(defenderDices));
-							this.gamev.getHistoryPanel().addMessage(players.get(new Integer(attacker.getOwnerID())).getName()+" rolled: ");
-							this.gamev.getHistoryPanel().addMessage(Arrays.toString(attackerDices));
-							this.gamev.getHistoryPanel().addMessage(players.get(new Integer(defender.getOwnerID())).getName()+" rolled: ");
-							this.gamev.getHistoryPanel().addMessage(Arrays.toString(defenderDices));
+							this.addToHistoryPanel(players.get(new Integer(attacker.getOwnerID())).getName()+" rolled: ");
+							this.addToHistoryPanel(Arrays.toString(attackerDices));
+							this.addToHistoryPanel(players.get(new Integer(defender.getOwnerID())).getName()+" rolled: ");
+							this.addToHistoryPanel(Arrays.toString(defenderDices));
 							int attackerVictories = 0;
 							int defenderVictories = 0;
 							if(defenderDices.length > attackerDices.length)
@@ -1257,9 +1362,9 @@ public class GameEngine implements Serializable
 									String cardName = board.getTerritories().get(nameIndex);
 									players.get(new Integer(attacker.getOwnerID())).getHand().add(new Card(type,cardName));
 									oneOnce = true;
-									this.gamev.getHistoryPanel().addMessage(players.get(integer).getName()+" has conquered a territory\n and won a card");
+									this.addToHistoryPanel(players.get(integer).getName()+" has conquered a territory\n and won a card");
 									board.update(RiskEvent.CountryUpdate);
-									board.update(RiskEvent.HistoryUpdate);
+									
 								}
 								
 								players.get(new Integer(defender.getOwnerID())).removeTerritory(defender.getTerritoryName());
@@ -1269,8 +1374,8 @@ public class GameEngine implements Serializable
 								if(board.getContinent(defender.getContinentName()).getOwnerID() == attacker.getOwnerID())
 								{
 									players.get(integer).incrementArmiesBy(board.getContinent(defender.getContinentName()).getContinentBonus());
-									this.gamev.getHistoryPanel().addMessage(players.get(integer).getName()+" has  conquered a continent\n and won a card");
-									board.update(RiskEvent.HistoryUpdate);
+									this.addToHistoryPanel(players.get(integer).getName()+" has  conquered a continent\n and won a card");
+									
 									if(isGameOver())
 									{
 										break;
@@ -1324,8 +1429,8 @@ public class GameEngine implements Serializable
 	private void reinforcePhase(Integer integer) {
 		this.setState(GameState.REINFORCE);
 		int newArmies =(int)(players.get(integer).getTerritoriesOwned().size() < 9 ?3 :players.get(integer).getTerritoriesOwned().size()/3);
-		this.gamev.getHistoryPanel().addMessage(players.get(integer).getName()+" has\n "+players.get(integer).getTerritoriesOwned().size()+" territories");
-		this.gamev.getHistoryPanel().addMessage("Army received: " +newArmies);
+		this.addToHistoryPanel(players.get(integer).getName()+" has\n "+players.get(integer).getTerritoriesOwned().size()+" territories");
+		this.addToHistoryPanel("Army received: " +newArmies);
 		board.update(RiskEvent.GeneralUpdate);
 		players.get(integer).incrementArmiesBy(newArmies);
 		//Player Object
@@ -1340,7 +1445,7 @@ public class GameEngine implements Serializable
 				{
 					mustExchange = true;
 					exchange = true;
-					this.gamev.getHistoryPanel().addMessage(players.get(integer).getName()+" Must Turn In Cards");
+					this.addToHistoryPanel(players.get(integer).getName()+" Must Turn In Cards");
 				}
 				
 				if(!mustExchange && players.get(integer).getHand().canTurnInCards())
@@ -1352,8 +1457,8 @@ public class GameEngine implements Serializable
 				}
 				if(exchange)
 				{
-					this.gamev.getHistoryPanel().addMessage("Card Exchange in progress");
-					board.update(RiskEvent.HistoryUpdate);
+					this.addToHistoryPanel("Card Exchange in progress");
+					
 					board.update(RiskEvent.CardTrade);
 					System.out.println("Here are the cards that you own");
 					System.out.println(players.get(integer).getHand().toString());
@@ -1374,12 +1479,12 @@ public class GameEngine implements Serializable
 							)
 					{
 						extra = 2;
-						this.gamev.getHistoryPanel().addMessage("One of the card traded\n shows a country occupied\n by player 2 extra armies ");
-						board.update(RiskEvent.HistoryUpdate);
+						this.addToHistoryPanel("One of the card traded\n shows a country occupied\n by player 2 extra armies ");
+						
 					}
 					players.get(integer).getHand().removeCardsFromHand(iArr[0], iArr[1], iArr[2]);
-					this.gamev.getHistoryPanel().addMessage("Cards Were traded");
-					board.update(RiskEvent.HistoryUpdate);
+					this.addToHistoryPanel("Cards Were traded");
+					
 					board.update(RiskEvent.CardTrade);
 					players.get(integer).incrementArmiesBy(extra);
 					players.get(integer).incrementArmiesBy(getArmiesFromCardExchange());
@@ -1432,7 +1537,7 @@ public class GameEngine implements Serializable
 			{
 				if(players.get(integer).getHand().mustTurnInCards())
 				{
-					this.gamev.getHistoryPanel().addMessage(players.get(integer).getName()+" Must Turn In Cards");
+					this.addToHistoryPanel(players.get(integer).getName()+" Must Turn In Cards");
 				}
 				Card card1 = players.get(integer).getHand().getCards().get(0);
 				Card card2 = players.get(integer).getHand().getCards().get(1);
@@ -1443,11 +1548,11 @@ public class GameEngine implements Serializable
 						)
 				{
 					extra = 2;
-					this.gamev.getHistoryPanel().addMessage("One of the card traded\n shows a country occupied\n by player 2 extra armies ");
+					this.addToHistoryPanel("One of the card traded\n shows a country occupied\n by player 2 extra armies ");
 				}
 				players.get(integer).getHand().removeCardsFromHand(0, 1, 2);
-				this.gamev.getHistoryPanel().addMessage("Cards Were traded");
-				board.update(RiskEvent.HistoryUpdate);
+				this.addToHistoryPanel("Cards Were traded");
+				
 				board.update(RiskEvent.CardTrade);
 				players.get(integer).incrementArmiesBy(extra);
 				players.get(integer).incrementArmiesBy(getArmiesFromCardExchange());
@@ -1517,5 +1622,9 @@ public class GameEngine implements Serializable
 	public IPlayer getPlayer(int index) {
 		return this.players.get(new Integer(index));
 	}
+	/**
+	 * The Scanner object to read from standard input
+	 */
+	private Scanner sc = new Scanner(System.in);
 
 }

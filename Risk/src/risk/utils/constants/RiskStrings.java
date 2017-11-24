@@ -11,6 +11,22 @@ package risk.utils.constants;
 public class RiskStrings 
 {
 	/**
+	 * Risk String
+	 */
+	public static final String RISK = "Risk";
+	/**
+	 * Continent and Bonus
+	 */
+	public static final String CREATE_CONTINENT_BONUS = "Naming the continents and set their bonus";
+	/**
+	 * Create Continent String
+	 */
+	public static final String CREATE_CONTINENT  = "Creating the continents";
+	/**
+	 * Create Territories String
+	 */
+	public static final String CREATE_TERRITORIES  = "Creating the territories";
+	/**
 	 * File Menu string label content
 	 */
 	public static final String MENU_FILE = "File";
@@ -100,12 +116,12 @@ public class RiskStrings
 	/**
 	 * Toggle Country String show
 	 */
-	public static final String TOGGLE_COUNTRY_OFF = "Show Country";
+	public static final String TOGGLE_COUNTRY_ON = "Show Country";
 	
 	/**
 	 * Toggle Country String hide
 	 */
-	public static final String TOGGLE_COUNTRY_ON = "Hide Country";
+	public static final String TOGGLE_COUNTRY_OFF = "Hide Country";
 
 	/**
 	 * Tournament String
@@ -121,4 +137,124 @@ public class RiskStrings
 	 * Load Game String
 	 */
 	public static final String LOAD_GAME = "Load Game";
+	
+	/**
+	 * Created Map Name
+	 */
+	public static final String CREATED_MAP = "Created Map";
+	
+	/**
+	 * Create Map How Many Continent Continent 
+	 */
+	public static final String CREATE_MAP_CONTINENT_QUERY = "How many continents would you like to create? please chose a number >= 2";
+	
+	/**
+	 * Ask for number input
+	 */
+	public static final String PLEASE_NUMBER ="Please enter a number";
+	
+	/**
+	 * Continent String
+	 */
+	public static final String CONTINENT = " continent";
+	
+	/**
+	 * String that asks for a name
+	 */
+	public static final String PLEASE_NAME = "Please Enter the name of the ";
+	
+	/**
+	 * String Ask Bonus for continent
+	 */
+	public static final String CONTINENT_BONUS = "Please enter a bonus for continent ";
+	
+	/**
+	 * Invalid Continent
+	 */
+	public static final String INVALID_CONTINENT = "This continent name already exists or the name is invalid";
+	
+	/**
+	 * Continent Created
+	 */
+	public static final String CONTINENT_CREATED = "The folowing continents were created";
+	
+	/**
+	 * Territory Query Number
+	 */
+	public static final String TERRITORY_NUMBER_QUERY = "Please Enter the number of territories for ";
+	
+	/**
+	 * String Territory
+	 */
+	public static final String TERRITORY = " territory";
+	
+	/**
+	 * String Territory Neighbor Query
+	 */
+	public static final String TERRITORY_NEIGHBOUR_NUMBER_QUERY = "Please enter the number of neighbours for the territory ";
+
+	/**
+	 * String Territory neighbor name query
+	 */
+	public static final String TERRITORY_NEIGHBOUR_NAME_QUERY = "Please enter the neighbour name for territory.";
+	
+	/**
+	 * Done
+	 */
+	public static final String DONE = "Done";
+	
+	/**
+	 * Invalid Map
+	 */
+	public static final String INVALID_MAP =" The Map is Invalid.";
+	
+	/**
+	 * Valid Map
+	 */
+	public static final String VALID_MAP =" The Map is Valid.";
+	
+	/**
+	 * Validating Map
+	 */
+	public static final String VALIDATING_MAP =" Validating Map.";
+	
+	/**
+	 * Valid Map Save
+	 */
+	public static final String VALID_SAVE_MAP ="The map is Valid please enter a name to save it";
+	
+	/**
+	 * Save Map
+	 */
+	public static final String SAVE_MAP =" Save Map.";
+	
+	/**
+	 * Map was saved
+	 */
+	public static final String MAP_SAVED = " The Map was saved: ";
+	
+	/**
+	 * New State
+	 */
+	public static final String NEW_STATE = " New State: ";
+	
+	/**
+	 * Number of Player set
+	 */
+	public static final String NUMBER_PLAYER = "Please Set the Number of players between 2 and 6"; 
+	
+	/**
+	 * Ask For player name
+	 */
+	public static final String PLAYER_NAME = "Please Enter your name";
+	
+	/**
+	 * Random Assignment
+	 */
+	public static final String RANDOM_ASSIGNMENT = "Random Assignement of countries";
+	
+	/**
+	 * Placing remaining armies
+	 */
+	public static final String PLACE_REM_ARMIES = "Placing Remaining armies";
 }

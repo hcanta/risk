@@ -68,5 +68,10 @@ public class RiskIntegers
 	 * Number Of Cells per Rows on the graph to be displayed
 	 */
 	public static final int CELL_PER_ROWS = 4;
+	
+	/**
+	 * Pause Duration
+	 */
+	public static final int PAUSE_DURATION = 2000;
 
 }

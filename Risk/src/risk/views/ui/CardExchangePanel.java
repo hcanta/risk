@@ -45,7 +45,7 @@ public class CardExchangePanel extends JPanel implements Observer, Serializable
 	}
 	
 	/**
-	 * Increments the Number of card Exhange rounds By 1
+	 * Increments the Number of card Exchange rounds By 1
 	 */
 	public void incrementCardExchangeRounds()
 	{
@@ -66,6 +66,9 @@ public class CardExchangePanel extends JPanel implements Observer, Serializable
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		// TODO Auto-generated method stub
+		
+		this.validate();
+		this.repaint();
 		
 	}
 	

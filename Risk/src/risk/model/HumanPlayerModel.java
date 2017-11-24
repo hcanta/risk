@@ -12,7 +12,8 @@ import risk.utils.constants.RiskEnum.PlayerColors;
  * Implementation of the Human Player Model
  * @author hcanta
  */
-public class HumanPlayerModel extends PlayerModel implements Serializable {
+public class HumanPlayerModel extends PlayerModel implements Serializable 
+{
 
 	/**
 	 * Generated Serial Version UID
