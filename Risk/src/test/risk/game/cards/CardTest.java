@@ -16,7 +16,8 @@ import risk.utils.constants.RiskEnum.CardType;
  * This class is a Junit Test Class which checks the method associated with the Card class.
  * @author hcanta
  * @author Mohammad Akif Beg
- * @version 2.0
+ * @author Karan
+ * @version 3.0
  */
 public class CardTest {
 	
@@ -29,7 +30,10 @@ public class CardTest {
 	private Territory testObject;
 
 
-	
+	/**
+	 * Initializes the Territory class and Card class objects before every test case
+	 * @throws Exception
+	 */
 	@Before
 	public void setUp() throws Exception {
 		
@@ -39,13 +43,21 @@ public class CardTest {
 		
 	}
 
+	/**
+	 * Tests the card associated with the territory
+	 */
 	@Test
 	public void testGetName() {
+		
 		assertEquals(testObject.getTerritoryName(),testCard.getTerritory());
 	}
 
+	/**
+	 * Tests the card type
+	 */
 	@Test
 	public void testGetType() {
+		
 		testCard.getType();
 		assertEquals(typeCard,testCard.getType().name());
 	}
