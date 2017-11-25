@@ -120,6 +120,20 @@ public class GameEngine implements Serializable
 		this(null, true);
 	}
 	
+	private void territoryInfo()
+	{
+		this.gamev.getCountryPanel().clearMessages();
+		String territory;
+		for(int i =0; i< board.getTerritories().size(); i++)
+		{
+			territory = board.getTerritories().get(i);
+			String[] info = board.getTerritory(territory).basicInfo();
+			this.gamev.getCountryPanel().addMessage(info[1]);
+			this.gamev.getCountryPanel().addMessage("Owner: "+players.get(Integer.parseInt(info[0])).getName()+"\n");
+		}
+		board.update(RiskEvent.CountryUpdate);
+	}
+	
 	/**
 	 * Adds The action Listener to the menu items of the Game View
 	 */
@@ -942,6 +956,7 @@ public class GameEngine implements Serializable
 				e.printStackTrace();
 			} 
 		}
+		territoryInfo();
 	}
 	
 	/**
@@ -957,6 +972,7 @@ public class GameEngine implements Serializable
 				int index = rand.nextInt(players.get(playerTurnOrder.get(i)).nbTerritoriesOwned());
 				players.get(playerTurnOrder.get(i)).reinforce(players.get(playerTurnOrder.get(i)).getTerritoriesOwned().get(index));
 			}
+			territoryInfo();
 		}
 	}
 	

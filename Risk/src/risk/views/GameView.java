@@ -233,6 +233,15 @@ public class GameView implements Observer, Serializable
 	}
 	
 	/**
+	 * Returns the country panel of the gameView
+	 * @return The country panel of the gameView
+	 */
+	public SidePanel getCountryPanel()
+	{
+		return countryTextPanel;
+	}
+	
+	/**
 	 * Returns the RiskMenu of the Game View
 	 * @return The risk Menu of the GameView
 	 */
@@ -257,6 +266,9 @@ public class GameView implements Observer, Serializable
 			case StateChange:
 				bottom.update(obj, param);
 				break;
+				
+			case CountryUpdate:
+				 countryUpdate(obj, param);
 			default:
 				break;
 		}
@@ -266,7 +278,7 @@ public class GameView implements Observer, Serializable
 		
 	}
 	/**
-	 * This methodUpdate the history
+	 * This method Update the history
 	 * @param obj The object Changed
 	 * @param param a parameter for possible observers
 	 */
@@ -275,6 +287,18 @@ public class GameView implements Observer, Serializable
 		GameView.historyTextPanel.update(obj,param);
 		GameView.historyTextScroller.validate();
 		GameView.historyTextScroller.repaint();
+		
+	}
+	/**
+	 * This method Update the country
+	 * @param obj The object Changed
+	 * @param param a parameter for possible observers
+	 */
+	private void countryUpdate(Observable obj, Object param)
+	{
+		GameView.countryTextPanel.update(obj,param);
+		GameView.countryTextScroller.validate();
+		GameView.countryTextScroller.repaint();
 		
 	}
 

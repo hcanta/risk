@@ -8,7 +8,6 @@ risk.utils
 risk.utils.constants
 risk.views
 risk.views.ui
-risk.views.ui.dialog
 test
 test.risk.game
 test.risk.game.cards

@@ -338,4 +338,13 @@ public class Territory implements Serializable
 		}
 		return true;
 	}
+	
+	/**
+	 * Returns the basic info of the territory
+	 * @return basic info of the territory Owner(0) info (1)
+	 */
+	public String[] basicInfo()
+	{
+		return new String[]{""+this.ownerID, " Name: "+this.territoryName +"\n Armies On: "+ this.armyOn+"\n Continent: "+this.continent };
+	}
 }
