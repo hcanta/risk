@@ -161,7 +161,7 @@ public class RiskStrings
 	/**
 	 * Continent String
 	 */
-	public static final String CONTINENT_TERRITORY = " continent the territory belongs too";
+	public static final String CONTINENT_TERRITORY = "continent the territory belongs.";
 	
 	
 	/**
@@ -278,7 +278,7 @@ public class RiskStrings
 												"3-Add a territory",
 												"4-Remove a territory",
 												"5-Add a link between two existing territories",
-												"6 remove a link between two existing territories",
+												"6-remove a link between two existing territories",
 												"7-Done"};
 	
 	/**
@@ -289,10 +289,10 @@ public class RiskStrings
 	/**
 	 * first string
 	 */
-	public static final String FIRST = " first ";
+	public static final String FIRST = "first ";
 	
 	/**
 	 * second string
 	 */
-	public static final String SECOND = " second ";
+	public static final String SECOND = "second ";
 }

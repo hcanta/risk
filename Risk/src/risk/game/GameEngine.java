@@ -411,27 +411,32 @@ public class GameEngine implements Serializable
 				board.clear();
 			    return;
 			}
-			
+			boolean result = false;
 			switch(option)
 			{
 				case 1:
-					
-					edited = edited || addContinent(RiskStrings.MENU_ITEM_EDIT_MAP, "");
+					result = addContinent(RiskStrings.MENU_ITEM_EDIT_MAP, "");
+					edited = edited || result;
 					break;
 				case 2:
-					edited = edited || removeContinent();
+					result = removeContinent();
+					edited = edited || result;
 					break;
 				case 3:
-					edited = edited || addTerritory();
+					result = addTerritory();
+					edited = edited || result;
 					break;
 				case 4:
-					edited = edited || removeTerritory();
+					result = removeTerritory();
+					edited = edited || result;
 					break;
 				case 5:
-					edited = edited || addLink();
+					result = addLink();
+					edited = edited || result;
 					break;
 				case 6:
-					edited = edited || removeLink();
+					result = removeLink();
+					edited = edited || result;
 					break;
 				default:
 					break;			
@@ -495,6 +500,10 @@ public class GameEngine implements Serializable
 	private boolean removeLink() {
 		String[] info1 = getContinentAndCountry(RiskStrings.FIRST);
 		String[] info2 = getContinentAndCountry(RiskStrings.SECOND);
+		
+		if(info1 == null || info2 == null)
+			return false;
+		
 		String continent1 = info1[0];
 		String continent2 = info2[0];
 		String ter1 = info1[1];
@@ -518,6 +527,10 @@ public class GameEngine implements Serializable
 
 		String[] info1 = getContinentAndCountry(RiskStrings.FIRST);
 		String[] info2 = getContinentAndCountry(RiskStrings.SECOND);
+		
+		if(info1 == null || info2 == null)
+			return false;
+		
 		String continent1 = info1[0];
 		String continent2 = info2[0];
 		String ter1 = info1[1];
@@ -553,6 +566,16 @@ public class GameEngine implements Serializable
 	 */
 	private String[] getContinentAndCountry(String param)
 	{
+		return getContinentAndCountry(param, false);
+	}
+	/**
+	 * Get the the continent and country from user input
+	 * @param add Are we adding a territory
+	 * @return an array containing the continent(0) and the country(1) 
+	 * @param the index id if any
+	 */
+	private String[] getContinentAndCountry(String param, boolean add)
+	{
 		String continent ="";
 		String input;
 		
@@ -564,8 +587,8 @@ public class GameEngine implements Serializable
 			if(input == null)
 				return null;
 			
-			continent=continent.toLowerCase().trim();
-			if(board.containsContinent(continent))
+			continent=input.toLowerCase().trim();
+			if(!board.containsContinent(continent))
 			{
 				continent="";
 				JOptionPane.showMessageDialog(gamev.getFrame(),
@@ -573,19 +596,29 @@ public class GameEngine implements Serializable
 						RiskStrings.MENU_ITEM_EDIT_MAP,
 					    JOptionPane.ERROR_MESSAGE);
 			}
+			
 		}
 		
 		String country ="";
-		while(country.length() == 0)
+		while(country.length() == 0 )
 		{
 			input =  (String)JOptionPane.showInputDialog(gamev.getFrame(), 
 					RiskStrings.PLEASE_NAME+ param  +RiskStrings.TERRITORY,
-					 RiskStrings.MENU_ITEM_EDIT_MAP, JOptionPane.PLAIN_MESSAGE, null, null, "");
+					RiskStrings.MENU_ITEM_EDIT_MAP, JOptionPane.PLAIN_MESSAGE, null, null, "");
 			if(input == null)
 				return null;
 			
-			country=country.toLowerCase().trim();
-			if(board.getTerritories().contains(country))
+			country=input.toLowerCase().trim();
+			
+			if(!board.getTerritories().contains(country) && !add)
+			{
+				country="";
+				JOptionPane.showMessageDialog(gamev.getFrame(),
+						RiskStrings.INVALID_TERRITORY,
+						RiskStrings.MENU_ITEM_EDIT_MAP,
+					    JOptionPane.ERROR_MESSAGE);
+			}
+			else if(board.getTerritories().contains(country) && add)
 			{
 				country="";
 				JOptionPane.showMessageDialog(gamev.getFrame(),
@@ -603,7 +636,7 @@ public class GameEngine implements Serializable
 	 */
 	private boolean addTerritory() 
 	{
-		String[] info = getContinentAndCountry("");
+		String[] info = getContinentAndCountry("", true);
 		if(info == null)
 			return false;
 		
