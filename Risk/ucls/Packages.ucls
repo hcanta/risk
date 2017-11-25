@@ -16,7 +16,7 @@
     <position height="50" width="101" x="380" y="140"/>    
     <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
   </package>  
-  <package id="4" language="java" name="risk.model.maputils" project="Risk" file="/Risk/src/risk/model/maputils" 
+  <package id="4" language="java" name="risk.model.maputils" project="Risk" file="/Risk/src/risk/model/Utils" 
     binary="false" corner="BOTTOM_RIGHT">    
     <position height="50" width="136" x="361" y="232"/>    
     <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  

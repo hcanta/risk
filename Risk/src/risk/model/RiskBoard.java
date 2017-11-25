@@ -12,7 +12,7 @@ import com.mxgraph.view.mxGraph;
 
 import risk.model.maputils.Continent;
 import risk.model.maputils.Territory;
-import risk.utils.MapUtils;
+import risk.utils.Utils;
 import risk.utils.constants.RiskEnum.GameState;
 import risk.utils.constants.RiskEnum.RiskEvent;
 import risk.utils.constants.RiskIntegers;
@@ -219,15 +219,18 @@ public class RiskBoard extends Observable implements Serializable
 	/**
 	 * Removes the mentioned continent if it exists
 	 * @param continent to be removed from the map
+	 * @return Was the continent removed or not
 	 */
-	public void removeContinent(String continent)
+	public boolean removeContinent(String continent)
 	{
 		String n_continent = continent.toLowerCase();
 		if(this.continents.containsKey(n_continent))
 		{
 			continents.get(n_continent).clear();
 			this.continents.remove(n_continent);
+			return true;
 		}
+		return false;
 		
 	}
 	
@@ -280,15 +283,17 @@ public class RiskBoard extends Observable implements Serializable
 	 * Add a territory to the Board
 	 * @param continentName the name of the continent to which we need to add a territory
 	 * @param territoryName the name of the territory to be added to said continent
+	 * @return was the territory added
 	 */
-	public void addTerritory(String continentName, String territoryName)
+	public boolean addTerritory(String continentName, String territoryName)
 	{
 		String c_name = continentName.toLowerCase();
 		String t_name = territoryName.toLowerCase();
 		if(continents.containsKey(c_name))
 		{
-			continents.get(c_name).addTerritory(t_name);
+			return continents.get(c_name).addTerritory(t_name);
 		}
+		return false;
 	}
 	
 	/**
@@ -477,7 +482,7 @@ public class RiskBoard extends Observable implements Serializable
 			}
 		}
 		
-		return MapUtils.performTraversal(adjMatrix) == territories.size();
+		return Utils.performTraversal(adjMatrix) == territories.size();
 	}
 	
 	/**

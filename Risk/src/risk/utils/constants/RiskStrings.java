@@ -257,4 +257,22 @@ public class RiskStrings
 	 * Placing remaining armies
 	 */
 	public static final String PLACE_REM_ARMIES = "Placing Remaining armies";
+	
+	
+	/**
+	 * Strings for edit option
+	 */
+	public static final String[] EDIT_OPTIONS  ={"1-Add a Continent",
+												"2-remove a Continent",
+												"3-Add a territory",
+												"4-Remove a territory",
+												"5-Add a link between two existing territories",
+												"6 remove a link between two existing territories",
+												"7-Done"};
+	
+	/**
+	 * To be removed string
+	 */
+	public static final String TO_BE_REMOVED= " to be removed.";
+	
 }

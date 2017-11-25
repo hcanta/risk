@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 import com.mxgraph.view.mxGraph;
 
-import risk.utils.MapUtils;
+import risk.utils.Utils;
 import risk.utils.constants.RiskIntegers;
 
 /**
@@ -112,14 +112,17 @@ public class Continent
 	/**
 	 * Add a territory to the Continent
 	 * @param name  The name of the territory to be added to the continent
+	 * @return was the territory added
 	 */
-	public void addTerritory(String name)
+	public boolean addTerritory(String name)
 	{
 		String n_name = name.toLowerCase();
 		if(!territories.containsKey(n_name))
 		{
 			territories.put(n_name, new Territory(n_name,this.continentName,this.graph, 0, 0));
+			return true;
 		}
+		return false;
 	}
 	
 	/**
@@ -314,7 +317,7 @@ public class Continent
 				}
 			}
 		}
-		valid = MapUtils.performTraversal(matrix)==territories.keySet().size();
+		valid = Utils.performTraversal(matrix)==territories.keySet().size();
 		return valid;
 	}
 	

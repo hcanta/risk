@@ -10,7 +10,7 @@ import org.junit.Test;
 
 
 import risk.model.RiskBoard;
-import risk.utils.MapUtils;
+import risk.utils.Utils;
 /**
  * Test cases for The RiskBoard
  * @version 2.0
@@ -22,7 +22,7 @@ public class RiskBoardTest {
 	public void setUp() throws Exception 
 	{
 		RiskBoard.ProperInstance(true).clear();
-		MapUtils.loadFile(new File("Maps/World.map"),true);
+		Utils.loadFile(new File("Maps/World.map"),true);
 	}
 
 	@Test
@@ -55,9 +55,9 @@ public class RiskBoardTest {
 		Assert.assertTrue(RiskBoard.ProperInstance(true).validateMap());
 		RiskBoard.ProperInstance(true).addContinent("testcontinent", 3);
 		Assert.assertFalse(RiskBoard.ProperInstance(true).validateMap());
-		Assert.assertFalse(MapUtils.loadFile(new File("Maps/invalidAtlantis.map"),true));
-		Assert.assertFalse(MapUtils.loadFile(new File("Maps/invalidUSA.map"),true));
-		Assert.assertFalse(MapUtils.loadFile(new File("Maps/invalidWorld.map"),true));
+		Assert.assertFalse(Utils.loadFile(new File("Maps/invalidAtlantis.map"),true));
+		Assert.assertFalse(Utils.loadFile(new File("Maps/invalidUSA.map"),true));
+		Assert.assertFalse(Utils.loadFile(new File("Maps/invalidWorld.map"),true));
 	}
 
 	@Test

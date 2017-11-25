@@ -11,13 +11,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import risk.model.RiskBoard;
-import risk.utils.MapUtils;
+import risk.utils.Utils;
 /**
  * 
  * TestFileFor the Map Utils
  *@author hcanta
  */
-public class MapUtilsTest {
+public class UtilsTest {
 
 	/**
 	 * Connected Matrix;
@@ -31,7 +31,7 @@ public class MapUtilsTest {
 	public void setUp() throws Exception 
 	{
 		RiskBoard.ProperInstance(true).clear();
-		MapUtils.loadFile(new File("Maps/World.map"),true);
+		Utils.loadFile(new File("Maps/World.map"),true);
 		connected = new int[][]{{0,1,0},{1,0,1},{0,1,0}};
 		disconnected = new int[][]{{0,1,0},{1,0,0},{0,0,0}};
 	}
@@ -43,13 +43,13 @@ public class MapUtilsTest {
 		Assert.assertFalse(RiskBoard.ProperInstance(true).getContinents().contains("kala"));
 		Assert.assertTrue(RiskBoard.ProperInstance(true).validateMap());
 		try {
-			MapUtils.saveMap("file",true);
+			Utils.saveMap("file",true);
 		} catch (IOException e) {
 			
 			e.printStackTrace();
 		}
 		RiskBoard.ProperInstance(true).clear();
-		Assert.assertTrue(MapUtils.loadFile(new File("Maps/file.map"),true));
+		Assert.assertTrue(Utils.loadFile(new File("Maps/file.map"),true));
 		Assert.assertTrue(RiskBoard.ProperInstance(true).getContinents().contains("europe"));
 	}
 
@@ -59,7 +59,7 @@ public class MapUtilsTest {
 		Assert.assertFalse(RiskBoard.ProperInstance(true).getContinents().contains("kala"));
 		Assert.assertTrue(RiskBoard.ProperInstance(true).validateMap());
 		RiskBoard.ProperInstance(true).clear();
-		MapUtils.loadFile(new File("Maps/Atlantis.map"),true);
+		Utils.loadFile(new File("Maps/Atlantis.map"),true);
 		Assert.assertFalse(RiskBoard.ProperInstance(true).getContinents().contains("europe"));
 		Assert.assertTrue(RiskBoard.ProperInstance(true).getContinents().contains("kala"));
 		Assert.assertTrue(RiskBoard.ProperInstance(true).validateMap());
@@ -68,28 +68,28 @@ public class MapUtilsTest {
 	@Test 
 	public void testLoadFileInValid() {
 		RiskBoard.ProperInstance(true).clear();
-		Assert.assertFalse(MapUtils.loadFile(new File("Maps/invalidAtlantis.map"),true));
+		Assert.assertFalse(Utils.loadFile(new File("Maps/invalidAtlantis.map"),true));
 		RiskBoard.ProperInstance(true).clear();
-		Assert.assertTrue(MapUtils.loadFile(new File("Maps/Atlantis.map"),true));
+		Assert.assertTrue(Utils.loadFile(new File("Maps/Atlantis.map"),true));
 	}
 	
 	@Test 
 	public void testLoadFileInValidDisconnected() {
 		RiskBoard.ProperInstance(true).clear();
-		Assert.assertFalse(MapUtils.loadFile(new File("Maps/Disconnected.map"),true));
+		Assert.assertFalse(Utils.loadFile(new File("Maps/Disconnected.map"),true));
 
 	}
 	
 	@Test 
 	public void testDisconnectedMatrix() {
 		
-		Assert.assertFalse(MapUtils.performTraversal(disconnected) == 3);
+		Assert.assertFalse(Utils.performTraversal(disconnected) == 3);
 	}
 	
 	@Test 
 	public void testConnectedMatrix() {
 		
-		Assert.assertTrue(MapUtils.performTraversal(connected) == 3);
+		Assert.assertTrue(Utils.performTraversal(connected) == 3);
 
 	}
 

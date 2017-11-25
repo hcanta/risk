@@ -12,7 +12,7 @@ import org.junit.Test;
 import risk.game.GameEngine;
 import risk.model.RiskBoard;
 import risk.model.playerutils.IPlayer;
-import risk.utils.MapUtils;
+import risk.utils.Utils;
 
 /**
  * 
@@ -39,7 +39,7 @@ public class GameEngineTest {
 		risk.model.RiskBoard.ProperInstance(debug);
 		
 		this.engine = new GameEngine(null, debug);
-		MapUtils.loadFile(new File("Maps/World.map"),debug);
+		Utils.loadFile(new File("Maps/World.map"),debug);
 		engine.createBots(4, false);
 		engine.addHumanPlayer("human");
 		player = engine.getPlayer(0);
@@ -81,7 +81,7 @@ public class GameEngineTest {
 	@Test
 	public void testRandomAssign() {
 		risk.model.RiskBoard.ProperInstance(debug).clear();
-		MapUtils.loadFile(new File("Maps/World.map"),debug);
+		Utils.loadFile(new File("Maps/World.map"),debug);
 		
 		engine.createBots(6, false);
 		engine.addHumanPlayer("human");

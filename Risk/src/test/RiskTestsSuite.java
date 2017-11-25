@@ -13,7 +13,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({test.risk.game.cards.CardTest.class,
 			   test.risk.game.GameEngineTest.class,
-			   test.risk.utils.MapUtilsTest.class,
+			   test.risk.utils.UtilsTest.class,
 			   test.risk.model.RiskBoardTest.class,
 			   test.risk.model.PlayerModelTest.class})
 public class RiskTestsSuite {

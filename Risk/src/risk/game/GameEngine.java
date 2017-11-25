@@ -23,7 +23,7 @@ import risk.model.RiskBoard;
 import risk.model.maputils.Territory;
 import risk.model.playerutils.IPlayer;
 import risk.model.playerutils.PlayerModel;
-import risk.utils.MapUtils;
+import risk.utils.Utils;
 import risk.utils.constants.OtherConstants;
 import risk.utils.constants.RiskEnum.CardType;
 import risk.utils.constants.RiskEnum.GameState;
@@ -212,51 +212,15 @@ public class GameEngine implements Serializable
 			}        
 		}
 		
-		int bonus = 0;
-		
 		// Name The continents and set their bonus
 		addToHistoryPanel(RiskStrings.CREATE_CONTINENT_BONUS);
 		for(int i =0; i<nbContinent; i++)
 		{
-			
-			input =  (String)JOptionPane.showInputDialog(gamev.getFrame(), RiskStrings.PLEASE_NAME + (i+1) +RiskStrings.CONTINENT,
-					 RiskStrings.MENU_ITEM_CREATE_MAP, JOptionPane.PLAIN_MESSAGE, null, null, "");
-			if(input == null)
+			boolean addCont = addContinent (RiskStrings.MENU_ITEM_CREATE_MAP, " "+ (i+1)+" ");
+
+			if(!addCont)
+			{
 				return;
-			str = input;
-			str = str.toLowerCase().trim();
-			if(str.length()== 0 || !board.getContinents().contains(str))
-			{
-				while(bonus <= 0)
-				{
-					input =  (String)JOptionPane.showInputDialog(gamev.getFrame(), RiskStrings.CONTINENT_BONUS + str,
-							 RiskStrings.MENU_ITEM_CREATE_MAP, JOptionPane.PLAIN_MESSAGE, null, null, "");
-					if(input == null)
-						return;
-					try
-					{
-						bonus = Integer.parseInt(input);
-					}
-					catch(Exception e)
-					{
-						JOptionPane.showMessageDialog(gamev.getFrame(),
-							   RiskStrings.PLEASE_NUMBER,
-							   RiskStrings.MENU_ITEM_CREATE_MAP,
-							    JOptionPane.WARNING_MESSAGE);
-					}   
-				}
-				
-				board.addContinent(str, bonus);
-				bonus = 0;
-				str = "";
-			}
-			else
-			{
-				i--;
-				JOptionPane.showMessageDialog(gamev.getFrame(),
-						RiskStrings.INVALID_CONTINENT,
-					    RiskStrings.MENU_ITEM_CREATE_MAP,
-					    JOptionPane.ERROR_MESSAGE);
 			}
 		}
 		
@@ -352,43 +316,7 @@ public class GameEngine implements Serializable
 			}
 		}
 		
-		 this.addToHistoryPanel("\n"+RiskStrings.VALIDATING_MAP);
-		 boolean valid = board.validateMap();
-		 
-		 if(valid)
-		 {
-			 this.addToHistoryPanel("\n"+RiskStrings.VALID_MAP);
-			 str = "";
-			 while(str.length() ==0)
-			 {
-				input =  (String)JOptionPane.showInputDialog(gamev.getFrame(), RiskStrings.VALID_SAVE_MAP,
-						 RiskStrings.MENU_ITEM_CREATE_MAP+" - "+RiskStrings.SAVE_MAP, 
-						 JOptionPane.PLAIN_MESSAGE, null, null, "");
-				if(input == null)
-					return;
-				
-				 str = input.trim();
-				
-			 }
-			 this.addToHistoryPanel("\n"+RiskStrings.MAP_SAVED+str);
-			 try {
-				MapUtils.saveMap(str, debug);
-				this.addToHistoryPanel("\n"+RiskStrings.DONE);
-				
-				board.clear();
-			} catch (IOException e) {
-				
-				e.printStackTrace();
-			}
-		 }
-		 else
-		 {
-			 this.addToHistoryPanel("\n"+RiskStrings.INVALID_MAP);
-			 JOptionPane.showMessageDialog(gamev.getHistoryPanel(),
-					 RiskStrings.INVALID_MAP);
-			
-			 board.clear();
-		 }
+		this.validateAndSave(RiskStrings.MENU_ITEM_CREATE_MAP);
 	}
 /**
 	 * This function chooses the file to be edited or loaded
@@ -420,7 +348,7 @@ public class GameEngine implements Serializable
 			{
 				this.addToHistoryPanel("file name is: " + file.getName());
 				
-				if(MapUtils.loadFile(file, this.debug))
+				if(Utils.loadFile(file, this.debug))
 				{
 					this.addToHistoryPanel("The Map File was properly loaded.");
 					
@@ -465,80 +393,105 @@ public class GameEngine implements Serializable
 	{
 		loadMapHelper(false);
 		Scanner sc = new Scanner(System.in);
-		String str = "";
 		int option =0;
+		boolean edited = false;
 		while(option!=7)
 		{
-			System.out.println("1-Add a Continent");
-			System.out.println("2-remove a Continent");
-			System.out.println("3-Add a territory");
-			System.out.println("4-Remove a territory");
-			System.out.println("5-Add a link between two existing territories");
-			System.out.println("6 remove a link between two existing territories");
-			System.out.println("7-Done");
+			Object selected = JOptionPane.showInputDialog(null, "", RiskStrings.MENU_ITEM_EDIT_MAP,
+					JOptionPane.DEFAULT_OPTION,
+					null, RiskStrings.EDIT_OPTIONS, RiskStrings.EDIT_OPTIONS[0]);
+			if ( selected != null )
+			{
+			    String selectedString = selected.toString();
+			    option = Utils.getIndexOf(selectedString,RiskStrings.EDIT_OPTIONS) + 1;
+			}
+			else
+			{
+				board.clear();
+			    return;
+			}
 			
-			option = sc.nextInt();
-			sc.nextLine();
+			
+			
 			switch(option)
 			{
 				case 1:
 					
-					addContinent(sc);
+					edited = edited || addContinent(RiskStrings.MENU_ITEM_EDIT_MAP, " the ");
 					break;
 				case 2:
-					removeContinent(sc);
+					edited = edited || removeContinent();
 					break;
 				case 3:
-					addTerritory(sc);
+					edited = edited || addTerritory();
 					break;
 				case 4:
-					removeTerritory(sc);
+				//	edited = edited || removeTerritory();
 					break;
 				case 5:
-					addLink(sc);
+				//	edited = edited || addLink();
 					break;
 				case 6:
-					removeLink(sc);
+				//	edited = edited || removeLink();
 					break;
 				default:
-					break;
-				
-			}
-			
-			
+					break;			
+			}		
 		}
+		if(edited)
+			validateAndSave(RiskStrings.MENU_ITEM_EDIT_MAP);
+	}
+	/**
+	 * Validating and saving map
+	 * @param dialogbox name/title of the dialog box
+	 */
+	private void validateAndSave(String dialogbox)
+	{
+		String str;
+		String input;
+		this.addToHistoryPanel("\n"+RiskStrings.VALIDATING_MAP);
 		boolean valid = board.validateMap();
-		 if(valid)
-		 {
-			 str = "";
-			 while(str.length() ==0)
-			 {
-				 addToHistoryPanel(" \n The Map was properly Edited");
-				 System.out.print("The map is Valid please enter a name to save it: ");
-				 str = sc.nextLine().trim();
-				 
+		 
+		if(valid)
+		{
+			this.addToHistoryPanel("\n"+RiskStrings.VALID_MAP);
+			str = "";
+			while(str.length() ==0)
+			{
+				input =  (String)JOptionPane.showInputDialog(gamev.getFrame(), RiskStrings.VALID_SAVE_MAP,
+						 dialogbox+" - "+RiskStrings.SAVE_MAP, 
+						 JOptionPane.PLAIN_MESSAGE, null, null, "");
+				if(input == null)
+					return;
+				
+				 str = input.trim();
+				
 			 }
+			 this.addToHistoryPanel("\n"+RiskStrings.MAP_SAVED+str);
 			 try {
-				MapUtils.saveMap(str, debug);
-				this.addToHistoryPanel("\n The Map was saved: "+str);
-				System.out.println("Done");
+				Utils.saveMap(str, debug);
+				this.addToHistoryPanel("\n"+RiskStrings.DONE);
+				
+				board.clear();
 			} catch (IOException e) {
-
+				
 				e.printStackTrace();
 			}
-		 }
-		 else
-		 {
-			 System.out.println("The map is Invalid");
-		 }
-		// sc.close();
+		}
+		else
+		{
+			 this.addToHistoryPanel("\n"+RiskStrings.INVALID_MAP);
+			 JOptionPane.showMessageDialog(gamev.getHistoryPanel(),
+					 RiskStrings.INVALID_MAP);
+			
+			 board.clear();
+		}
 	}
 
 	/**
 	 * Removes a link between 2 territories
-	 * @param sc the scanner parameter for display to console
 	 */
-	private void removeLink(Scanner sc) {
+	private void removeLink() {
 		String continent1 ="";
 		String continent2="";
 		
@@ -602,17 +555,13 @@ public class GameEngine implements Serializable
 				board.getContinent(continent1).getTerritory(ter1).removeNeighbours(ter2);
 				board.getContinent(continent2).getTerritory(ter2).removeNeighbours(ter1);
 				
-				
 			}
-		}
-		
-		
+		}	
 	}
 	/**
 	 * Adds a link between 2 territories
-	 * @param sc the scanner parameter for display to console
 	 */
-	private void addLink(Scanner sc) {
+	private void addLink() {
 		String continent1 ="";
 		String continent2="";
 		
@@ -683,9 +632,8 @@ public class GameEngine implements Serializable
 	}
 	/**
 	 * Removes a territory
-	 * @param sc the scanner parameter for display to console
 	 */
-	private void removeTerritory(Scanner sc) {
+	private void removeTerritory() {
 		String continent ="";
 		
 		while(continent.length() == 0 )
@@ -717,9 +665,9 @@ public class GameEngine implements Serializable
 	}
 	/**
 	 * Adds a territory
-	 * @param sc the scanner parameter for display to console
+	 * @return was a territory added
 	 */
-	private void addTerritory(Scanner sc) 
+	private boolean addTerritory() 
 	{
 		String continent ="";
 		
@@ -736,57 +684,88 @@ public class GameEngine implements Serializable
 				
 			}
 		}
-		if(continent.length() > 0)
+		
+		String country ="";
+		while(country.length()==0)
 		{
-			String country ="";
-			while(country.length()==0)
-			{
-				System.out.println("Please enter the name of the territory to be added: ");
-				country = sc.nextLine();
-				country = country.toLowerCase().trim();
-			}
-			
-			board.addTerritory(continent, country);
+			System.out.println("Please enter the name of the territory to be added: ");
+			country = sc.nextLine();
+			country = country.toLowerCase().trim();
 		}
+		
+		return board.addTerritory(continent, country);
 		
 	}
 	/**
 	 * Removes a continent
-	 * @param sc the scanner parameter for display to console
+	 * @return was the continent removed
 	 */
-	private void removeContinent(Scanner sc) {
+	private boolean removeContinent() {
 		String str ="";
-
+		String input;
 		while(str.length() == 0)
 		{
-			System.out.print("Please enter the name of the continent to be removed: " );
-			str=sc.nextLine();
+			input =  (String)JOptionPane.showInputDialog(gamev.getFrame(), 
+					RiskStrings.PLEASE_NAME + (" the ") +RiskStrings.CONTINENT +" "+RiskStrings.TO_BE_REMOVED,
+					 RiskStrings.MENU_ITEM_EDIT_MAP, JOptionPane.PLAIN_MESSAGE, null, null, "");
+			if(input == null)
+				return false;
+			
+			str=str.toLowerCase().trim();
 		}
-		board.removeContinent(str);
+		return board.removeContinent(str);
 	}
 
 	/**
 	 * Adds a Continent
-	 * @param sc the scanner parameter for display to console
+	 * @return was a continent added
+	 * @param dialogbox The name of the dialogox
+	 * @param the string preposition
 	 */
-	private void addContinent(Scanner sc) 
+	private boolean addContinent(String dialogBox, String param) 
 	{
 		String str ="";
 		int bonus = 0;
+		String input;
 		while(str.length() == 0)
 		{
-			System.out.print("Please enter the name of the continent to be added: " );
-			str=sc.nextLine();
+			input =  (String)JOptionPane.showInputDialog(gamev.getFrame(), RiskStrings.PLEASE_NAME + param +RiskStrings.CONTINENT,
+					 dialogBox, JOptionPane.PLAIN_MESSAGE, null, null, "");
+			if(input == null)
+				return false;
+			str = input;
 			str = str.toLowerCase().trim();
+			if(board.getContinents().contains(str))
+			{
+				str="";
+				JOptionPane.showMessageDialog(gamev.getFrame(),
+						RiskStrings.INVALID_CONTINENT,
+					    dialogBox,
+					    JOptionPane.ERROR_MESSAGE);
+			}
 		}
-		
 		while(bonus <= 0)
 		{
-			System.out.print("Please enter the associated bonus: " );
-			bonus=sc.nextInt();
+			input =  (String)JOptionPane.showInputDialog(gamev.getFrame(), RiskStrings.CONTINENT_BONUS + str,
+					 dialogBox, JOptionPane.PLAIN_MESSAGE, null, null, "");
+			if(input == null)
+				return false;
+			try
+			{
+				bonus = Integer.parseInt(input);
+			}
+			catch(Exception e)
+			{
+				JOptionPane.showMessageDialog(gamev.getFrame(),
+					   RiskStrings.PLEASE_NUMBER,
+					   RiskStrings.MENU_ITEM_CREATE_MAP,
+					    JOptionPane.WARNING_MESSAGE);
+			}   
 		}
-		sc.nextLine();
+		
 		board.addContinent(str, bonus);
+		
+		return true;
 	}
 	
 	/**
@@ -1532,45 +1511,10 @@ public class GameEngine implements Serializable
 		}
 		else // Robot object
 		{
-			int extra = 0;
-			if(players.get(integer).getHand().mustTurnInCards() || players.get(integer).getHand().canTurnInCards())
-			{
-				if(players.get(integer).getHand().mustTurnInCards())
-				{
-					this.addToHistoryPanel(players.get(integer).getName()+" Must Turn In Cards");
-				}
-				Card card1 = players.get(integer).getHand().getCards().get(0);
-				Card card2 = players.get(integer).getHand().getCards().get(1);
-				Card card3 = players.get(integer).getHand().getCards().get(2);
-				if(players.get(integer).getTerritoriesOwned().contains(card1.getTerritory())
-						||players.get(integer).getTerritoriesOwned().contains(card2.getTerritory())
-						||players.get(integer).getTerritoriesOwned().contains(card3.getTerritory())
-						)
-				{
-					extra = 2;
-					this.addToHistoryPanel("One of the card traded\n shows a country occupied\n by player 2 extra armies ");
-				}
-				players.get(integer).getHand().removeCardsFromHand(0, 1, 2);
-				this.addToHistoryPanel("Cards Were traded");
-				
-				board.update(RiskEvent.CardTrade);
-				players.get(integer).incrementArmiesBy(extra);
-				players.get(integer).incrementArmiesBy(getArmiesFromCardExchange());
-			}
-			while(players.get(integer).getNbArmiesToBePlaced() > 0)
-			{
-				int index = rand.nextInt(players.get(integer).nbTerritoriesOwned());
-				players.get(integer).reinforce(players.get(integer).getTerritoriesOwned().get(index));
-			}
-			
+		
 		}
 		
-		try {
-			Thread.sleep(2500);
-		} catch (InterruptedException e) {
-			
-			e.printStackTrace();
-		} 
+		pause();
 		
 	}
 

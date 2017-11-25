@@ -16,8 +16,9 @@ import risk.utils.constants.RiskIntegers;
 /**
  * This class contains implementation for load and save functions
  * @author hcanta
+ * @version 3.3
  */
-public class MapUtils 
+public class Utils 
 {
 	/**
 	 * Load The Map On the RiskBoard
@@ -139,7 +140,7 @@ public class MapUtils
 	/**
 	 * Save the Map to a .map file
 	 * @param filename the name of the file where the risk board will be saved
-	 *@param debug set to true for debugging or testing
+	 * @param debug set to true for debugging or testing
 	 * @throws IOException Could not open/write to file
 	 */
 	public static void saveMap(String filename, boolean debug) throws IOException
@@ -156,6 +157,24 @@ public class MapUtils
 		fw.write(RiskBoard.ProperInstance(debug).territoriesToString());
 		
 		fw.close();
+	}
+
+	/**
+	 * Search for the index of string given an array
+	 * @param str The string that index we search
+	 * @param array the array in which the search occurs
+	 * @return the index of str in the array
+	 */
+	public static int getIndexOf(String str, String[] array) 
+	{
+		for(int i=0; i< array.length; i++)
+		{
+			if(str.equalsIgnoreCase(array[i]))
+			{
+				return i;
+			}
+		}
+		return RiskIntegers.ERROR;
 	}
 
 }

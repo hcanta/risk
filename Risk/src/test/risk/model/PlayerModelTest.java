@@ -13,7 +13,7 @@ import org.junit.Test;
 
 import risk.model.RiskBoard;
 import risk.model.playerutils.PlayerModel;
-import risk.utils.MapUtils;
+import risk.utils.Utils;
 import risk.utils.constants.RiskEnum.PlayerColors;
 /**
  * Test cases for The PlayerModel
@@ -34,7 +34,7 @@ public class PlayerModelTest {
 	{
 		debug =true;
 		RiskBoard.ProperInstance(debug).clear();
-		MapUtils.loadFile(new File("Maps/World.map"),debug);
+		Utils.loadFile(new File("Maps/World.map"),debug);
 		player = new PlayerModel("test",PlayerColors.red,(short)0,debug);
 	}
 
