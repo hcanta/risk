@@ -3,6 +3,8 @@
  */
 package risk.views.ui;
 
+import java.io.Serializable;
+
 import javax.swing.JFrame;
 
 import com.mxgraph.swing.mxGraphComponent;
@@ -14,7 +16,7 @@ import risk.utils.constants.RiskIntegers;
  * This Class Creates A Frame Object That will be used to display the graph
  * @author hcanta
  */
-public class GraphDisplayPanel extends JFrame 
+public class GraphDisplayPanel extends JFrame implements Serializable
 {
 
 	/**

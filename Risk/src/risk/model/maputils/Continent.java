@@ -3,6 +3,7 @@
  */
 package risk.model.maputils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -14,9 +15,14 @@ import risk.utils.constants.RiskIntegers;
 /**
  * This is the implementation of the Continent class, a continent continent contains territory.
  * @author hcanta
+ * @version 3.0
  */
-public class Continent 
+public class Continent implements Serializable
 {
+	/**
+	 * Generated Serial Version UID
+	 */
+	private static final long serialVersionUID = 9133545413028996975L;
 	/**
 	 * The graph that will be displayed
 	 */

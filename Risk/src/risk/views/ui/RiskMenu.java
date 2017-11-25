@@ -6,6 +6,7 @@ package risk.views.ui;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serializable;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -20,7 +21,7 @@ import risk.utils.constants.RiskStrings;
  * @author hcanta
  *
  */
-public class RiskMenu  extends JMenuBar
+public class RiskMenu  extends JMenuBar implements Serializable
 {
 
 	/**
@@ -63,7 +64,7 @@ public class RiskMenu  extends JMenuBar
 	/**
 	 *open map and play menu item, the action listener need to be added in the class that uses it
 	 */
-	public final JMenuItem menuItemOpenMap = new JMenuItem(RiskStrings.MENU_ITEM_OPEN_MAP);
+	private final JMenuItem menuItemOpenMap = new JMenuItem(RiskStrings.MENU_ITEM_OPEN_MAP);
 	
 	/**
 	 * Jmenu Item to save the Game
@@ -110,9 +111,11 @@ public class RiskMenu  extends JMenuBar
 		
 		menuFile.add(menuItemOpenMap);
 		
+		saveGame.setEnabled(false);
 		menuFile.add(saveGame);
 		menuFile.add(tournament);
 		menuFile.add(menuItemExit);
+		menuFile.add(loadGame);
 		
 		help.add(loggerOff);
 		help.add(countryOff);
@@ -187,6 +190,14 @@ public class RiskMenu  extends JMenuBar
 	public JMenuItem getMenuItemCreatetMap()
 	{
 		return this.menuItemCreateMap;
+	}
+	/**
+	 * Returns the Jmenu Item load and Play item
+	 * @return the creopenate map on item
+	 */
+	public JMenuItem getMenuItemOpenetMap()
+	{
+		return this.menuItemOpenMap;
 	}
 
 	/**

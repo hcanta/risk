@@ -5,11 +5,14 @@ package risk.utils;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.Stack;
 
+import risk.game.GameEngine;
 import risk.model.RiskBoard;
 import risk.utils.constants.RiskIntegers;
 
@@ -176,5 +179,30 @@ public class Utils
 		}
 		return RiskIntegers.ERROR;
 	}
+	
+	/**
+	 * Saves the current Game
+	 * @param gameEngine The game engine of the game
+	 * @return If the game was saved successfully or not
+	 */
+	public static boolean saveGame(GameEngine gameEngine)
+	{
+		try 
+		{
+			FileOutputStream fileOut =
+			new FileOutputStream("SavedGames\\employee.ser");
+			ObjectOutputStream out = new ObjectOutputStream(fileOut);
+			out.writeObject(gameEngine);
+			out.close();
+			fileOut.close();
+			System.out.printf("Serialized data is saved in /tmp/employee.ser");
+			return true;
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+			return false;
+		}
+	}
 
-}

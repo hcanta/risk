@@ -245,11 +245,6 @@ public class RiskStrings
 	public static final String MAP_SAVED = " The Map was saved: ";
 	
 	/**
-	 * New State
-	 */
-	public static final String NEW_STATE = " New State: ";
-	
-	/**
 	 * Number of Player set
 	 */
 	public static final String NUMBER_PLAYER = "Please Set the Number of players between 2 and 6"; 
@@ -295,4 +290,58 @@ public class RiskStrings
 	 * second string
 	 */
 	public static final String SECOND = "second ";
+	
+	/**
+	 *  Attempt success
+	 */
+	public static final String  ATTEMPT_SUCCESFUL = " The attempt was successful";
+	
+	/**
+	 *  Attempt failed
+	 */
+	public static final String  ATTEMPT_FAILED = " The attempt was a failure";
+	
+	/**
+	 * attempt add continent
+	 */
+	public static final String ADD_CONTINENT_ATTEMPT = "Attempting to add a continent...";
+	
+	/**
+	 * attempt add Territory
+	 */
+	public static final String ADD_TERRITORY_ATTEMPT = "Attempting to add a territory...";
+	
+	/**
+	 * attempt add link
+	 */
+	public static final String ADD_LINK_ATTEMPT = "Attempting to add a link...";
+	
+	/**
+	 * attempt remove continent
+	 */
+	public static final String REMOVE_CONTINENT_ATTEMPT = "Attempting to remove a continent...";
+	
+	/**
+	 * attempt remove Territory
+	 */
+	public static final String REMOVE_TERRITORY_ATTEMPT = "Attempting to remove a territory...";
+	
+	/**
+	 * attempt remove link
+	 */
+	public static final String REMOVE_LINK_ATTEMPT = "Attempting to remove a link...";
+	
+	/**
+	 * Initiate Create Map
+	 */
+	public static final String INITIATE_CREATE_MAP = "Initiating Create Map Mode...";
+	
+	/**
+	 * Initiate Edit Map
+	 */
+	public static final String INITIATE_EDIT_MAP = "Initiating Edit Map Mode...";
+	/**
+	 * Initiate Load and Play
+	 */
+	public static final String INITIATE_LOAD_PLAY = "Initiating Load and Play Mode...";
 }

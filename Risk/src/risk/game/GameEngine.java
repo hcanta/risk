@@ -43,7 +43,18 @@ import risk.views.ui.MapSelector;
  */
 public class GameEngine implements Serializable 
 {
-	
+	/**
+	 * The number of rounds played;
+	 */
+	private int nbRoundsPlayed;
+	/**
+	 * The current Player Name
+	 */
+	private String currentPlayer;
+	/**
+	 * Are we in Game mode
+	 */
+	private boolean gameplay;
 	/**
 	 * Generated Serialization UID
 	 */
@@ -98,6 +109,7 @@ public class GameEngine implements Serializable
 		{
 			addMenuItemActionListener();
 		}
+		this.nbRoundsPlayed = 0;
 	}
 	
 	/**
@@ -113,12 +125,15 @@ public class GameEngine implements Serializable
 	 */
 	private void addMenuItemActionListener()
 	{
+		//Adding Create Map ActionListener
 		this.gamev.getRiskMenu().getMenuItemCreatetMap().addActionListener(new ActionListener()
 		{
 		
 			public void actionPerformed(ActionEvent e)
 			{
-				addToHistoryPanel("\n Entering Create Map Mode");
+				nbRoundsPlayed= 0;
+				setGamePlay(false);
+				addToHistoryPanel("\n"+RiskStrings.INITIATE_CREATE_MAP);
 				Thread thread = new Thread(new Runnable() {
 			         @Override
 			         public void run() {
@@ -129,10 +144,14 @@ public class GameEngine implements Serializable
 			}
 		});
 		
-		this.gamev.getRiskMenu().getMenuItemEditMap().addActionListener(new ActionListener(){
+		// Adding Edit Map Action Listener
+		this.gamev.getRiskMenu().getMenuItemEditMap().addActionListener(new ActionListener()
+		{
 				public void actionPerformed(ActionEvent e)
 				{
-					addToHistoryPanel("\n Entering Edit Map Mode");
+					nbRoundsPlayed= 0;
+					setGamePlay(false);
+					addToHistoryPanel("\n"+RiskStrings.INITIATE_EDIT_MAP);
 					Thread thread = new Thread(new Runnable() {
 				         @Override
 				         public void run() {
@@ -143,12 +162,14 @@ public class GameEngine implements Serializable
 			
 				}
 		});
-		
-		this.gamev.getRiskMenu().menuItemOpenMap.addActionListener(new ActionListener(){
+		//Adding Load and Play Map Action Listener
+		this.gamev.getRiskMenu().getMenuItemOpenetMap().addActionListener(new ActionListener()
+		{
 				public void actionPerformed(ActionEvent e)
 				{
-					addToHistoryPanel("\n Loading  Map Mode");
-
+					nbRoundsPlayed= 0;
+					addToHistoryPanel("\n"+RiskStrings.INITIATE_LOAD_PLAY);
+					
 					if(loadMapHelper(true))
 					{
 						
@@ -162,12 +183,19 @@ public class GameEngine implements Serializable
 						});
 						thread.start();
 					}
-					
-			
 				}
 		});
 		
+		//Adding Save Game action Listener
+		this.gamev.getRiskMenu().getSaveGame().addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				Utils.saveGame(GameEngine.this);
+			}
+		});
 	}
+	
 	
 	/**
 	 * Adds a message to the history panel
@@ -415,28 +443,58 @@ public class GameEngine implements Serializable
 			switch(option)
 			{
 				case 1:
+					this.addToHistoryPanel(RiskStrings.ADD_CONTINENT_ATTEMPT);
 					result = addContinent(RiskStrings.MENU_ITEM_EDIT_MAP, "");
 					edited = edited || result;
+					if(result)
+						this.addToHistoryPanel(RiskStrings.ATTEMPT_SUCCESFUL);
+					else
+						this.addToHistoryPanel(RiskStrings.ATTEMPT_FAILED);
 					break;
 				case 2:
+					this.addToHistoryPanel(RiskStrings.REMOVE_CONTINENT_ATTEMPT);
 					result = removeContinent();
 					edited = edited || result;
+					if(result)
+						this.addToHistoryPanel(RiskStrings.ATTEMPT_SUCCESFUL);
+					else
+						this.addToHistoryPanel(RiskStrings.ATTEMPT_FAILED);
 					break;
 				case 3:
+					this.addToHistoryPanel(RiskStrings.ADD_TERRITORY_ATTEMPT);
 					result = addTerritory();
 					edited = edited || result;
+					if(result)
+						this.addToHistoryPanel(RiskStrings.ATTEMPT_SUCCESFUL);
+					else
+						this.addToHistoryPanel(RiskStrings.ATTEMPT_FAILED);
 					break;
 				case 4:
+					this.addToHistoryPanel(RiskStrings.REMOVE_TERRITORY_ATTEMPT);
 					result = removeTerritory();
 					edited = edited || result;
+					if(result)
+						this.addToHistoryPanel(RiskStrings.ATTEMPT_SUCCESFUL);
+					else
+						this.addToHistoryPanel(RiskStrings.ATTEMPT_FAILED);
 					break;
 				case 5:
+					this.addToHistoryPanel(RiskStrings.ADD_LINK_ATTEMPT);
 					result = addLink();
 					edited = edited || result;
+					if(result)
+						this.addToHistoryPanel(RiskStrings.ATTEMPT_SUCCESFUL);
+					else
+						this.addToHistoryPanel(RiskStrings.ATTEMPT_FAILED);
 					break;
 				case 6:
+					this.addToHistoryPanel(RiskStrings.REMOVE_LINK_ATTEMPT);
 					result = removeLink();
 					edited = edited || result;
+					if(result)
+						this.addToHistoryPanel(RiskStrings.ATTEMPT_SUCCESFUL);
+					else
+						this.addToHistoryPanel(RiskStrings.ATTEMPT_FAILED);
 					break;
 				default:
 					break;			
@@ -561,8 +619,8 @@ public class GameEngine implements Serializable
 	
 	/**
 	 * Get the the continent and country from user input
+	 * @param param the index id if any
 	 * @return an array containing the continent(0) and the country(1) 
-	 * @param the index id if any
 	 */
 	private String[] getContinentAndCountry(String param)
 	{
@@ -570,9 +628,9 @@ public class GameEngine implements Serializable
 	}
 	/**
 	 * Get the the continent and country from user input
+	 * @param param the string preposition
 	 * @param add Are we adding a territory
 	 * @return an array containing the continent(0) and the country(1) 
-	 * @param the index id if any
 	 */
 	private String[] getContinentAndCountry(String param, boolean add)
 	{
@@ -665,9 +723,9 @@ public class GameEngine implements Serializable
 
 	/**
 	 * Adds a Continent
+	 * @param dialogBox The name of the dialogbox
+	 * @param param the string preposition
 	 * @return was a continent added
-	 * @param dialogbox The name of the dialogbox
-	 * @param the string preposition
 	 */
 	private boolean addContinent(String dialogBox, String param) 
 	{
@@ -723,7 +781,7 @@ public class GameEngine implements Serializable
 	{
 		board.setState(state);
 		board.update(RiskEvent.StateChange);
-		this.addToHistoryPanel(RiskStrings.NEW_STATE + state.name());
+		this.addToHistoryPanel(this.currentPlayer+" : " + state.name());
 	}
 	
 	/**
@@ -782,6 +840,7 @@ public class GameEngine implements Serializable
 		pause();
 		placeRemainingArmies();
 		pause();
+		setGamePlay(true);
 		return true;
 	}
 	
@@ -910,7 +969,9 @@ public class GameEngine implements Serializable
 		{
 			for(int i =0; i < this.playerTurnOrder.size(); i++)
 			{
+				this.nbRoundsPlayed++;
 				board.setCurrentPlayer(players.get(this.playerTurnOrder.get(i)).getName());
+				this.currentPlayer = board.getCurrentPlayer();
 				reinforcePhase(this.playerTurnOrder.get(i));
 				attackPhase(this.playerTurnOrder.get(i));
 				if(isGameOver())
@@ -1168,161 +1229,12 @@ public class GameEngine implements Serializable
 			}
 			else //Robot Randomly picks a country  belonging to it, and attack one of the neighbors
 			{
-				boolean oneOnce = false;
-				int countryindex = 0;
-				for(String origin: players.get(integer).getTerritoriesOwned())
-				{
-					Territory attacker = board.getTerritory(origin);
-					countryindex=  rand.nextInt(attacker.getNeighbours().size());
-					if(!players.get(integer).getTerritoriesOwned().contains(attacker.getNeighbours().get(countryindex)))
-					{
-						
-						Territory defender =  board.getTerritory(attacker.getNeighbours().get(countryindex));
-						if(attacker.getArmyOn() >=2 )
-						{
-							System.out.println("Attacking country: " +attacker.getTerritoryName()+" Defending country: "+defender.getTerritoryName());
-							int nbOfdiceRollAttacker = 0;
-							if(attacker.getArmyOn()>= 4)
-							{
-								nbOfdiceRollAttacker = 3;
-							}
-							else if(attacker.getArmyOn() == 3)
-							{
-								nbOfdiceRollAttacker = 2;
-							}
-							else
-							{
-								nbOfdiceRollAttacker = 1;
-							}
-							
-							int[] attackerDices = new int[nbOfdiceRollAttacker];
-							for(int i=0; i< attackerDices.length;i++)
-							{
-								attackerDices[i] = rand.nextInt(6) + 1;
-							}
-							Arrays.sort(attackerDices);
-							int nbOfdiceRollDefender;
-							if(defender.getOwnerID() == 0 && defender.getArmyOn()>= 2)
-							{
-								System.out.print("How many dices would you like to roll 1 or 2? ");
-								nbOfdiceRollDefender = sc.nextInt();
-								sc.nextLine();
-							}
-							else
-							{
-								nbOfdiceRollDefender = 0;
-								if(defender.getArmyOn()>= 2)
-								{
-									nbOfdiceRollDefender = 2;
-								}
-								else
-								{
-									nbOfdiceRollDefender = 1;
-								}
-							}
-							
-							
-							int[] defenderDices = new int[nbOfdiceRollDefender];
-							for(int i=0; i< defenderDices.length;i++)
-							{
-								defenderDices[i] = rand.nextInt(6) + 1;
-							}
-							Arrays.sort(defenderDices);
-							System.out.println(players.get(new Integer(attacker.getOwnerID())).getName()+" rolled: ");
-							System.out.println(Arrays.toString(attackerDices));
-							System.out.println(players.get(new Integer(defender.getOwnerID())).getName()+" rolled: ");
-							System.out.println(Arrays.toString(defenderDices));
-							this.addToHistoryPanel(players.get(new Integer(attacker.getOwnerID())).getName()+" rolled: ");
-							this.addToHistoryPanel(Arrays.toString(attackerDices));
-							this.addToHistoryPanel(players.get(new Integer(defender.getOwnerID())).getName()+" rolled: ");
-							this.addToHistoryPanel(Arrays.toString(defenderDices));
-							int attackerVictories = 0;
-							int defenderVictories = 0;
-							if(defenderDices.length > attackerDices.length)
-							{
-								for(int i = 0; i<defenderDices.length -1 ; i++)
-								{
-									int attackerIndex = attackerDices.length -1 -i;
-									int defenderIndex = defenderDices.length -1 -i;
-									if(attackerIndex>=0)
-									{
-										if(defenderDices[defenderIndex]>attackerDices[attackerIndex])
-										{
-											defenderVictories++;
-										}
-										else
-										{
-											attackerVictories++;
-										}
-									}
-								}
-							}
-							else
-							{
-								for(int i = 0; i<attackerDices.length -1 ; i++)
-								{
-									int attackerIndex = attackerDices.length -1 -i;
-									int defenderIndex = defenderDices.length -1 -i;
-									if(defenderIndex>=0)
-									{
-										if(defenderDices[defenderIndex]>attackerDices[attackerIndex])
-										{
-											defenderVictories++;
-										}
-										else
-										{
-											attackerVictories++;
-										}
-									}
-								}
-							}
-							defender.setArmyOn(defender.getArmyOn() - attackerVictories);
-							attacker.setArmyOn(attacker.getArmyOn() - defenderVictories);
-							if(defender.getArmyOn() == 0)
-							{
-								if(!oneOnce)
-								{
-									int typeIndex = rand.nextInt(CardType.values().length);
-									CardType type = CardType.values()[typeIndex];
-									int nameIndex = rand.nextInt(board.getTerritories().size());
-									String cardName = board.getTerritories().get(nameIndex);
-									players.get(new Integer(attacker.getOwnerID())).getHand().add(new Card(type,cardName));
-									oneOnce = true;
-									this.addToHistoryPanel(players.get(integer).getName()+" has conquered a territory\n and won a card");
-									board.update(RiskEvent.CountryUpdate);
-									
-								}
-								
-								players.get(new Integer(defender.getOwnerID())).removeTerritory(defender.getTerritoryName());
-								defender.setOwnerID(attacker.getOwnerID());
-								players.get(new Integer(attacker.getOwnerID())).addTerritory(defender.getTerritoryName());
-								board.update(RiskEvent.CountryUpdate);
-								if(board.getContinent(defender.getContinentName()).getOwnerID() == attacker.getOwnerID())
-								{
-									players.get(integer).incrementArmiesBy(board.getContinent(defender.getContinentName()).getContinentBonus());
-									this.addToHistoryPanel(players.get(integer).getName()+" has  conquered a continent\n and won a card");
-									
-									if(isGameOver())
-									{
-										break;
-									}
-								}
-								players.get(new Integer(attacker.getOwnerID())).fortify(attacker.getTerritoryName(), defender.getTerritoryName(), attackerVictories);
-								
-							}
-						}
-					}
-				}
+				
 				
 			}
 		}
 
-		try {
-			Thread.sleep(2500);
-		} catch (InterruptedException e) {
-			
-			e.printStackTrace();
-		} 
+		pause();
 		
 	}
 
@@ -1469,10 +1381,24 @@ public class GameEngine implements Serializable
 	 * Checks if the Game is Done Or not
 	 * @return true/false is the game over or not
 	 */
-	private boolean isGameOver() {
-		return board.isGameOver();
+	private boolean isGameOver() 
+	{
+		boolean gameOver = board.isGameOver();
+		setGamePlay(!gameOver);
+		return  gameOver;
 	}
 	
+	/**
+	 * Sets the gamePlay
+	 * @param b are we in the game play or not
+	 */
+	private void setGamePlay(boolean b) {
+		this.gameplay = b;
+		this.gamev.getRiskMenu().getSaveGame().setEnabled(true);
+		this.gamev.getRiskMenu().validate();
+		this.gamev.getRiskMenu().repaint();
+	}
+
 	/**
 	 * Returns the amount of armies when the cards are exchanged
 	 * @return amount of armies
@@ -1513,6 +1439,13 @@ public class GameEngine implements Serializable
 	public IPlayer getPlayer(int index) {
 		return this.players.get(new Integer(index));
 	}
+	/**Returns the gameplay status
+	 * @return the gameplay status
+	 */
+	public boolean getGameplay() {
+		return gameplay;
+	}
+
 	/**
 	 * The Scanner object to read from standard input
 	 */

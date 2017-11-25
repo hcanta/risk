@@ -3,6 +3,7 @@
  */
 package risk.model.maputils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -16,13 +17,19 @@ import risk.utils.constants.RiskIntegers;
 /**
  * This is the implementation of the Territory country class. 
  * @author hcanta
+ * @version 3.1
  */
-public class Territory {
+public class Territory implements Serializable
+{
 
+	/**
+	 * Generated Serial Version UID
+	 */
+	private static final long serialVersionUID = 7319805127272223817L;
 	/**
 	 * The graph that will be displayed
 	 */
-	private mxGraph graph;
+	private transient mxGraph graph;
 	/**
 	 * Vertex representation on the graph
 	 */

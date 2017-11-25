@@ -3,6 +3,7 @@
  */
 package risk.views.ui;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -14,7 +15,7 @@ import javax.swing.JTextArea;
  * State And step taken throughout the game, as well as the info on the various countries
  * @author hcanta
  */
-public class SidePanel extends JTextArea implements Observer
+public class SidePanel extends JTextArea implements Observer, Serializable
 {
 	
 	/**
