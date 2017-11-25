@@ -20,6 +20,7 @@ import javax.swing.JOptionPane;
 
 import risk.game.cards.Card;
 import risk.model.RiskBoard;
+import risk.model.maputils.Continent;
 import risk.model.maputils.Territory;
 import risk.model.playerutils.IPlayer;
 import risk.model.playerutils.PlayerModel;
@@ -392,7 +393,7 @@ public class GameEngine implements Serializable
 	public void editMap() 
 	{
 		loadMapHelper(false);
-		Scanner sc = new Scanner(System.in);
+	
 		int option =0;
 		boolean edited = false;
 		while(option!=7)
@@ -411,13 +412,11 @@ public class GameEngine implements Serializable
 			    return;
 			}
 			
-			
-			
 			switch(option)
 			{
 				case 1:
 					
-					edited = edited || addContinent(RiskStrings.MENU_ITEM_EDIT_MAP, " the ");
+					edited = edited || addContinent(RiskStrings.MENU_ITEM_EDIT_MAP, "");
 					break;
 				case 2:
 					edited = edited || removeContinent();
@@ -426,18 +425,19 @@ public class GameEngine implements Serializable
 					edited = edited || addTerritory();
 					break;
 				case 4:
-				//	edited = edited || removeTerritory();
+					edited = edited || removeTerritory();
 					break;
 				case 5:
-				//	edited = edited || addLink();
+					edited = edited || addLink();
 					break;
 				case 6:
-				//	edited = edited || removeLink();
+					edited = edited || removeLink();
 					break;
 				default:
 					break;			
 			}		
 		}
+		
 		if(edited)
 			validateAndSave(RiskStrings.MENU_ITEM_EDIT_MAP);
 	}
@@ -490,212 +490,126 @@ public class GameEngine implements Serializable
 
 	/**
 	 * Removes a link between 2 territories
+	 * @return was the link removed
 	 */
-	private void removeLink() {
-		String continent1 ="";
-		String continent2="";
-		
-		String ter1="";
-		String ter2="";
-		
-		while(continent1.length() == 0 )
-		{
-			System.out.print("Please enter the name of the continent to which the first territory belongs: " );
-			continent1=sc.nextLine();
-			continent1= continent1.toLowerCase().trim();
-			if(!board.containsContinent(continent1))
-			{
-				System.out.print("This continent Does not exist");
-				continent1 = "";
-				break;
-				
-			}
-		}
-		if(continent1.length()>0)
-		{
-			while(continent2.length() == 0 )
-			{
-				System.out.print("Please enter the name of the continent to which the second territory belongs: " );
-				continent2=sc.nextLine();
-				continent2= continent2.toLowerCase().trim();
-				if(!board.containsContinent(continent2))
-				{
-					System.out.print("This continent Does not exist");
-					continent2 = "";
-					break;
-					
-				}
-			}
-			if(continent2.length()>0)
-			{
-				while(ter1.length()==0)
-				{
-					System.out.print("Please enter the name of the first territory: ");
-					ter1 =sc.nextLine();
-					ter1.toLowerCase().trim();
-					
-					if(!board.getContinent(continent1).getTerritories().contains(ter1))
-					{
-						System.out.println("This territory does not belong to the map");
-						ter1 = "";
-					}
-				}
-				while(ter2.length()==0)
-				{
-					System.out.print("Please enter the name of the second territory: ");
-					ter2 =sc.nextLine();
-					ter2.toLowerCase().trim();
-					
-					if(!board.getContinent(continent2).getTerritories().contains(ter2))
-					{
-						System.out.println("This territory does not belong to the map");
-						ter2 = "";
-					}
-				}
-				board.getContinent(continent1).getTerritory(ter1).removeNeighbours(ter2);
-				board.getContinent(continent2).getTerritory(ter2).removeNeighbours(ter1);
-				
-			}
-		}	
+	private boolean removeLink() {
+		String[] info1 = getContinentAndCountry(RiskStrings.FIRST);
+		String[] info2 = getContinentAndCountry(RiskStrings.SECOND);
+		String continent1 = info1[0];
+		String continent2 = info2[0];
+		String ter1 = info1[1];
+		String ter2 = info2[1];
+
+		Continent cont1 = board.getContinent(continent1);
+		Continent cont2 = board.getContinent(continent2);
+		if(cont1 == null || cont2 == null)
+			return false;
+		Territory terr1 = cont1.getTerritory(ter1);
+		Territory terr2 = cont2.getTerritory(ter2);
+		if(terr1 == null || terr2 == null)
+			return false;
+		return terr1.removeNeighbours(ter2) && terr2.removeNeighbours(ter1);	
 	}
 	/**
 	 * Adds a link between 2 territories
+	 * @return was the link added or not
 	 */
-	private void addLink() {
-		String continent1 ="";
-		String continent2="";
-		
-		String ter1="";
-		String ter2="";
-		
-		while(continent1.length() == 0 )
-		{
-			System.out.print("Please enter the name of the continent to which the first territory belongs: " );
-			continent1=sc.nextLine();
-			continent1= continent1.toLowerCase().trim();
-			if(!board.containsContinent(continent1))
-			{
-				System.out.print("This continent Does not exist");
-				continent1 = "";
-				break;
-				
-			}
-		}
-		if(continent1.length()>0)
-		{
-			while(continent2.length() == 0 )
-			{
-				System.out.print("Please enter the name of the continent to which the second territory belongs: " );
-				continent2=sc.nextLine();
-				continent2= continent2.toLowerCase().trim();
-				if(!board.containsContinent(continent2))
-				{
-					System.out.print("This continent Does not exist");
-					continent2 = "";
-					break;
-					
-				}
-			}
-			if(continent2.length()>0)
-			{
-				while(ter1.length()==0)
-				{
-					System.out.print("Please enter the name of the first territory: ");
-					ter1 =sc.nextLine();
-					ter1.toLowerCase().trim();
-					
-					if(!board.getContinent(continent1).getTerritories().contains(ter1))
-					{
-						System.out.println("This territory does not belong to the map");
-						ter1 = "";
-					}
-				}
-				while(ter2.length()==0)
-				{
-					System.out.print("Please enter the name of the second territory: ");
-					ter2 =sc.nextLine();
-					ter2.toLowerCase().trim();
-					
-					if(!board.getContinent(continent2).getTerritories().contains(ter2))
-					{
-						System.out.println("This territory does not belong to the map");
-						ter2 = "";
-					}
-				}
-				board.getContinent(continent1).getTerritory(ter1).addNeighbours(ter2);
-				board.getContinent(continent2).getTerritory(ter2).addNeighbours(ter1);
-				
-				
-			}
-		}
-		
+	private boolean addLink() {
+
+		String[] info1 = getContinentAndCountry(RiskStrings.FIRST);
+		String[] info2 = getContinentAndCountry(RiskStrings.SECOND);
+		String continent1 = info1[0];
+		String continent2 = info2[0];
+		String ter1 = info1[1];
+		String ter2 = info2[1];
+
+		Continent cont1 = board.getContinent(continent1);
+		Continent cont2 = board.getContinent(continent2);
+		if(cont1 == null || cont2 == null)
+			return false;
+		Territory terr1 = cont1.getTerritory(ter1);
+		Territory terr2 = cont2.getTerritory(ter2);
+		if(terr1 == null || terr2 == null)
+			return false;
+		return terr1.addNeighbours(ter2) && terr2.addNeighbours(ter1);
 	}
+	
 	/**
 	 * Removes a territory
+	 * @return was the territory removed or not
 	 */
-	private void removeTerritory() {
-		String continent ="";
+	private boolean removeTerritory() {
 		
-		while(continent.length() == 0 )
-		{
-			System.out.print("Please enter the name of the continent to which the country need to be removed belong: " );
-			continent=sc.nextLine();
-			continent= continent.toLowerCase().trim();
-			if(!board.containsContinent(continent))
-			{
-				System.out.print("This continent Does not exist");
-				continent = "";
-				break;
-				
-			}
-		}
-		if(continent.length() > 0)
-		{
-			String country ="";
-			while(country.length()==0)
-			{
-				System.out.println("Please enter the name of the territory to be removed: ");
-				country = sc.nextLine();
-				country = country.toLowerCase().trim();
-			}
-			
-			board.removeTerritory(continent, country);
-		}
-		
+			String[] info = getContinentAndCountry("");
+			if(info == null)
+				return false;
+			return board.removeTerritory(info[0], info[1]);	
 	}
+	
+	/**
+	 * Get the the continent and country from user input
+	 * @return an array containing the continent(0) and the country(1) 
+	 * @param the index id if any
+	 */
+	private String[] getContinentAndCountry(String param)
+	{
+		String continent ="";
+		String input;
+		
+		while(continent.length() == 0)
+		{
+			input =  (String)JOptionPane.showInputDialog(gamev.getFrame(), 
+					RiskStrings.PLEASE_NAME+ param  +RiskStrings.CONTINENT_TERRITORY,
+					 RiskStrings.MENU_ITEM_EDIT_MAP, JOptionPane.PLAIN_MESSAGE, null, null, "");
+			if(input == null)
+				return null;
+			
+			continent=continent.toLowerCase().trim();
+			if(board.containsContinent(continent))
+			{
+				continent="";
+				JOptionPane.showMessageDialog(gamev.getFrame(),
+						RiskStrings.INVALID_CONTINENT,
+						RiskStrings.MENU_ITEM_EDIT_MAP,
+					    JOptionPane.ERROR_MESSAGE);
+			}
+		}
+		
+		String country ="";
+		while(country.length() == 0)
+		{
+			input =  (String)JOptionPane.showInputDialog(gamev.getFrame(), 
+					RiskStrings.PLEASE_NAME+ param  +RiskStrings.TERRITORY,
+					 RiskStrings.MENU_ITEM_EDIT_MAP, JOptionPane.PLAIN_MESSAGE, null, null, "");
+			if(input == null)
+				return null;
+			
+			country=country.toLowerCase().trim();
+			if(board.getTerritories().contains(country))
+			{
+				country="";
+				JOptionPane.showMessageDialog(gamev.getFrame(),
+						RiskStrings.INVALID_TERRITORY,
+						RiskStrings.MENU_ITEM_EDIT_MAP,
+					    JOptionPane.ERROR_MESSAGE);
+			}
+		}
+		return new String[]{continent, country};
+	}
+	
 	/**
 	 * Adds a territory
 	 * @return was a territory added
 	 */
 	private boolean addTerritory() 
 	{
-		String continent ="";
+		String[] info = getContinentAndCountry("");
+		if(info == null)
+			return false;
 		
-		while(continent.length() == 0 )
-		{
-			System.out.print("Please enter the name of the continent to which the country need to be added: " );
-			continent=sc.nextLine();
-			continent= continent.toLowerCase().trim();
-			if(!board.containsContinent(continent))
-			{
-				System.out.print("This continent Does not exist");
-				continent = "";
-				break;
-				
-			}
-		}
-		
-		String country ="";
-		while(country.length()==0)
-		{
-			System.out.println("Please enter the name of the territory to be added: ");
-			country = sc.nextLine();
-			country = country.toLowerCase().trim();
-		}
-		
-		return board.addTerritory(continent, country);
-		
+		return board.addTerritory(info[0], info[1]);
 	}
+	
 	/**
 	 * Removes a continent
 	 * @return was the continent removed
@@ -706,7 +620,7 @@ public class GameEngine implements Serializable
 		while(str.length() == 0)
 		{
 			input =  (String)JOptionPane.showInputDialog(gamev.getFrame(), 
-					RiskStrings.PLEASE_NAME + (" the ") +RiskStrings.CONTINENT +" "+RiskStrings.TO_BE_REMOVED,
+					RiskStrings.PLEASE_NAME  +RiskStrings.CONTINENT +" "+RiskStrings.TO_BE_REMOVED,
 					 RiskStrings.MENU_ITEM_EDIT_MAP, JOptionPane.PLAIN_MESSAGE, null, null, "");
 			if(input == null)
 				return false;
@@ -719,7 +633,7 @@ public class GameEngine implements Serializable
 	/**
 	 * Adds a Continent
 	 * @return was a continent added
-	 * @param dialogbox The name of the dialogox
+	 * @param dialogbox The name of the dialogbox
 	 * @param the string preposition
 	 */
 	private boolean addContinent(String dialogBox, String param) 

@@ -159,6 +159,12 @@ public class RiskStrings
 	public static final String CONTINENT = " continent";
 	
 	/**
+	 * Continent String
+	 */
+	public static final String CONTINENT_TERRITORY = " continent the territory belongs too";
+	
+	
+	/**
 	 * String that asks for a name
 	 */
 	public static final String PLEASE_NAME = "Please Enter the name of the ";
@@ -172,6 +178,11 @@ public class RiskStrings
 	 * Invalid Continent
 	 */
 	public static final String INVALID_CONTINENT = "This continent name already exists or the name is invalid";
+	
+	/**
+	 * Invalid Territory
+	 */
+	public static final String INVALID_TERRITORY = "This territory name already exists or the name is invalid";
 	
 	/**
 	 * Continent Created
@@ -275,4 +286,13 @@ public class RiskStrings
 	 */
 	public static final String TO_BE_REMOVED= " to be removed.";
 	
+	/**
+	 * first string
+	 */
+	public static final String FIRST = " first ";
+	
+	/**
+	 * second string
+	 */
+	public static final String SECOND = " second ";
 }

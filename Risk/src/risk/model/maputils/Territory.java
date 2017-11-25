@@ -175,14 +175,17 @@ public class Territory {
 	/**
 	 * Add a neighbor to the current territory list of neighbors
 	 * @param neighbour new neighbor to be added to the adjacency list.
+	 * @return was the neighbor properly added
 	 */
-	public void addNeighbours(String neighbour)
+	public boolean addNeighbours(String neighbour)
 	{
 		String n_neighbour = neighbour.toLowerCase();
 		if(!this.neighbours.contains(n_neighbour))
 		{
 			this.neighbours.add(n_neighbour);
+			return true;
 		}
+		return false;
 	}
 	
 	/**
@@ -215,15 +218,17 @@ public class Territory {
 	/**
 	 * Removes a neighbors from the current territory adjacency list if it exists
 	 * @param neighbour to be removed to the adjacency list.
+	 * @return was the neighbor removed
 	 */
-	public void removeNeighbours(String neighbour)
+	public boolean removeNeighbours(String neighbour)
 	{
 		String n_neighbour = neighbour.toLowerCase();
 		if(this.neighbours.contains(n_neighbour))
 		{
 			this.neighbours.remove(n_neighbour);
+			return true;
 		}
-		
+		return false;		
 	}
 	
 	/**

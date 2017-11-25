@@ -489,14 +489,16 @@ public class RiskBoard extends Observable implements Serializable
 	 * Given a continent and a territory removes said territory
 	 * @param continentName The continent to which the territory belongs
 	 * @param territoryName the territory to be removed
+	 * @return was the territory removed or not
 	 */
-	public void removeTerritory(String continentName, String territoryName) {
+	public boolean removeTerritory(String continentName, String territoryName) {
 		String c_name = continentName.toLowerCase();
 		String t_name = territoryName.toLowerCase();
 		if(continents.containsKey(c_name))
 		{
-			continents.get(c_name).removeTerritory(t_name);
+			return continents.get(c_name).removeTerritory(t_name);
 		}
+		return false;
 		
 	}
 	

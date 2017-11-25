@@ -263,15 +263,18 @@ public class Continent
 	/**
 	 * Removes a territory from the continent if it exists
 	 * @param territory to be removed to the adjacency list.
+	 * @return was the territory removed or not
 	 */
-	public void removeTerritory(String territory)
+	public boolean removeTerritory(String territory)
 	{
 		String n_territory = territory.toLowerCase();
 		if(this.territories.containsKey(n_territory))
 		{
 			territories.get(n_territory).clear();
 			this.territories.remove(n_territory);
+			return true;
 		}
+		return false;
 	}
 	
 	/**
