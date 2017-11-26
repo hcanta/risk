@@ -1,5 +1,5 @@
 /**
- * This Package contains the testcase and test suite
+ * This Package contains the test-cases and test suite
  * */
 package test.risk.utils;
 
@@ -22,31 +22,30 @@ import risk.utils.MapUtils;
 public class MapUtilsTest {
 
 	/**
-	 * Connected Matrix;
+	 * Connected matrix.
 	 */
 	private int[][] connected;
 
 	/**
-	 * Disconnected Matrix
+	 * Disconnected matrix.
 	 */
 	private int[][] disconnected;
 	
 	/**
 	 * Setups the objects and global variables required for the test cases.
+	 * the before test case of the connected and disconnected.
 	 * @throws Exception
+	 * 
 	 */
+	
 	@Before
-<<<<<<< HEAD
-	/**
-	 * teh before test case of the connected and disconnected.
-	 * @throws Exception
-	 */
-	public void setUp() throws Exception 
-	{
-=======
+	
+	
+
 	public void setUp() throws Exception {
 		
->>>>>>> e6b14fa01f3d31e97a92c565e82463529789c5c5
+
+
 		RiskBoard.ProperInstance(true).clear();
 		MapUtils.loadFile(new File("Maps/World.map"),true);
 		connected = new int[][]{{0,1,0},{1,0,1},{0,1,0}};
@@ -55,10 +54,16 @@ public class MapUtilsTest {
 	
 	/**
 <<<<<<< HEAD
+<<<<<<< HEAD
 	 * test case checks the saved file.
 =======
 	 * tests the map saving utility of Risk game
 >>>>>>> e6b14fa01f3d31e97a92c565e82463529789c5c5
+=======
+
+	 * test case checks the map saving utility of Risk game
+
+>>>>>>> 3acc04e2c49f9473d06d9afcea6bc34078de5958
 	 */
 	@Test
 	public void testSaveFile() {
@@ -80,10 +85,16 @@ public class MapUtilsTest {
 
 	/**
 <<<<<<< HEAD
+<<<<<<< HEAD
 	 * the test case checking the loaded file.
 =======
 	 * tests the loading of existing valid map file with .map extension
 >>>>>>> e6b14fa01f3d31e97a92c565e82463529789c5c5
+=======
+
+	 * the test case checking the loading of existing valid map file with .map extension
+
+>>>>>>> 3acc04e2c49f9473d06d9afcea6bc34078de5958
 	 */
 	@Test
 	public void testLoadFileValid() {
@@ -97,15 +108,20 @@ public class MapUtilsTest {
 		Assert.assertTrue(RiskBoard.ProperInstance(true).getContinents().contains("kala"));
 		Assert.assertTrue(RiskBoard.ProperInstance(true).validateMap());
 	}
-<<<<<<< HEAD
+
 
 	/**
+  
 	 * the test case testing the load file to be invalid
+<<<<<<< HEAD
 =======
 	
 	/**
 	 * tests the loading of invalid map file
 >>>>>>> e6b14fa01f3d31e97a92c565e82463529789c5c5
+=======
+
+>>>>>>> 3acc04e2c49f9473d06d9afcea6bc34078de5958
 	 */
 	@Test 
 	public void testLoadFileInValid() {
@@ -118,10 +134,16 @@ public class MapUtilsTest {
 	
 	/**
 <<<<<<< HEAD
+<<<<<<< HEAD
 	 * to check the loaded file invalid and disconnected.
 =======
 	 * tests the loading of map which is a disconnected graph.
 >>>>>>> e6b14fa01f3d31e97a92c565e82463529789c5c5
+=======
+
+	 * to check the loaded file invalid and disconnected graph.
+
+>>>>>>> 3acc04e2c49f9473d06d9afcea6bc34078de5958
 	 */
 	@Test 
 	public void testLoadFileInValidDisconnected() {
@@ -130,7 +152,7 @@ public class MapUtilsTest {
 		Assert.assertFalse(MapUtils.loadFile(new File("Maps/Disconnected.map"),true));
 
 	}
-<<<<<<< HEAD
+
 	/**
 	 * to check the disconnected matrix.	
 =======
@@ -138,6 +160,13 @@ public class MapUtilsTest {
 	/**
 	 * tests the element traversal in the map file for disconnected graph
 >>>>>>> e6b14fa01f3d31e97a92c565e82463529789c5c5
+=======
+
+	/**
+	 * to check the disconnected matrix.	
+
+	
+>>>>>>> 3acc04e2c49f9473d06d9afcea6bc34078de5958
 	 */
 	@Test 
 	public void testDisconnectedMatrix() {
@@ -147,10 +176,16 @@ public class MapUtilsTest {
 	
 	/**
 <<<<<<< HEAD
+<<<<<<< HEAD
 	 * testing the connected matrix
 =======
 	 * tests the element traversal in the map file for connected graph
 >>>>>>> e6b14fa01f3d31e97a92c565e82463529789c5c5
+=======
+
+	 * testing the connected matrix
+
+>>>>>>> 3acc04e2c49f9473d06d9afcea6bc34078de5958
 	 */
 	@Test 
 	public void testConnectedMatrix() {
