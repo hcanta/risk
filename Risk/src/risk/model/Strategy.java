@@ -16,4 +16,24 @@ public class Strategy {
 		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * 
+	 */
+	public void cheater( ) {
+		
+	}
+	
+	/**
+	 * 
+	 */
+	public void aggressive( ) {
+		
+	}
+	
+	/**
+	 * 
+	 */
+	public void benevolent( ) {
+		
+	}
 }
