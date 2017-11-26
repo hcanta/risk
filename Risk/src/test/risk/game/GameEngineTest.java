@@ -18,6 +18,7 @@ import risk.views.GameView;
 /**
  * TestFileFor the game engine
  *@author hcanta
+ *@author addy
  */
 public class GameEngineTest {
 

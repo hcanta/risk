@@ -19,6 +19,7 @@ import risk.utils.constants.RiskEnum.PlayerColors;
  * Test cases for The PlayerModel
  * @version 1.0
  * @author hcanta
+ * @author addy
  */
 public class PlayerModelTest {
 	/**

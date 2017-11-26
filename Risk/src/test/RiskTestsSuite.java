@@ -7,9 +7,13 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 /**
+ * 
+ * 
  * @author hcanta
  * @author addy
  * This class contains a test case runner which runs all the test cases.
+ * 
+ * 
  */
 @RunWith(Suite.class)
 @SuiteClasses({test.risk.game.cards.CardTest.class,

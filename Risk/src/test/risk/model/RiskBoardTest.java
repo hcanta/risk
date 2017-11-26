@@ -15,6 +15,7 @@ import risk.utils.MapUtils;
  * Test cases for The RiskBoard
  * @version 2.0
  * @author hcanta
+ * @author addy
  */
 public class RiskBoardTest {
 
