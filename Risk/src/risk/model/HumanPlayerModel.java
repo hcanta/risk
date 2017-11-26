@@ -25,12 +25,12 @@ public class HumanPlayerModel extends PlayerModel implements Serializable
 	 * Constructor for the Human Player Model
 	 * @param name the name of the player
 	 * @param color the color of the player
-	 * @param turnID the turn of the player
+	 * @param playerID the turn/player id of the player
 	 * @param debug set to true for debugging or testing
 	 */
-	public HumanPlayerModel(String name, PlayerColors color, short turnID, boolean debug) 
+	public HumanPlayerModel(String name, PlayerColors color, short playerID, boolean debug) 
 	{
-		super(color, turnID, debug, RiskPlayerType.Human);
+		super(color, playerID, debug, RiskPlayerType.Human);
 	}
 
 }

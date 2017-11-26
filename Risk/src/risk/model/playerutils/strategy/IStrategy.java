@@ -3,29 +3,31 @@
  */
 package risk.model.playerutils.strategy;
 
+import risk.utils.Tuple;
+
 /**
  * The Interface of Strategy
  * @author hcanta
- * @version 2.1
+ * @version 2.2
  */
 public interface IStrategy 
 {
 	/**
-	 * Performs a reinforce operation
-	 * @return was the reinforcement successful or not
+	 * Performs a reinforce check
+	 * @return  The country to reinforce and the amount of army to reinforce it with
 	 */
-	public boolean reinforce();
+	public Tuple<String,Integer> reinforce();
 	
 	/**
 	 * Performs a fortify operation
-	 * @return was the fortify successful or not
+	 * @return a tuple containing the origin and a tuple containing the destination and the amount of army to move
 	 */
-	public boolean fortify();
+	public Tuple<String,Tuple<String,Integer>> fortify();
 	
 	/**
 	 * Decides which country to attack 
-	 * @return an array of size 2, where the first element is the origin (attacker) and  the second is the destination of the attack (defender)
+	 * @return a tuple of size 2, where the first element is the origin (attacker) and  the second is the destination of the attack (defender)
 	 */
-	public String [] attack();
+	public Tuple<String,Tuple<String,Integer>> attack();
 
 }

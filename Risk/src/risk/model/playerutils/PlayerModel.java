@@ -7,17 +7,23 @@ import java.util.ArrayList;
 
 import risk.game.cards.Hand;
 import risk.model.RiskBoard;
+import risk.model.maputils.Territory;
+import risk.utils.Tuple;
 import risk.utils.constants.RiskEnum.PlayerColors;
 import risk.utils.constants.RiskEnum.RiskPlayerType;
 
 /**
  * Implementation of the player model
  * @author hcanta
- * @version 3.2
+ * @version 3.3
  */
 public class PlayerModel implements IPlayer
 {
 
+	/**
+	 * The board
+	 */
+	private RiskBoard board;
 	/**
 	 * The type of the player
 	 */
@@ -54,6 +60,7 @@ public class PlayerModel implements IPlayer
 	/**
 	 * Set to true if we re debugging or not
 	 */
+	@SuppressWarnings("unused")
 	private boolean debug;
 	/**
 	 * Constructor for the Player Model
@@ -73,6 +80,7 @@ public class PlayerModel implements IPlayer
 		territoriesOwned = new ArrayList<String>();
 		this.debug = debug;
 		this.type = type;
+		this.board = RiskBoard.ProperInstance(debug);
 	}
 	
 	/**
@@ -112,7 +120,7 @@ public class PlayerModel implements IPlayer
 	 * @return the player Id
 	 */
 	@Override
-	public short getTurnID() {
+	public short getPlayerID() {
 		
 		return this.turnID;
 	}
@@ -198,16 +206,16 @@ public class PlayerModel implements IPlayer
 		if(this.territoriesOwned.contains(origin.toLowerCase().trim()) && 
 				this.territoriesOwned.contains(destination.toLowerCase().trim()))
 		{
-			if(!RiskBoard.ProperInstance(debug).getTerritory(origin).getNeighbours().contains(destination))
+			if(!board.getTerritory(origin).getNeighbours().contains(destination))
 			{
 				return false;
 			}
-			int armyOn1 = RiskBoard.ProperInstance(debug).getTerritory(origin).getArmyOn();
-			int armyOn2 = RiskBoard.ProperInstance(debug).getTerritory(destination).getArmyOn();
+			int armyOn1 = board.getTerritory(origin).getArmyOn();
+			int armyOn2 = board.getTerritory(destination).getArmyOn();
 			if( armyOn1 > armies)
 			{
-				RiskBoard.ProperInstance(debug).getTerritory(origin).setArmyOn(armyOn1 - armies);
-				RiskBoard.ProperInstance(debug).getTerritory(destination).setArmyOn(armyOn2 + armies);
+				board.getTerritory(origin).setArmyOn(armyOn1 - armies);
+				board.getTerritory(destination).setArmyOn(armyOn2 + armies);
 				return true;
 			}
 			
@@ -226,11 +234,11 @@ public class PlayerModel implements IPlayer
 	public boolean reinforce(String territory) {
 		if(this.territoriesOwned.contains(territory.toLowerCase().trim()) )
 		{
-			int armyOn = RiskBoard.ProperInstance(debug).getTerritory(territory).getArmyOn();
+			int armyOn = board.getTerritory(territory).getArmyOn();
 		
 			if( this.nbArmiesToBePlaced > 0)
 			{
-				RiskBoard.ProperInstance(debug).getTerritory(territory).setArmyOn(armyOn + 1);
+				board.getTerritory(territory).setArmyOn(armyOn + 1);
 				this.nbArmiesToBePlaced --;
 				return true;
 				
@@ -281,7 +289,7 @@ public class PlayerModel implements IPlayer
 		ArrayList<String> array = new ArrayList<String>();
 		for(int i = 0; i< this.territoriesOwned.size(); i++)
 		{
-			array.add(this.territoriesOwned.get(i)+" "+RiskBoard.ProperInstance(debug).getTerritory(this.territoriesOwned.get(i)).getArmyOn());
+			array.add(this.territoriesOwned.get(i)+" "+board.getTerritory(this.territoriesOwned.get(i)).getArmyOn());
 		}
 		return array;
 	}
@@ -298,11 +306,11 @@ public class PlayerModel implements IPlayer
 	public boolean reinforce(String territory, int army) {
 		if(this.territoriesOwned.contains(territory.toLowerCase().trim()) )
 		{
-			int armyOn = RiskBoard.ProperInstance(debug).getTerritory(territory).getArmyOn();
+			int armyOn = board.getTerritory(territory).getArmyOn();
 		
 			if( this.nbArmiesToBePlaced >= army)
 			{
-				RiskBoard.ProperInstance(debug).getTerritory(territory).setArmyOn(armyOn + 1);
+				board.getTerritory(territory).setArmyOn(armyOn + 1);
 				this.nbArmiesToBePlaced -= army;
 				return true;
 				
@@ -337,13 +345,85 @@ public class PlayerModel implements IPlayer
 	 */
 	@Override
 	public boolean canFortify() {
-		// TODO Auto-generated method stub
+		Territory territory;
+		String neighbor;
+		for(int i=0; i< this.territoriesOwned.size(); i++)
+		{
+			territory = board.getTerritory(territoriesOwned.get(i));
+			for(int j =0; j< territory.getNeighbours().size(); j++)
+			{
+				neighbor = territory.getNeighbours().get(j);
+				if(this.territoriesOwned.contains(neighbor))
+				{
+					if(territory.getArmyOn() > 1 || board.getTerritory(neighbor).getArmyOn() > 1)
+					{
+						return true;
+					}
+				}
+			}
+		}
 		return false;
 	}
 
+	/**
+	 * Return the type of the player. Player model implementation
+	 * @return type of the player model
+	 */
 	@Override
 	public RiskPlayerType getType() {
 		return this.type;
+	}
+
+	/**
+	 * Perform a reinforcement To be fully implemented on BotModel
+	 * @return true/ false
+	 */
+	@Override
+	public boolean reinforce() 
+	{
+		return false;
+	}
+
+	/**
+	 * Perform a fortification To be fully implemented on BotModel
+	 * @return true/ false
+	 */
+	@Override
+	public boolean fortify() 
+	{
+		return false;
+	}
+
+	
+	/**
+	 * Perform a check on whether we can attack or not
+	 * @return true/ false
+	 */
+	@Override
+	public boolean canAttack() {
+		for(int i =0; i < this.getTerritoriesOwned().size(); i++)
+		{
+			String territory =  this.getTerritoriesOwned().get(i);
+			for(int  j =0; j <board.getTerritory(territory).getNeighbours().size(); j++)
+			{
+				String neighbor = board.getTerritory(territory).getNeighbours().get(j);
+				if(board.getTerritory(territory).getArmyOn() > 1 && board.getTerritory(neighbor).getOwnerID() != this.turnID)
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Decides which country to attack 
+	 * @return a tuple of size 2, where the first element is the origin (attacker) and  the second is the destination of the attack and amount of armies to use(defender)
+	 */
+	@Override
+	public Tuple<String, Tuple<String, Integer>> attack() 
+	{
+		return null;
 	}
 
 }

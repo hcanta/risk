@@ -24,6 +24,7 @@ import risk.model.maputils.Continent;
 import risk.model.maputils.Territory;
 import risk.model.playerutils.IPlayer;
 import risk.model.playerutils.PlayerModel;
+import risk.utils.Tuple;
 import risk.utils.Utils;
 import risk.utils.constants.OtherConstants;
 import risk.utils.constants.RiskEnum.CardType;
@@ -124,6 +125,8 @@ public class GameEngine implements Serializable
 	
 	private void territoryInfo()
 	{
+		if(gamev == null)
+			return;
 		this.gamev.getCountryPanel().clearMessages();
 		String territory;
 		for(int i =0; i< board.getTerritories().size(); i++)
@@ -572,16 +575,17 @@ public class GameEngine implements Serializable
 	 * @return was the link removed
 	 */
 	private boolean removeLink() {
-		String[] info1 = getContinentAndCountry(RiskStrings.FIRST);
-		String[] info2 = getContinentAndCountry(RiskStrings.SECOND);
+
+		Tuple<String, String> info1 = getContinentAndCountry(RiskStrings.FIRST);
+		Tuple<String, String> info2 = getContinentAndCountry(RiskStrings.SECOND);
 		
 		if(info1 == null || info2 == null)
 			return false;
 		
-		String continent1 = info1[0];
-		String continent2 = info2[0];
-		String ter1 = info1[1];
-		String ter2 = info2[1];
+		String continent1 = info1.getFirst();
+		String continent2 = info2.getFirst();
+		String ter1 = info1.getSecond();
+		String ter2 = info2.getSecond();
 
 		Continent cont1 = board.getContinent(continent1);
 		Continent cont2 = board.getContinent(continent2);
@@ -599,16 +603,16 @@ public class GameEngine implements Serializable
 	 */
 	private boolean addLink() {
 
-		String[] info1 = getContinentAndCountry(RiskStrings.FIRST);
-		String[] info2 = getContinentAndCountry(RiskStrings.SECOND);
+		Tuple<String, String> info1 = getContinentAndCountry(RiskStrings.FIRST);
+		Tuple<String, String> info2 = getContinentAndCountry(RiskStrings.SECOND);
 		
 		if(info1 == null || info2 == null)
 			return false;
 		
-		String continent1 = info1[0];
-		String continent2 = info2[0];
-		String ter1 = info1[1];
-		String ter2 = info2[1];
+		String continent1 = info1.getFirst();
+		String continent2 = info2.getFirst();
+		String ter1 = info1.getSecond();
+		String ter2 = info2.getSecond();
 
 		Continent cont1 = board.getContinent(continent1);
 		Continent cont2 = board.getContinent(continent2);
@@ -627,18 +631,18 @@ public class GameEngine implements Serializable
 	 */
 	private boolean removeTerritory() {
 		
-			String[] info = getContinentAndCountry("");
+			Tuple<String, String> info = getContinentAndCountry("");
 			if(info == null)
 				return false;
-			return board.removeTerritory(info[0], info[1]);	
+			return board.removeTerritory(info.getFirst(), info.getSecond());	
 	}
 	
 	/**
 	 * Get the the continent and country from user input
 	 * @param param the index id if any
-	 * @return an array containing the continent(0) and the country(1) 
+	 * @return a Tuple containing the continent(0) and the country(1) 
 	 */
-	private String[] getContinentAndCountry(String param)
+	private Tuple<String,String> getContinentAndCountry(String param)
 	{
 		return getContinentAndCountry(param, false);
 	}
@@ -646,9 +650,9 @@ public class GameEngine implements Serializable
 	 * Get the the continent and country from user input
 	 * @param param the string preposition
 	 * @param add Are we adding a territory
-	 * @return an array containing the continent(0) and the country(1) 
+	 * @return a Tuple containing the continent(0) and the country(1) 
 	 */
-	private String[] getContinentAndCountry(String param, boolean add)
+	private Tuple<String,String> getContinentAndCountry(String param, boolean add)
 	{
 		String continent ="";
 		String input;
@@ -701,7 +705,7 @@ public class GameEngine implements Serializable
 					    JOptionPane.ERROR_MESSAGE);
 			}
 		}
-		return new String[]{continent, country};
+		return new Tuple<String,String>(continent, country);
 	}
 	
 	/**
@@ -710,11 +714,11 @@ public class GameEngine implements Serializable
 	 */
 	private boolean addTerritory() 
 	{
-		String[] info = getContinentAndCountry("", true);
+		Tuple<String, String> info = getContinentAndCountry("", true);
 		if(info == null)
 			return false;
 		
-		return board.addTerritory(info[0], info[1]);
+		return board.addTerritory(info.getFirst(), info.getSecond());
 	}
 	
 	/**
@@ -948,7 +952,7 @@ public class GameEngine implements Serializable
 			Integer player = new Integer(i%this.playerTurnOrder.size());			
 			players.get(player).addTerritory(countries.get(i));
 			players.get(player).decrementArmies();
-			board.getTerritory(countries.get(i)).setOwnerID(players.get(player).getTurnID());
+			board.getTerritory(countries.get(i)).setOwnerID(players.get(player).getPlayerID());
 			board.getTerritory(countries.get(i)).setArmyOn(1);
 			board.update(RiskEvent.CountryUpdate);
 			try {
@@ -1078,7 +1082,7 @@ public class GameEngine implements Serializable
 	 */
 	private void attackPhase(Integer integer) {
 		this.setState(GameState.ATTACK);
-		if(canAttack(integer))
+		if(players.get(integer).canAttack())
 		{
 			if((int)integer == 0)
 			{
@@ -1254,28 +1258,6 @@ public class GameEngine implements Serializable
 
 		pause();
 		
-	}
-
-	/**
-	 * Checks if the player with the owner ID integer can Attack
-	 * @param integer owner/player ID
-	 * @return can attack true/false
-	 */
-	public boolean canAttack(Integer integer) {
-		
-		for(int i =0; i < players.get(integer).getTerritoriesOwned().size(); i++)
-		{
-			String territory =  players.get(integer).getTerritoriesOwned().get(i);
-			for(int  j =0; j <board.getTerritory(territory).getNeighbours().size(); j++)
-			{
-				String neighbor = board.getTerritory(territory).getNeighbours().get(j);
-				if(board.getTerritory(territory).getArmyOn() > 1 && board.getTerritory(neighbor).getOwnerID() != (int)integer)
-				{
-					return true;
-				}
-			}
-		}
-		return false;
 	}
 
 	/**

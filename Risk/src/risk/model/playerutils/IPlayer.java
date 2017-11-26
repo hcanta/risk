@@ -6,6 +6,7 @@ package risk.model.playerutils;
 import java.util.ArrayList;
 
 import risk.game.cards.Hand;
+import risk.utils.Tuple;
 import risk.utils.constants.RiskEnum.PlayerColors;
 import risk.utils.constants.RiskEnum.RiskPlayerType;
 
@@ -32,7 +33,7 @@ public interface IPlayer
 	 * Returns the Id of the player whose turn it is
 	 * @return the player Id
 	 */
-	public short getTurnID();
+	public short getPlayerID();
 	
 	/**
 	 *  Increments the number of armies to be placed by the given number;
@@ -146,5 +147,31 @@ public interface IPlayer
 	 * @return type of the player model
 	 */
 	public RiskPlayerType getType();
+	
+	/**
+	 * Perform a reinforcement
+	 * @return true/ false
+	 */
+	public boolean reinforce();
+	
+	/**
+	 * Perform a fortification
+	 * @return true/ false
+	 */
+	public boolean fortify();
+	
+	
+	/**
+	 * check if an attack can be made 
+	 * @return true/ false
+	 */
+	public boolean canAttack();
+	
+	/**
+	 * Decides which country to attack 
+	 * @return a tuple of size 2, where the first element is the origin (attacker) and  the second is the destination of the attack and amount of armies to use(defender)
+	 */
+	public Tuple<String,Tuple<String,Integer>> attack();
+
 
 }

@@ -103,6 +103,6 @@ public class GameEngineTest {
 		player.addTerritory("alaska");	
 		RiskBoard.ProperInstance(debug).getTerritory("alaska").setOwnerID(0);
 		RiskBoard.ProperInstance(debug).getTerritory("alaska").setArmyOn(5);
-		Assert.assertTrue(engine.canAttack(new Integer(0)));
+		Assert.assertTrue(player.canAttack());
 	}
 }
