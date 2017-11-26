@@ -16,7 +16,6 @@ import risk.utils.MapUtils;
 import risk.views.GameView;
 
 /**
- * 
  * TestFileFor the game engine
  *@author hcanta
  */
@@ -26,12 +25,22 @@ public class GameEngineTest {
 	 * player object
 	 */
 	private IPlayer player;
+	
 	/**
 	 * Are we debugging
 	 */
 	private boolean debug;
 	
+	/**
+	 * GameEngine object
+	 */
 	private GameEngine engine;
+	
+	/**
+	 * Creates the RiskBoard and GameEngine instances for debugging.
+	 * this function runs before every test case.
+	 * @throws Exception
+	 */
 	@Before
 	public void setUp() throws Exception 
 	{
@@ -47,6 +56,9 @@ public class GameEngineTest {
 		player = engine.getPlayer(0);
 	}
 
+	/**
+	 * Tests the number of players currently playing.
+	 */
 	@Test
 	public void testGetNumberOfPlayers()
 	{
@@ -54,6 +66,9 @@ public class GameEngineTest {
 		Assert.assertTrue(engine.getNumberOfPlayers() == 4);
 	}
 	
+	/**
+	 * tests the number of armies according to risk rules
+	 */
 	@Test
 	public void testGetNumberOfArmies()
 	{
@@ -79,9 +94,12 @@ public class GameEngineTest {
 		Assert.assertTrue(engine.setArmiesforPlayers() == 20);
 	}
 	
-
+	/**
+	 * testing the random assignation of armies and territories.
+	 */
 	@Test
 	public void testRandomAssign() {
+		
 		risk.model.RiskBoard.ProperInstance(debug).clear();
 		MapUtils.loadFile(new File("Maps/World.map"),debug);
 		
@@ -95,8 +113,9 @@ public class GameEngineTest {
 		Assert.assertTrue(engine.getPlayer(0).getNbArmiesToBePlaced() == (20 - engine.getPlayer(0).nbTerritoriesOwned()));
 	}
 	
-	
-	
+	/**
+	 * Checks if the player with the owner ID integer can Attack
+	 */
 	@Test
 	public void testcanAttack()
 	{
