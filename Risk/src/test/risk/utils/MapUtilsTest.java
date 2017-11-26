@@ -53,17 +53,11 @@ public class MapUtilsTest {
 	}
 	
 	/**
-<<<<<<< HEAD
-<<<<<<< HEAD
-	 * test case checks the saved file.
-=======
-	 * tests the map saving utility of Risk game
->>>>>>> e6b14fa01f3d31e97a92c565e82463529789c5c5
-=======
+
+	 * tests the map saving utility of the game.
 
 	 * test case checks the map saving utility of Risk game
 
->>>>>>> 3acc04e2c49f9473d06d9afcea6bc34078de5958
 	 */
 	@Test
 	public void testSaveFile() {
@@ -84,17 +78,14 @@ public class MapUtilsTest {
 	}
 
 	/**
-<<<<<<< HEAD
-<<<<<<< HEAD
-	 * the test case checking the loaded file.
-=======
+
+
+
 	 * tests the loading of existing valid map file with .map extension
->>>>>>> e6b14fa01f3d31e97a92c565e82463529789c5c5
-=======
+
 
 	 * the test case checking the loading of existing valid map file with .map extension
 
->>>>>>> 3acc04e2c49f9473d06d9afcea6bc34078de5958
 	 */
 	@Test
 	public void testLoadFileValid() {
@@ -113,15 +104,9 @@ public class MapUtilsTest {
 	/**
   
 	 * the test case testing the load file to be invalid
-<<<<<<< HEAD
-=======
-	
-	/**
-	 * tests the loading of invalid map file
->>>>>>> e6b14fa01f3d31e97a92c565e82463529789c5c5
-=======
 
->>>>>>> 3acc04e2c49f9473d06d9afcea6bc34078de5958
+	 * tests the loading of invalid map file
+
 	 */
 	@Test 
 	public void testLoadFileInValid() {
@@ -133,17 +118,10 @@ public class MapUtilsTest {
 	}
 	
 	/**
-<<<<<<< HEAD
-<<<<<<< HEAD
-	 * to check the loaded file invalid and disconnected.
-=======
-	 * tests the loading of map which is a disconnected graph.
->>>>>>> e6b14fa01f3d31e97a92c565e82463529789c5c5
-=======
+
 
 	 * to check the loaded file invalid and disconnected graph.
 
->>>>>>> 3acc04e2c49f9473d06d9afcea6bc34078de5958
 	 */
 	@Test 
 	public void testLoadFileInValidDisconnected() {
@@ -153,20 +131,12 @@ public class MapUtilsTest {
 
 	}
 
-	/**
-	 * to check the disconnected matrix.	
-=======
+
 	
 	/**
 	 * tests the element traversal in the map file for disconnected graph
->>>>>>> e6b14fa01f3d31e97a92c565e82463529789c5c5
-=======
 
-	/**
 	 * to check the disconnected matrix.	
-
-	
->>>>>>> 3acc04e2c49f9473d06d9afcea6bc34078de5958
 	 */
 	@Test 
 	public void testDisconnectedMatrix() {
@@ -175,17 +145,9 @@ public class MapUtilsTest {
 	}
 	
 	/**
-<<<<<<< HEAD
-<<<<<<< HEAD
-	 * testing the connected matrix
-=======
-	 * tests the element traversal in the map file for connected graph
->>>>>>> e6b14fa01f3d31e97a92c565e82463529789c5c5
-=======
 
-	 * testing the connected matrix
+	 * this tests the element traversal in the map file for connected graph
 
->>>>>>> 3acc04e2c49f9473d06d9afcea6bc34078de5958
 	 */
 	@Test 
 	public void testConnectedMatrix() {
