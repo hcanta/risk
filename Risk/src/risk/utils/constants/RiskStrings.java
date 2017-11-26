@@ -344,4 +344,17 @@ public class RiskStrings
 	 * Initiate Load and Play
 	 */
 	public static final String INITIATE_LOAD_PLAY = "Initiating Load and Play Mode...";
+	
+	/**
+	 * The colors that can be assigned to a player 
+	 */
+	public static final String[] PLAYER_COLORS =
+	{
+		"red", "yellow", "brown", "green",  "pink", "purple"
+	};
+	
+	/**
+	 * Choose your color String
+	 */
+	public static final String CHOOSE_COLOR = "Choose your color";
 }

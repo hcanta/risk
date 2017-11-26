@@ -27,6 +27,7 @@ import risk.model.playerutils.PlayerModel;
 import risk.utils.Tuple;
 import risk.utils.Utils;
 import risk.utils.constants.OtherConstants;
+import risk.utils.constants.RiskEnum;
 import risk.utils.constants.RiskEnum.CardType;
 import risk.utils.constants.RiskEnum.GameState;
 import risk.utils.constants.RiskEnum.PlayerColors;
@@ -225,7 +226,17 @@ public class GameEngine implements Serializable
 		gamev.getHistoryPanel().addMessage(message);
 		board.update(RiskEvent.HistoryUpdate);
 	}
-	
+	/**
+	 * generate the turn order
+	 */
+	private void generateTurnOrder()
+	{
+		playerTurnOrder = new ArrayList<Integer>();
+		for(int i=0; i< players.keySet().size(); ++i)
+		{
+			playerTurnOrder.add(new Integer(i));
+		}
+	}
 	/**
 	 * Creates a Map from scratch with user input
 	 */
@@ -836,7 +847,8 @@ public class GameEngine implements Serializable
 			}  			
 		}
 		
-		createBots(nbPlayer, tournament);
+		
+		RiskEnum.PlayerColors humanColor;
 		if(!tournament)
 		{
 			String str ="";
@@ -848,9 +860,26 @@ public class GameEngine implements Serializable
 					return false;
 				str = input.trim();
 			}
+			Object selected = JOptionPane.showInputDialog(null, RiskStrings.CHOOSE_COLOR, RiskStrings.MENU_ITEM_OPEN_MAP,
+					JOptionPane.DEFAULT_OPTION,
+					null, RiskStrings.PLAYER_COLORS, RiskStrings.PLAYER_COLORS[0]);
+			if ( selected != null )
+			{
+			    String selectedString = selected.toString();
+			    System.out.println(selectedString);
+			    humanColor = RiskEnum.PlayerColors.valueOf(selectedString);
+			    addHumanPlayer(str, humanColor);
+			    createBots(nbPlayer, tournament, humanColor);
+			    
+			}
+			else
+			{
+				board.clear();
+			    return false;
+			}
 			
-			addHumanPlayer(str);
 		}
+		generateTurnOrder();
 		Collections.shuffle(playerTurnOrder);
 
 		setArmiesforPlayers();
@@ -867,30 +896,37 @@ public class GameEngine implements Serializable
 	/**
 	 * Ad user/human player
 	 * @param name The players name
+	 * @param humanColor the color of the Human player
 	 */
-	public void addHumanPlayer(String name)
-	{
-		players.put(new Integer(0),new PlayerModel(name, PlayerColors.values()[0], (short)(0), debug, RiskPlayerType.Human));
-		playerTurnOrder = new ArrayList<Integer>();
-		for(int i=0; i< players.keySet().size(); ++i)
-		{
-			playerTurnOrder.add(new Integer(i));
-		}
+	public void addHumanPlayer(String name, PlayerColors humanColor)
+	{	
+		players.clear();
+		players.put(new Integer(0),new PlayerModel(name, humanColor, (short)(0), debug, RiskPlayerType.Human));		
 	}
 	
 	/**
 	 * Generates computer player
 	 * @param numberOfPlayers The Number of Players in the game
 	 * @param tournament  are we in tournament mode or not
+	 * @param humanColor the color the human player chose
 	 */
-	public void createBots(int numberOfPlayers, boolean tournament)
+	public void createBots(int numberOfPlayers, boolean tournament, RiskEnum.PlayerColors humanColor)
 	{
+		ArrayList<PlayerColors> plColor = new ArrayList<PlayerColors>();
+		for(int i = 0; i < PlayerColors.values().length; i++)
+		{
+			if(humanColor!= PlayerColors.values()[i])
+			{
+				plColor.add(PlayerColors.values()[i]);
+			}
+		}
+		
+		Collections.shuffle(plColor);
 		if(!tournament)
 		{
-		players.clear();
 			for(short i = 1; i< numberOfPlayers; i++)
 			{			
-				players.put(new Integer(i), new PlayerModel("Computer "+ i, PlayerColors.values()[i], (short)(i),debug,RiskPlayerType.Bot));
+				players.put(new Integer(i), new PlayerModel("Computer "+ i, plColor.get(i-1), (short)(i),debug,RiskPlayerType.Bot));
 			}
 		}
 		else //Creating specific bots
@@ -1267,7 +1303,7 @@ public class GameEngine implements Serializable
 	private void reinforcePhase(Integer integer) {
 		this.setState(GameState.REINFORCE);
 		int newArmies =(int)(players.get(integer).getTerritoriesOwned().size() < 9 ?3 :players.get(integer).getTerritoriesOwned().size()/3);
-		this.addToHistoryPanel(players.get(integer).getName()+" has\n "+players.get(integer).getTerritoriesOwned().size()+" territories");
+		this.addToHistoryPanel(players.get(integer).getName()+" has "+players.get(integer).getTerritoriesOwned().size()+" territories");
 		this.addToHistoryPanel("Army received: " +newArmies);
 		board.update(RiskEvent.GeneralUpdate);
 		players.get(integer).incrementArmiesBy(newArmies);

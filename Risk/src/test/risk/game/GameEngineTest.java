@@ -13,6 +13,7 @@ import risk.game.GameEngine;
 import risk.model.RiskBoard;
 import risk.model.playerutils.IPlayer;
 import risk.utils.Utils;
+import risk.utils.constants.RiskEnum;
 
 /**
  * 
@@ -40,8 +41,8 @@ public class GameEngineTest {
 		
 		this.engine = new GameEngine(null, debug);
 		Utils.loadFile(new File("Maps/World.map"),debug);
-		engine.createBots(4, false);
-		engine.addHumanPlayer("human");
+		engine.createBots(4, false, RiskEnum.PlayerColors.red);
+		engine.addHumanPlayer("human", RiskEnum.PlayerColors.red);
 		player = engine.getPlayer(0);
 	}
 
@@ -56,24 +57,24 @@ public class GameEngineTest {
 	public void testGetNumberOfArmies()
 	{
 		
-		engine.createBots(2, false);
-		engine.addHumanPlayer("human");
+		engine.createBots(2, false, RiskEnum.PlayerColors.red);
+		engine.addHumanPlayer("human", RiskEnum.PlayerColors.red);
 		Assert.assertTrue(engine.setArmiesforPlayers() == 40);
 		
-		engine.createBots(3, false);;
-		engine.addHumanPlayer("human");
+		engine.createBots(3, false, RiskEnum.PlayerColors.red);
+		engine.addHumanPlayer("human", RiskEnum.PlayerColors.red);
 		Assert.assertTrue(engine.setArmiesforPlayers() == 35);
 		
-		engine.createBots(4, false);
-		engine.addHumanPlayer("human");
+		engine.createBots(4, false, RiskEnum.PlayerColors.red);
+		engine.addHumanPlayer("human", RiskEnum.PlayerColors.red);
 		Assert.assertTrue(engine.setArmiesforPlayers() == 30);
 		
-		engine.createBots(5, false);
-		engine.addHumanPlayer("human");
+		engine.createBots(5, false, RiskEnum.PlayerColors.red);
+		engine.addHumanPlayer("human", RiskEnum.PlayerColors.red);
 		Assert.assertTrue(engine.setArmiesforPlayers() == 25);
 		
-		engine.createBots(6, false);
-		engine.addHumanPlayer("human");
+		engine.createBots(6, false, RiskEnum.PlayerColors.red);
+		engine.addHumanPlayer("human", RiskEnum.PlayerColors.red);
 		Assert.assertTrue(engine.setArmiesforPlayers() == 20);
 	}
 	
@@ -83,8 +84,8 @@ public class GameEngineTest {
 		risk.model.RiskBoard.ProperInstance(debug).clear();
 		Utils.loadFile(new File("Maps/World.map"),debug);
 		
-		engine.createBots(6, false);
-		engine.addHumanPlayer("human");
+		engine.createBots(6, false, RiskEnum.PlayerColors.red);
+		engine.addHumanPlayer("human", RiskEnum.PlayerColors.red);
 		engine.setArmiesforPlayers();
 		
 		Assert.assertTrue(engine.getPlayer(0).getNbArmiesToBePlaced() == 20);
