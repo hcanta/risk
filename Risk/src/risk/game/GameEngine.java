@@ -30,6 +30,7 @@ import risk.utils.constants.RiskEnum.CardType;
 import risk.utils.constants.RiskEnum.GameState;
 import risk.utils.constants.RiskEnum.PlayerColors;
 import risk.utils.constants.RiskEnum.RiskEvent;
+import risk.utils.constants.RiskEnum.RiskPlayerType;
 import risk.utils.constants.RiskIntegers;
 import risk.utils.constants.RiskStrings;
 import risk.views.GameView;
@@ -46,6 +47,7 @@ public class GameEngine implements Serializable
 	/**
 	 * The number of rounds played;
 	 */
+	@SuppressWarnings("unused")
 	private int nbRoundsPlayed;
 	/**
 	 * The current Player Name
@@ -864,7 +866,7 @@ public class GameEngine implements Serializable
 	 */
 	public void addHumanPlayer(String name)
 	{
-		players.put(new Integer(0),new PlayerModel(name, PlayerColors.values()[0], (short)(0), debug));
+		players.put(new Integer(0),new PlayerModel(name, PlayerColors.values()[0], (short)(0), debug, RiskPlayerType.Human));
 		playerTurnOrder = new ArrayList<Integer>();
 		for(int i=0; i< players.keySet().size(); ++i)
 		{
@@ -884,7 +886,7 @@ public class GameEngine implements Serializable
 		players.clear();
 			for(short i = 1; i< numberOfPlayers; i++)
 			{			
-				players.put(new Integer(i), new PlayerModel("Computer "+ i, PlayerColors.values()[i], (short)(i),debug));
+				players.put(new Integer(i), new PlayerModel("Computer "+ i, PlayerColors.values()[i], (short)(i),debug,RiskPlayerType.Bot));
 			}
 		}
 		else //Creating specific bots

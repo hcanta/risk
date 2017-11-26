@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import risk.game.cards.Hand;
 import risk.utils.constants.RiskEnum.PlayerColors;
+import risk.utils.constants.RiskEnum.RiskPlayerType;
 
 /**
  * This interface contains the function that a player Human or Not must implement
@@ -133,5 +134,17 @@ public interface IPlayer
 	 * @return True /false
 	 */
 	public boolean canReinforce();
+	
+	/**
+	 * Checks if the player can perform a fortify attack
+	 * @return True /false
+	 */
+	public boolean canFortify();
+	
+	/**
+	 * Return the type of the player
+	 * @return type of the player model
+	 */
+	public RiskPlayerType getType();
 
 }

@@ -7,6 +7,7 @@ import java.io.Serializable;
 
 import risk.model.playerutils.PlayerModel;
 import risk.utils.constants.RiskEnum.PlayerColors;
+import risk.utils.constants.RiskEnum.RiskPlayerType;
 
 /**
  * Implementation of the Human Player Model
@@ -29,7 +30,7 @@ public class HumanPlayerModel extends PlayerModel implements Serializable
 	 */
 	public HumanPlayerModel(String name, PlayerColors color, short turnID, boolean debug) 
 	{
-		super(color, turnID, debug);
+		super(color, turnID, debug, RiskPlayerType.Human);
 	}
 
 }

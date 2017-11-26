@@ -8,15 +8,20 @@ import java.util.ArrayList;
 import risk.game.cards.Hand;
 import risk.model.RiskBoard;
 import risk.utils.constants.RiskEnum.PlayerColors;
+import risk.utils.constants.RiskEnum.RiskPlayerType;
 
 /**
  * Implementation of the player model
  * @author hcanta
- * @version 2.0
+ * @version 3.2
  */
 public class PlayerModel implements IPlayer
 {
 
+	/**
+	 * The type of the player
+	 */
+	private RiskPlayerType type;
 	/**
 	 * The hand of the player
 	 */
@@ -56,8 +61,9 @@ public class PlayerModel implements IPlayer
 	 * @param color the color of the player
 	 * @param turnID the turn of the player
 	 * @param debug set to true for debugging or testing
+	 * @param type the type of player
 	 */
-	public PlayerModel(String name, PlayerColors color, short turnID, boolean debug) 
+	public PlayerModel(String name, PlayerColors color, short turnID, boolean debug, RiskPlayerType type) 
 	{
 		this.hand = new Hand();
 		this.playerName=name;
@@ -66,6 +72,7 @@ public class PlayerModel implements IPlayer
 		this.nbArmiesToBePlaced = 0;
 		territoriesOwned = new ArrayList<String>();
 		this.debug = debug;
+		this.type = type;
 	}
 	
 	/**
@@ -73,10 +80,11 @@ public class PlayerModel implements IPlayer
 	 * @param color the color of the player
 	 * @param turnID the turn of the player
 	 * @param debug set to true for debugging or testing
+	 * @param type the type of the player
 	 */
-	public PlayerModel(PlayerColors color, short turnID, boolean debug) 
+	public PlayerModel(PlayerColors color, short turnID, boolean debug, RiskPlayerType type) 
 	{
-		 this("Computer Player", color,turnID, debug) ;
+		 this("Computer Player", color,turnID, debug, type) ;
 	}
 
 	/** 
@@ -321,6 +329,21 @@ public class PlayerModel implements IPlayer
 	@Override
 	public boolean canReinforce() {
 		return this.nbArmiesToBePlaced > 0;
+	}
+
+	/**
+	 * checks if the player can perform a fortify attack. Player Model Implementation
+	 * return true false
+	 */
+	@Override
+	public boolean canFortify() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public RiskPlayerType getType() {
+		return this.type;
 	}
 
 }

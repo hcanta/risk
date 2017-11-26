@@ -46,4 +46,15 @@ public class RiskEnum
 		StateChange, GeneralUpdate, HistoryUpdate, CountryUpdate, CardTrade
 	}
 	
+	/**
+	 * Player Type
+	 * @author hcanta
+	 */
+	public static enum RiskPlayerType
+	{
+		Human, Bot
+	}
+	
+	
+	
 }
