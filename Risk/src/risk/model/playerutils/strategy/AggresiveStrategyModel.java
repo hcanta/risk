@@ -11,6 +11,7 @@ import risk.utils.Tuple;
 /**
  * Implementation of the  AggressiveStrategy Model
  * @author hcanta
+ * @author Karan
  */
 public class AggresiveStrategyModel implements IStrategy {
 

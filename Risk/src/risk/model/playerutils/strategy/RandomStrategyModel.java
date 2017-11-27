@@ -3,7 +3,11 @@
  */
 package risk.model.playerutils.strategy;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import risk.model.RiskBoard;
+import risk.model.maputils.Territory;
 import risk.model.playerutils.IPlayer;
 import risk.utils.Tuple;
 
@@ -14,14 +18,16 @@ import risk.utils.Tuple;
 public class RandomStrategyModel implements IStrategy {
 
 	/**
+	 * Random generatorl
+	 */
+	private Random rand;
+	/**
 	 * The player using the strategy
 	 */
-	@SuppressWarnings("unused")
 	private IPlayer player;
 	/**
 	 * The current game Board
 	 */
-	@SuppressWarnings("unused")
 	private RiskBoard board;
 	/**
 	 * Constructor for the Strategy Model
@@ -32,6 +38,7 @@ public class RandomStrategyModel implements IStrategy {
 	{
 		this.board = RiskBoard.ProperInstance(debug);
 		this.player = player;
+		this.rand = new Random();
 	}
 
 	/**
@@ -41,6 +48,15 @@ public class RandomStrategyModel implements IStrategy {
 	@Override
 	public Tuple<String, Integer> reinforce() 
 	{
+		if(player.canReinforce())
+		{
+			int toBePlaced = player.getNbArmiesToBePlaced();
+			int index = rand.nextInt(player.getTerritoriesOwned().size());
+			String toReinforce = player.getTerritoriesOwned().get(index);
+			
+			Tuple<String, Integer> toReturn = new Tuple<String, Integer>(toReinforce, toBePlaced);
+			return toReturn;
+		}
 		return null;
 	}
 
@@ -51,6 +67,32 @@ public class RandomStrategyModel implements IStrategy {
 	@Override
 	public Tuple<String, Tuple<String, Integer>> fortify() 
 	{
+	
+		if(player.canFortify())
+		{
+			ArrayList<Tuple<String,String>> fortifiable = new ArrayList<Tuple<String,String>>();
+			Territory  territory;
+			for(int i =0; i< player.getTerritoriesOwned().size(); i++)
+			{
+				territory = board.getTerritory(player.getTerritoriesOwned().get(i));
+				for(int j = 0; j < territory.getNeighbours().size(); j++)
+				{
+					if(territory.canFortify(territory.getNeighbours().get(j)))
+					{
+						fortifiable.add(new Tuple<String,String>(territory.getTerritoryName(), territory.getNeighbours().get(j)));
+					}
+				}
+			}
+			
+			
+			int index = rand.nextInt(fortifiable.size());
+			String origin = fortifiable.get(index).getFirst();
+			String destination = fortifiable.get(index).getSecond();
+			int armyToMove = rand.nextInt(board.getTerritory(origin).getArmyOn());
+			Tuple<String, Tuple<String,Integer>> toReturn = 
+					new  Tuple<String, Tuple<String,Integer>>(origin, new Tuple<String,Integer>(destination, armyToMove));
+			return toReturn;
+		}
 		return null;
 	}
 
@@ -61,6 +103,31 @@ public class RandomStrategyModel implements IStrategy {
 	@Override
 	public Tuple<String, Tuple<String, Integer>> attack() 
 	{
+		if(player.canAttack())
+		{
+			ArrayList<Tuple<String,String>> attack = new ArrayList<Tuple<String,String>>();
+			Territory  territory;
+			for(int i =0; i< player.getTerritoriesOwned().size(); i++)
+			{
+				territory = board.getTerritory(player.getTerritoriesOwned().get(i));
+				for(int j = 0; j < territory.getNeighbours().size(); j++)
+				{
+					if(territory.canAttack(territory.getNeighbours().get(j)))
+					{
+						attack.add(new Tuple<String,String>(territory.getTerritoryName(), territory.getNeighbours().get(j)));
+					}
+				}
+			}
+			
+			
+			int index = rand.nextInt(attack.size());
+			String origin = attack.get(index).getFirst();
+			String destination = attack.get(index).getSecond();
+			int armyToMove = rand.nextInt(board.getTerritory(origin).getArmyOn());
+			Tuple<String, Tuple<String,Integer>> toReturn = 
+					new  Tuple<String, Tuple<String,Integer>>(origin, new Tuple<String,Integer>(destination, armyToMove));
+			return toReturn;
+		}
 		return null;
 	}
 

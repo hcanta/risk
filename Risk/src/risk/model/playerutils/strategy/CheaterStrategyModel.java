@@ -11,6 +11,7 @@ import risk.utils.Tuple;
 /**
  * Implementation of Cheater the Strategy Model
  * @author hcanta
+ * @author Karan
  */
 public class CheaterStrategyModel implements IStrategy {
 
