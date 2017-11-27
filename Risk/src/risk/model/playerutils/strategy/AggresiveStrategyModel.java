@@ -56,6 +56,9 @@ public class AggresiveStrategyModel implements IStrategy {
 	@Override
 	public Tuple<String, Tuple<String, Integer>> fortify() 
 	{
+		if (player.canFortify()) {
+			
+		}
 		return null;
 	}
 
