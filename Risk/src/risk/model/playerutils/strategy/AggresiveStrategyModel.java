@@ -3,6 +3,8 @@
  */
 package risk.model.playerutils.strategy;
 
+import java.util.ArrayList;
+
 import risk.model.RiskBoard;
 import risk.model.maputils.Territory;
 import risk.model.playerutils.IPlayer;
@@ -21,11 +23,18 @@ public class AggresiveStrategyModel implements IStrategy {
 	 */
 	@SuppressWarnings("unused")
 	private IPlayer player;
+	
 	/**
 	 * The current game Board
 	 */
 	@SuppressWarnings("unused")
 	private RiskBoard board;
+	
+	/**
+	 * The territory with the highest army for the respective player.
+	 */
+	private int strongestTerritory;
+	
 	/**
 	 * Constructor for the Strategy Model
 	 * @param debug The current board in use
@@ -35,6 +44,28 @@ public class AggresiveStrategyModel implements IStrategy {
 	{
 		this.board = RiskBoard.ProperInstance(debug);
 		this.player = player;
+	}
+	
+	/**
+	 * Finds the territory with the highest army for the respective players
+	 * @return the index of strongest territory
+	 */
+	public int getStrongestTerritory() {
+		
+		Territory territory;
+		int getArmies=0;
+		for (int i = 0; i < player.getTerritoriesOwned().size(); i++) {
+			
+			territory = board.getTerritory(player.getTerritoriesOwned().get(i));
+			
+			if (getArmies < board.getTerritory(territory.getTerritoryName()).getArmyOn()) {
+		
+				getArmies = board.getTerritory(territory.getTerritoryName()).getArmyOn();
+				strongestTerritory = i;
+			}			
+		}
+		
+		return strongestTerritory;
 	}
 
 	/**
@@ -48,13 +79,10 @@ public class AggresiveStrategyModel implements IStrategy {
 			
 			int toBePlaced = player.getNbArmiesToBePlaced();
 			Territory territory;
-			int strongestTerritory=0;
 			int getArmies=0;
-			for (int i = 0; i < player.getTerritoriesOwned().size(); i++) {
+/*			for (int i = 0; i < player.getTerritoriesOwned().size(); i++) {
 				
 				territory = board.getTerritory(player.getTerritoriesOwned().get(i));
-				//territoryName = territory.getTerritoryName();
-				//getArmies = board.getTerritory(territoryName).getArmyOn();
 				
 				if (getArmies < board.getTerritory(territory.getTerritoryName()).getArmyOn()) {
 			
@@ -62,7 +90,7 @@ public class AggresiveStrategyModel implements IStrategy {
 					strongestTerritory = i;
 				}
 				
-			}
+			}*/
 			
 			String toReinforce = player.getTerritoriesOwned().get(strongestTerritory);
 			
@@ -94,9 +122,39 @@ public class AggresiveStrategyModel implements IStrategy {
 	@Override
 	public Tuple<String, Tuple<String, Integer>> attack() 
 	{
-		if (player.canAttack()) {
+		/*if (player.canAttack()) {
 			
-		}
+			ArrayList<Tuple<String,String>> attack = new ArrayList<Tuple<String,String>>();
+			Territory  territory;
+			int getArmies=0;
+			for(int i =0; i< player.getTerritoriesOwned().size(); i++)
+			{
+				territory = board.getTerritory(player.getTerritoriesOwned().get(i));
+				
+				if (getArmies < board.getTerritory(territory.getTerritoryName()).getArmyOn()) {
+					
+					getArmies = board.getTerritory(territory.getTerritoryName()).getArmyOn();
+					strongestTerritory = i;
+				}
+			}
+			
+			for(int j = 0; j < territory.getNeighbours().size(); j++)
+			{
+				if(territory.canAttack(territory.getNeighbours().get(j)))
+				{
+					attack.add(new Tuple<String,String>(territory.getTerritoryName(), territory.getNeighbours().get(j)));
+				}
+			}
+			
+			int index = rand.nextInt(attack.size());
+			String origin = attack.get(index).getFirst();
+			String destination = attack.get(index).getSecond();
+			int armyToMove = rand.nextInt(board.getTerritory(origin).getArmyOn());
+			
+			Tuple<String, Tuple<String,Integer>> toReturn = 
+					new  Tuple<String, Tuple<String,Integer>>(origin, new Tuple<String,Integer>(destination, armyToMove));
+			return toReturn;
+		}*/
 		
 		return null;
 	}
