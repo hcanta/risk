@@ -357,7 +357,7 @@ public class Territory implements Serializable
 	public boolean canFortify(String territory)
 	{
 		Territory neighbor = RiskBoard.ProperInstance(graph == null).getTerritory(territory);
-		return this.neighbours.contains(territory) && this.armyOn > 1&& this.ownerID == neighbor.getOwnerID();			
+		return this.neighbours.contains(territory) && this.armyOn > 1 && this.ownerID == neighbor.getOwnerID();			
 	}
 	
 	/**
