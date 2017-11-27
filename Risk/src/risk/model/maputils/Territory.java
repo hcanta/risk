@@ -347,4 +347,15 @@ public class Territory implements Serializable
 	{
 		return new String[]{""+this.ownerID, " Name: "+this.territoryName +"\n Armies On: "+ this.armyOn+"\n Continent: "+this.continent };
 	}
+	
+	/**
+	 * check if the territory can be fortified from the current territory assuming there s
+	 * enough armies to be moved
+	 * @param territory The territory to check if it can be fortified
+	 * @return True False
+	 */
+	public boolean canFortify(String territory)
+	{
+		return this.neighbours.contains(territory);		
+	}
 }
