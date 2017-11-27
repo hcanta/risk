@@ -9,6 +9,7 @@ import risk.game.cards.Hand;
 import risk.utils.Tuple;
 import risk.utils.constants.RiskEnum.PlayerColors;
 import risk.utils.constants.RiskEnum.RiskPlayerType;
+import risk.utils.constants.RiskEnum.Strategy;
 
 /**
  * This interface contains the function that a player Human or Not must implement
@@ -172,6 +173,12 @@ public interface IPlayer
 	 * @return a tuple of size 2, where the first element is the origin (attacker) and  the second is the destination of the attack and amount of armies to use(defender)
 	 */
 	public Tuple<String,Tuple<String,Integer>> attack();
+	
+	/**
+	 * get The strategyType
+	 * @return the strategy Type
+	 */
+	public Strategy getStrategy();
 
 
 }

@@ -35,6 +35,7 @@ import risk.utils.constants.RiskEnum.GameState;
 import risk.utils.constants.RiskEnum.PlayerColors;
 import risk.utils.constants.RiskEnum.RiskEvent;
 import risk.utils.constants.RiskEnum.RiskPlayerType;
+import risk.utils.constants.RiskEnum.Strategy;
 import risk.utils.constants.RiskIntegers;
 import risk.utils.constants.RiskStrings;
 import risk.views.GameView;
@@ -951,7 +952,7 @@ public class GameEngine implements Serializable
 			for(short i = 1; i< numberOfPlayers; i++)
 			{	
 				id = this.IDGenerator();
-				players.put(new Integer(id), new PlayerModel("Computer "+ i, plColor.get(i-1), id,debug,RiskPlayerType.Bot));
+				players.put(new Integer(id), new PlayerModel("Computer "+ i, plColor.get(i-1), id,debug,RiskPlayerType.Bot, Strategy.random));
 			}
 		}
 		else //Creating specific bots

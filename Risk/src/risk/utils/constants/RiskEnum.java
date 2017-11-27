@@ -62,7 +62,7 @@ public class RiskEnum
 	 */
 	public static enum Strategy
 	{
-		aggressive, benevolent, random, cheater
+		aggressive, benevolent, random, cheater, human
 	}
 	
 	

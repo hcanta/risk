@@ -9,8 +9,10 @@ import risk.game.cards.Hand;
 import risk.model.RiskBoard;
 import risk.model.maputils.Territory;
 import risk.utils.Tuple;
+import risk.utils.constants.RiskEnum;
 import risk.utils.constants.RiskEnum.PlayerColors;
 import risk.utils.constants.RiskEnum.RiskPlayerType;
+import risk.utils.constants.RiskEnum.Strategy;
 
 /**
  * Implementation of the player model
@@ -19,6 +21,10 @@ import risk.utils.constants.RiskEnum.RiskPlayerType;
  */
 public class PlayerModel implements IPlayer
 {
+	/**
+	 * The strategy
+	 */
+	private Strategy strategy;
 
 	/**
 	 * The board
@@ -70,7 +76,7 @@ public class PlayerModel implements IPlayer
 	 * @param debug set to true for debugging or testing
 	 * @param type the type of player
 	 */
-	public PlayerModel(String name, PlayerColors color, short turnID, boolean debug, RiskPlayerType type) 
+	public PlayerModel(String name, PlayerColors color, short turnID, boolean debug, RiskPlayerType type, RiskEnum.Strategy strategy) 
 	{
 		this.hand = new Hand();
 		this.playerName=name;
@@ -81,6 +87,8 @@ public class PlayerModel implements IPlayer
 		this.debug = debug;
 		this.type = type;
 		this.board = RiskBoard.ProperInstance(debug);
+		this.strategy = strategy;
+		
 	}
 	
 	/**
@@ -92,7 +100,7 @@ public class PlayerModel implements IPlayer
 	 */
 	public PlayerModel(PlayerColors color, short turnID, boolean debug, RiskPlayerType type) 
 	{
-		 this("Computer Player", color,turnID, debug, type) ;
+		 this("Computer Player", color,turnID, debug, type,  RiskEnum.Strategy.random) ;
 	}
 
 	/** 
@@ -424,6 +432,16 @@ public class PlayerModel implements IPlayer
 	public Tuple<String, Tuple<String, Integer>> attack() 
 	{
 		return null;
+	}
+
+	/**
+	 * get The strategyType. Player model implementation
+	 * @return the strategy Type
+	 */
+	@Override
+	public Strategy getStrategy() 
+	{
+		return this.strategy;
 	}
 
 }
