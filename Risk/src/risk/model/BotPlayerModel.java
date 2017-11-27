@@ -49,8 +49,9 @@ public class BotPlayerModel extends PlayerModel implements Serializable
 	@Override
 	public boolean reinforce() 
 	{
-		String territory="";
-		int army=0;
+		Tuple<String, Integer> reinforceInfo = this.strategy.reinforce();
+		String territory= reinforceInfo.getFirst();
+		int army=reinforceInfo.getSecond();
 		return this.reinforce(territory, army);
 	}
 
@@ -61,7 +62,11 @@ public class BotPlayerModel extends PlayerModel implements Serializable
 	@Override
 	public boolean fortify() 
 	{
-		return false;
+		Tuple<String, Tuple<String, Integer>> fortifyInfo = this.strategy.fortify();
+		String origin= fortifyInfo.getFirst();
+		String destination = fortifyInfo.getSecond().getFirst();
+		int armies=fortifyInfo.getSecond().getSecond();
+		return this.fortify(origin, destination, armies);
 	}
 
 	/**

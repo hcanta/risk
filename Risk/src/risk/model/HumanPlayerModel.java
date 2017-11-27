@@ -30,7 +30,7 @@ public class HumanPlayerModel extends PlayerModel implements Serializable
 	 */
 	public HumanPlayerModel(String name, PlayerColors color, short playerID, boolean debug) 
 	{
-		super(color, playerID, debug, RiskPlayerType.Human);
+		super(name, color, playerID, debug, RiskPlayerType.Human);
 	}
 
 }

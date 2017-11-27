@@ -92,15 +92,15 @@ public class StatePanel extends JPanel implements Observer, Serializable
 		switch(board.getState())
 		{
 			case REINFORCE:
-				stateLabel.setText(board.getCurrentPlayer()+": Reinforcement Phase Phase In Progress");
+				stateLabel.setText(board.getCurrentPlayer()+": "+RiskStrings.REINFORCE_PHASE);
 				reinforceON();
 				break;
 			case ATTACK:
-				stateLabel.setText(board.getCurrentPlayer()+": Attack Phase Phase In Progress");
+				stateLabel.setText(board.getCurrentPlayer()+": "+RiskStrings.ATTACK_PHASE);
 				attackON();
 				break;
 			case FORTIFY:
-				stateLabel.setText(board.getCurrentPlayer()+": Fortification Phase Phase In Progress");
+				stateLabel.setText(board.getCurrentPlayer()+": "+RiskStrings.FORTIFY_PHASE);
 				fortifyON();
 				break;
 			case IDLE:

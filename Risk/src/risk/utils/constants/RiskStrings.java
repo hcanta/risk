@@ -294,12 +294,12 @@ public class RiskStrings
 	/**
 	 *  Attempt success
 	 */
-	public static final String  ATTEMPT_SUCCESFUL = " The attempt was successful";
+	public static final String  ATTEMPT_SUCCESFUL = "The attempt was successful";
 	
 	/**
 	 *  Attempt failed
 	 */
-	public static final String  ATTEMPT_FAILED = " The attempt was a failure";
+	public static final String  ATTEMPT_FAILED = "The attempt was a failure";
 	
 	/**
 	 * attempt add continent
@@ -357,4 +357,65 @@ public class RiskStrings
 	 * Choose your color String
 	 */
 	public static final String CHOOSE_COLOR = "Choose your color";
+	
+	/**
+	 * Fortification Options
+	 */
+	public static final String [] FORTIFY_OPTIONS = {"1-Attempt Fortification",
+													 "2-End fortification phase"};
+	
+	/**
+	 * FortiFy String
+	 */
+	public static final String FORTIFY = "Fortify";
+	
+	/**
+	 * Reinforce String
+	 */
+	public static final String REINFORCE = "Reinforce";
+	
+	/**
+	 * Reinforcement Phase
+	 */
+	public static final String REINFORCE_PHASE = "Reinforcement Phase In Progress";
+	
+	/**
+	 * Attack Phase
+	 */
+	public static final String ATTACK_PHASE = "Attack Phase In Progress";
+	
+	/**
+	 * Fortify Phase
+	 */
+	public static final String FORTIFY_PHASE = "Fortification Phase In Progress";
+	
+	/**
+	 * Attempt Reinforcement Phase
+	 */
+	public static final String ATTEMPT_REINFORCE = "Attempting Reinforcement ...";
+	
+	/**
+	 * Attempt Attack Phase
+	 */
+	public static final String ATTEMPT_ATTACK = "Attempting Attack ...";
+	
+	/**
+	 * Attempt Fortify Phase
+	 */
+	public static final String ATTEMPT_FORTIFY = "Attempting Fortify...";
+	
+	/**
+	 * Origin Territory
+	 */
+	public static final String ORIGIN_TERRITORY = "Enter origin territory";
+	
+	/**
+	 * Destination Territory
+	 */
+	public static final String DESTINATION_TERRITORY = "Enter Destination territory";
+	
+	/**
+	 * Number Of Armies
+	 */
+	public static final String NUMBER_OF_ARMIES = " Enter The Number Of Armies";
 }

@@ -43,9 +43,10 @@ public class GameEngineTest {
 		Utils.loadFile(new File("Maps/World.map"),debug);
 		
 		engine.addHumanPlayer("human", RiskEnum.PlayerColors.red);
+		player = engine.getPlayer(engine.testFirstPlayer());
 		engine.createBots(4, false, RiskEnum.PlayerColors.red);
 		engine.generateTurnOrder();
-		player = engine.getPlayer(0);
+		
 		
 	}
 
@@ -63,6 +64,7 @@ public class GameEngineTest {
 		engine.createBots(2, false, RiskEnum.PlayerColors.red);
 		
 		Assert.assertTrue(engine.setArmiesforPlayers() == 40);
+		
 		engine.addHumanPlayer("human", RiskEnum.PlayerColors.red);
 		engine.createBots(3, false, RiskEnum.PlayerColors.red);
 		
@@ -89,14 +91,15 @@ public class GameEngineTest {
 		Utils.loadFile(new File("Maps/World.map"),debug);
 		
 		engine.addHumanPlayer("human", RiskEnum.PlayerColors.red);
-		engine.createBots(6, false, RiskEnum.PlayerColors.red);
-		
+		Integer id =  new Integer (engine.testFirstPlayer());
+		engine.createBots(6, false, RiskEnum.PlayerColors.red);		
+		engine.generateTurnOrder();
 		engine.setArmiesforPlayers();
 		
-		Assert.assertTrue(engine.getPlayer(0).getNbArmiesToBePlaced() == 20);
+		Assert.assertTrue(engine.getPlayer(id).getNbArmiesToBePlaced() == 20);
 		engine.randomAssignTerritories();
 
-		Assert.assertTrue(engine.getPlayer(0).getNbArmiesToBePlaced() == (20 - engine.getPlayer(0).nbTerritoriesOwned()));
+		Assert.assertTrue(engine.getPlayer(id).getNbArmiesToBePlaced() == (20 - engine.getPlayer(id).nbTerritoriesOwned()));
 	}
 	
 	

@@ -72,7 +72,7 @@ public class RiskIntegers
 	/**
 	 * Pause Duration
 	 */
-	public static final int PAUSE_DURATION = 2000;
+	public static final int PAUSE_DURATION = 1750;
 
 	/**
 	 * Integer Marking an error

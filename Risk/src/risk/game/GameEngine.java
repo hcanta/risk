@@ -19,6 +19,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import risk.game.cards.Card;
+import risk.model.HumanPlayerModel;
 import risk.model.RiskBoard;
 import risk.model.maputils.Continent;
 import risk.model.maputils.Territory;
@@ -234,7 +235,7 @@ public class GameEngine implements Serializable
 		playerTurnOrder = new ArrayList<Integer>();
 		for(int i=0; i< players.keySet().size(); ++i)
 		{
-			playerTurnOrder.add(new Integer(i));
+			playerTurnOrder.add(new Integer(players.get(players.keySet().toArray()[i]).getPlayerID()));
 		}
 	}
 	/**
@@ -901,9 +902,30 @@ public class GameEngine implements Serializable
 	public void addHumanPlayer(String name, PlayerColors humanColor)
 	{	
 		players.clear();
-		players.put(new Integer(0),new PlayerModel(name, humanColor, (short)(0), debug, RiskPlayerType.Human));		
+		short id = IDGenerator();
+		players.put(new Integer(id),new HumanPlayerModel(name, humanColor, id, debug));		
 	}
 	
+	/**
+	 * Generates a unique ID for the players
+	 * @return the generated ID
+	 */
+	private short IDGenerator()
+	{
+		short id =  (short)rand.nextInt(250);
+		if(players == null)
+		{
+			return id;
+		}
+		else
+		{
+			while(players.keySet().contains(new Integer(id)))
+			{
+				id =  (short)rand.nextInt(250);
+			}
+		}
+		return id;
+	}
 	/**
 	 * Generates computer player
 	 * @param numberOfPlayers The Number of Players in the game
@@ -912,6 +934,7 @@ public class GameEngine implements Serializable
 	 */
 	public void createBots(int numberOfPlayers, boolean tournament, RiskEnum.PlayerColors humanColor)
 	{
+		
 		ArrayList<PlayerColors> plColor = new ArrayList<PlayerColors>();
 		for(int i = 0; i < PlayerColors.values().length; i++)
 		{
@@ -920,17 +943,19 @@ public class GameEngine implements Serializable
 				plColor.add(PlayerColors.values()[i]);
 			}
 		}
-		
+		short id;
 		Collections.shuffle(plColor);
 		if(!tournament)
 		{
 			for(short i = 1; i< numberOfPlayers; i++)
-			{			
-				players.put(new Integer(i), new PlayerModel("Computer "+ i, plColor.get(i-1), (short)(i),debug,RiskPlayerType.Bot));
+			{	
+				id = this.IDGenerator();
+				players.put(new Integer(id), new PlayerModel("Computer "+ i, plColor.get(i-1), id,debug,RiskPlayerType.Bot));
 			}
 		}
 		else //Creating specific bots
 		{
+			players.clear();
 			
 		}
 	}
@@ -962,9 +987,10 @@ public class GameEngine implements Serializable
 				break;
 		}
 		
-		for(int i =0; i < players.size(); i++)
+		
+		for(int i =0; i < players.keySet().size(); i++)
 		{
-			players.get(new Integer(i)).setNbArmiesToBePlaced(nbArmiesToBePlaced);
+			players.get(players.keySet().toArray()[i]).setNbArmiesToBePlaced(nbArmiesToBePlaced);
 		}
 		if(gamev != null)
 		{
@@ -986,20 +1012,31 @@ public class GameEngine implements Serializable
 		for(int i=0; i< countries.size(); i++)
 		{
 			
-			Integer player = new Integer(i%this.playerTurnOrder.size());			
+			int index = i % this.playerTurnOrder.size();
+			Integer player = playerTurnOrder.get(index);			
 			players.get(player).addTerritory(countries.get(i));
 			players.get(player).decrementArmies();
 			board.getTerritory(countries.get(i)).setOwnerID(players.get(player));
 			board.getTerritory(countries.get(i)).setArmyOn(1);
 			board.update(RiskEvent.CountryUpdate);
-			try {
-				Thread.sleep(200);
-			} catch (InterruptedException e) {
-				
-				e.printStackTrace();
-			} 
+			smallPause();
 		}
 		territoryInfo();
+	}
+	
+	/**
+	 * Make a small pause 
+	 */
+	private void smallPause()
+	{
+		try 
+		{
+			Thread.sleep(200);
+		} 
+		catch (InterruptedException e) 
+		{			
+			e.printStackTrace();
+		} 
 	}
 	
 	/**
@@ -1055,43 +1092,87 @@ public class GameEngine implements Serializable
 		
 		this.setState(GameState.FORTIFY);
 		//Player Object
-		if((int)integer == 0)
+		if(players.get(integer).getType() == RiskEnum.RiskPlayerType.Human)
 		{
 			int option = 0;
 		
 			while(option!=2)
 			{
-				System.out.println("1-Attempt Fortification");
-				System.out.println("2-End fortification phase");
-
-				
-				option = sc.nextInt();
+				Object selected = JOptionPane.showInputDialog(null, RiskStrings.FORTIFY, RiskStrings.FORTIFY,
+						JOptionPane.DEFAULT_OPTION,
+						null, RiskStrings.FORTIFY_OPTIONS, RiskStrings.FORTIFY_OPTIONS[0]);
+				if ( selected != null )
+				{
+				    String selectedString = selected.toString();
+				    option = Utils.getIndexOf(selectedString,RiskStrings.FORTIFY_OPTIONS) + 1;
+				}
+				else
+				{
+					option = 0;
+					return;
+				}
+					
 				if(option == 2)
 				{
 					break;
 				}
 				else if(option == 1)
 				{
-					sc.nextLine();
-					System.out.print("Enter origin territory: ");
-					String origin = sc.nextLine();
-					System.out.print("Enter destination territory: ");
-					String destination = sc.nextLine();
-					System.out.print("Enter the number of armies to be moved: ");
-					int armies = sc.nextInt();
-					sc.nextLine();
-					if(players.get(new Integer(0)).fortify(origin, destination, armies))
+					String input,str;
+					input =  (String)JOptionPane.showInputDialog(gamev.getFrame(), RiskStrings.ORIGIN_TERRITORY,
+							RiskStrings.FORTIFY, JOptionPane.PLAIN_MESSAGE, null, null, "");
+					if(input == null)
+						continue;
+					str = input;
+					str = str.toLowerCase().trim();
+					if(str.length() == 0)
+						continue;
+					String origin = str;
+					
+					input =  (String)JOptionPane.showInputDialog(gamev.getFrame(), RiskStrings.DESTINATION_TERRITORY,
+							RiskStrings.FORTIFY, JOptionPane.PLAIN_MESSAGE, null, null, "");
+					if(input == null)
+						continue;
+					str = input;
+					str = str.toLowerCase().trim();
+					if(str.length() == 0)
+						continue;
+					String destination = str;
+					
+					input =  (String)JOptionPane.showInputDialog(gamev.getFrame(), RiskStrings.NUMBER_OF_ARMIES,
+							RiskStrings.FORTIFY, JOptionPane.PLAIN_MESSAGE, null, null, "");
+					if(input == null)
+						continue;
+					str = input;
+					str = str.toLowerCase().trim();
+					if(str.length() == 0)
+						continue;
+					int armies ;
+					try
 					{
-						System.out.println("Fortification was successful");
+						armies = Integer.parseInt(str);
+					}
+					catch(Exception e)
+					{
+						JOptionPane.showMessageDialog(gamev.getFrame(),
+							   RiskStrings.PLEASE_NUMBER,
+							   RiskStrings.FORTIFY,
+							    JOptionPane.WARNING_MESSAGE);
+						continue;
+					}      
+
+					this.addToHistoryPanel(RiskStrings.ATTEMPT_FORTIFY);
+					if(players.get(integer).fortify(origin, destination, armies))
+					{
+						this.addToHistoryPanel(RiskStrings.ATTEMPT_SUCCESFUL);
+						territoryInfo();
 					}
 					else
 					{
-						System.out.println("Fortification was not successful");
+						this.addToHistoryPanel(RiskStrings.ATTEMPT_FAILED);
 					}
 				}
 			}
-			
-			
 		}
 		else 
 		{
@@ -1121,7 +1202,7 @@ public class GameEngine implements Serializable
 		this.setState(GameState.ATTACK);
 		if(players.get(integer).canAttack())
 		{
-			if((int)integer == 0)
+			if(players.get(integer).getType() == RiskEnum.RiskPlayerType.Human)
 			{
 				int option = 0;
 				boolean oneOnce = false;
@@ -1309,7 +1390,7 @@ public class GameEngine implements Serializable
 		board.update(RiskEvent.GeneralUpdate);
 		players.get(integer).incrementArmiesBy(newArmies);
 		//Player Object
-		if((int)integer == 0)
+		if(players.get(integer).getType() == RiskEnum.RiskPlayerType.Human)
 		{
 			int extra = 0;
 			boolean mustExchange = false;
@@ -1487,5 +1568,17 @@ public class GameEngine implements Serializable
 	 * The Scanner object to read from standard input
 	 */
 	private Scanner sc = new Scanner(System.in);
+	
+	/**
+	 * Returns the ID of the first player for testing purposes
+	 * @return the ID of the first player for testing purposes
+	 */
+	public Integer testFirstPlayer() 
+	{
+		
+		return   new Integer ((int) players.keySet().toArray()[0]);
+	}
+	
+	
 
 }
