@@ -46,6 +46,7 @@ public class AggresiveStrategyModel implements IStrategy {
 		if (player.canReinforce()) {
 			
 		}
+		
 		return null;
 	}
 
@@ -59,6 +60,7 @@ public class AggresiveStrategyModel implements IStrategy {
 		if (player.canFortify()) {
 			
 		}
+		
 		return null;
 	}
 
@@ -69,6 +71,10 @@ public class AggresiveStrategyModel implements IStrategy {
 	@Override
 	public Tuple<String, Tuple<String, Integer>> attack() 
 	{
+		if (player.canAttack()) {
+			
+		}
+		
 		return null;
 	}
 
