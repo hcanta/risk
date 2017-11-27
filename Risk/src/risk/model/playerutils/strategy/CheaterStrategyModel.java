@@ -11,22 +11,22 @@ import risk.utils.Tuple;
 /**
  * Implementation of Cheater the Strategy Model
  * @author hcanta
- * @author Karan
+ * @author addy
  */
 public class CheaterStrategyModel implements IStrategy {
 
 	/**
-	 * The player using the strategy
+	 * The Player using this strategy i.
 	 */
 	@SuppressWarnings("unused")
 	private IPlayer player;
 	/**
-	 * The current game Board
+	 * The game board currently active
 	 */
 	@SuppressWarnings("unused")
 	private RiskBoard board;
 	/**
-	 * Constructor for the Strategy Model
+	 * Constructor for the Strategy Model Class
 	 * @param debug The current board in use
 	 * @param player The player using the strategy
 	 */
@@ -37,7 +37,7 @@ public class CheaterStrategyModel implements IStrategy {
 	}
 
 	/**
-	 * Performs a reinforce check
+	 * Reinforce check is performed.
 	 * @return  The country to reinforce and the amount of army to reinforce it with
 	 */
 	@Override
@@ -47,7 +47,7 @@ public class CheaterStrategyModel implements IStrategy {
 	}
 
 	/**
-	 * Performs a fortify operation
+	 * Fortify operation performed
 	 * @return a tuple containing the origin and a tuple containing the destination and the amount of army to move
 	 */
 	@Override
@@ -57,7 +57,7 @@ public class CheaterStrategyModel implements IStrategy {
 	}
 
 	/**
-	 * Decides which country to attack 
+	 * The attack is planned and which country to attack on 
 	 * @return a tuple of size 2, where the first element is the origin (attacker) and  the second is the destination of the attack (defender)
 	 */
 	@Override
