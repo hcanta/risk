@@ -83,6 +83,12 @@ public class StatePanel extends JPanel implements Observer, Serializable
 		this.validate();
 	}
 
+	/**
+	 * Updates the observer/view regarding the ongoing phase or state of the game
+	 * This method is called whenever the observed object is changed. An application calls an Observable object's notifyObservers method to have all the object's observers notified of the change.
+	 * @param arg0 The object Changed
+	 * @param arg1 a parameter for possible observers
+	 */
 	@Override
 	public void update(Observable arg0, Object arg1) 
 	{

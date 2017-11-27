@@ -1,3 +1,4 @@
+
 /**
  * This Package contains the testcase for the test.risk.game folder
  */
@@ -30,8 +31,15 @@ public class GameEngineTest {
 	 * Are we debugging
 	 */
 	private boolean debug;
-	
+	/**
+	 * The Game Engine in uses
+	 */
 	private GameEngine engine;
+	/**
+	 * Creates the RiskBoard and GameEngine instances for debugging.
+	 * this function runs before every test case.
+	 * @throws Exception set up failed
+	 */
 	@Before
 	public void setUp() throws Exception 
 	{
@@ -49,14 +57,18 @@ public class GameEngineTest {
 		
 		
 	}
-
+	/**
+	 * tests the map saving utility of Risk game
+	 */
 	@Test
 	public void testGetNumberOfPlayers()
 	{
 		
 		Assert.assertTrue(engine.getNumberOfPlayers() == 4);
 	}
-	
+	/**
+	 * tests the number of armies according to risk rules
+	 */
 	@Test
 	public void testGetNumberOfArmies()
 	{
@@ -84,7 +96,9 @@ public class GameEngineTest {
 		Assert.assertTrue(engine.setArmiesforPlayers() == 20);
 	}
 	
-
+	/**
+	 * testing the random assignation of armies and territories.
+	 */
 	@Test
 	public void testRandomAssign() {
 		risk.model.RiskBoard.ProperInstance(debug).clear();
@@ -103,7 +117,9 @@ public class GameEngineTest {
 	}
 	
 	
-	
+	/**
+	 * Checks if the player with the owner ID integer can Attack
+	 */
 	@Test
 	public void testcanAttack()
 	{
