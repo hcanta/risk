@@ -1,5 +1,5 @@
 /**
- * This Package contains the testcase and test suite
+ * This Package contains the test-cases and test suite
  * */
 package test.risk.utils;
 
@@ -21,22 +21,25 @@ import risk.utils.Utils;
 public class UtilsTest {
 
 	/**
-	 * Connected Matrix;
+	 * Connected matrix.
 	 */
 	private int[][] connected;
 
 	/**
-	 * Disconnected Matrix
+	 * Disconnected matrix.
 	 */
 	private int[][] disconnected;
 	
 	/**
 	 * Setups the objects and global variables required for the test cases.
 	 * @throws Exception Set Up failed
-	 */
+	 * 	 */
+	
 	@Before
 	public void setUp() throws Exception {
 		
+
+
 		RiskBoard.ProperInstance(true).clear();
 		Utils.loadFile(new File("Maps/World.map"),true);
 		connected = new int[][]{{0,1,0},{1,0,1},{0,1,0}};
@@ -44,7 +47,11 @@ public class UtilsTest {
 	}
 	
 	/**
-	 * tests the map saving utility of Risk game
+
+	 * tests the map saving utility of the game.
+
+	 * test case checks the map saving utility of Risk game
+
 	 */
 	@Test
 	public void testSaveFile() {
@@ -67,7 +74,14 @@ public class UtilsTest {
 	}
 
 	/**
+
+
+
 	 * tests the loading of existing valid map file with .map extension
+
+
+	 * the test case checking the loading of existing valid map file with .map extension
+
 	 */
 	@Test
 	public void testLoadFileValid() {
@@ -81,9 +95,14 @@ public class UtilsTest {
 		Assert.assertTrue(RiskBoard.ProperInstance(true).getContinents().contains("kala"));
 		Assert.assertTrue(RiskBoard.ProperInstance(true).validateMap());
 	}
-	
+
+
 	/**
+  
+	 * the test case testing the load file to be invalid
+
 	 * tests the loading of invalid map file
+
 	 */
 	@Test 
 	public void testLoadFileInValid() {
@@ -95,7 +114,10 @@ public class UtilsTest {
 	}
 	
 	/**
-	 * tests the loading of map which is a disconnected graph.
+
+
+	 * to check the loaded file invalid and disconnected graph.
+
 	 */
 	@Test 
 	public void testLoadFileInValidDisconnected() {
@@ -104,9 +126,13 @@ public class UtilsTest {
 		Assert.assertFalse(Utils.loadFile(new File("Maps/Disconnected.map"),true));
 
 	}
+
+
 	
 	/**
 	 * tests the element traversal in the map file for disconnected graph
+
+	 * to check the disconnected matrix.	
 	 */
 	@Test 
 	public void testDisconnectedMatrix() {
@@ -115,7 +141,9 @@ public class UtilsTest {
 	}
 	
 	/**
-	 * tests the element traversal in the map file for connected graph
+
+	 * this tests the element traversal in the map file for connected graph
+
 	 */
 	@Test 
 	public void testConnectedMatrix() {
