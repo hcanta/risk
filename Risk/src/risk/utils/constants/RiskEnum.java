@@ -55,6 +55,15 @@ public class RiskEnum
 		Human, Bot
 	}
 	
+	/**
+	 * The different type of strategy
+	 * @author hcanta
+	 *
+	 */
+	public static enum Strategy
+	{
+		aggressive, benevolent, random, cheater
+	}
 	
 	
 }

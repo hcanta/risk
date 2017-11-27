@@ -1,5 +1,5 @@
 /**
- * The model package holds the driver and the Game Engine
+ * The Player utils package contains the classes necessary for the creation and work of a player object
  */
 package risk.model.playerutils;
 

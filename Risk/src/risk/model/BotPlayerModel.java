@@ -7,7 +7,9 @@ import java.io.Serializable;
 
 import risk.model.playerutils.PlayerModel;
 import risk.model.playerutils.strategy.IStrategy;
+import risk.model.playerutils.strategy.StrategyUtils;
 import risk.utils.Tuple;
+import risk.utils.constants.RiskEnum;
 import risk.utils.constants.RiskEnum.PlayerColors;
 import risk.utils.constants.RiskEnum.RiskPlayerType;
 
@@ -33,12 +35,12 @@ public class BotPlayerModel extends PlayerModel implements Serializable
 	 * @param color the color of the player
 	 * @param playerID the turn/player id of the player
 	 * @param debug set to true for debugging or testing
-	 * @param strategy	 the strategy the bot is using
+	 * @param strategy the strategy the bot is using
 	 * */
-	public BotPlayerModel(String name, PlayerColors color, short playerID, boolean debug, IStrategy strategy) 
+	public BotPlayerModel(String name, PlayerColors color, short playerID, boolean debug, RiskEnum.Strategy strategy) 
 	{
 		super(color, playerID, debug, RiskPlayerType.Bot);
-		this.strategy = strategy;
+		this.strategy =  StrategyUtils.strategyGenerator(strategy, debug, this);
 		
 	}
 	
