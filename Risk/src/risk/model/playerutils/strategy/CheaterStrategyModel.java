@@ -27,8 +27,8 @@ public class CheaterStrategyModel implements IStrategy {
 	private RiskBoard board;
 	/**
 	 * Constructor for the Strategy Model Class
-	 * @param debug The current board in use
-	 * @param player The player using the strategy
+	 * @param debug the current board been used
+	 * @param player it is The player using the strategy
 	 */
 	public CheaterStrategyModel(boolean debug, IPlayer player) 
 	{
@@ -48,7 +48,7 @@ public class CheaterStrategyModel implements IStrategy {
 
 	/**
 	 * Fortify operation performed
-	 * @return a tuple containing the origin and a tuple containing the destination and the amount of army to move
+	 * @return a tuple containing a origin and the tuple containing the destination and the amount of army to move
 	 */
 	@Override
 	public Tuple<String, Tuple<String, Integer>> fortify() 
