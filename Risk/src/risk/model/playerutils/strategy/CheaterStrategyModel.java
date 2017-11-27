@@ -45,7 +45,19 @@ public class CheaterStrategyModel implements IStrategy {
 	{
 		if(player.canReinforce())
 		{
+			int toBePlaced = player.getNbArmiesToBePlaced();
+			int getArmies=0;
 			
+			for(int i =0; i < player.getTerritoriesOwned().size(); i++)
+			{
+				
+			}
+			
+			String toReinforce;
+			
+			
+			Tuple<String, Integer> toReturn = new Tuple<String, Integer>(toReinforce, toBePlaced);
+			return toReturn;
 		}
 		return null;
 	}
