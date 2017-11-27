@@ -325,7 +325,7 @@ public class PlayerModel implements IPlayer
 	 * @return the hand of the player
 	 */
 	@Override
-	public Hand getHand() {
+	public Hand getHand(){
 		
 		return this.hand;
 	}

@@ -1558,6 +1558,7 @@ public class GameEngine implements Serializable
 	public IPlayer getPlayer(int index) {
 		return this.players.get(new Integer(index));
 	}
+
 	/**Returns the gameplay status
 	 * @return the gameplay status
 	 */
@@ -1579,7 +1580,6 @@ public class GameEngine implements Serializable
 		
 		return   new Integer ((int) players.keySet().toArray()[0]);
 	}
-	
 	
 
 }
