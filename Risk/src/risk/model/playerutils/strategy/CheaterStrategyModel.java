@@ -43,6 +43,10 @@ public class CheaterStrategyModel implements IStrategy {
 	@Override
 	public Tuple<String, Integer> reinforce() 
 	{
+		if(player.canReinforce())
+		{
+			
+		}
 		return null;
 	}
 
@@ -53,16 +57,24 @@ public class CheaterStrategyModel implements IStrategy {
 	@Override
 	public Tuple<String, Tuple<String, Integer>> fortify() 
 	{
+		if(player.canFortify())
+		{
+			
+		}
 		return null;
 	}
 
 	/**
 	 * The attack is planned and which country to attack on 
-	 * @return a tuple of size 2, where the first element is the origin (attacker) and  the second is the destination of the attack (defender)
+	 * @return a tuple of size 2, where the first element is the (attacker) origin  and  the second is the (defender) destination of the attack 
 	 */
 	@Override
 	public Tuple<String, Tuple<String, Integer>> attack() 
 	{
+		if(player.canAttack())
+		{
+			
+		}
 		return null;
 	}
 
