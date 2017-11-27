@@ -229,7 +229,7 @@ public class GameEngine implements Serializable
 	/**
 	 * generate the turn order
 	 */
-	private void generateTurnOrder()
+	public void generateTurnOrder()
 	{
 		playerTurnOrder = new ArrayList<Integer>();
 		for(int i=0; i< players.keySet().size(); ++i)
@@ -881,7 +881,7 @@ public class GameEngine implements Serializable
 		}
 		generateTurnOrder();
 		Collections.shuffle(playerTurnOrder);
-
+		
 		setArmiesforPlayers();
 		this.addToHistoryPanel(RiskStrings.RANDOM_ASSIGNMENT);
 		randomAssignTerritories();
@@ -985,10 +985,11 @@ public class GameEngine implements Serializable
 
 		for(int i=0; i< countries.size(); i++)
 		{
+			
 			Integer player = new Integer(i%this.playerTurnOrder.size());			
 			players.get(player).addTerritory(countries.get(i));
 			players.get(player).decrementArmies();
-			board.getTerritory(countries.get(i)).setOwnerID(players.get(player).getPlayerID());
+			board.getTerritory(countries.get(i)).setOwnerID(players.get(player));
 			board.getTerritory(countries.get(i)).setArmyOn(1);
 			board.update(RiskEvent.CountryUpdate);
 			try {
@@ -1260,7 +1261,7 @@ public class GameEngine implements Serializable
 								}
 								
 								players.get(new Integer(defender.getOwnerID())).removeTerritory(defender.getTerritoryName());
-								defender.setOwnerID(attacker.getOwnerID());
+								defender.setOwnerID(players.get(attacker.getOwnerID()));
 								players.get(new Integer(attacker.getOwnerID())).addTerritory(defender.getTerritoryName());
 								board.update(RiskEvent.CountryUpdate);
 								if(board.getContinent(defender.getContinentName()).getOwnerID() == attacker.getOwnerID())

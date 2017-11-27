@@ -11,7 +11,7 @@ import com.mxgraph.util.mxConstants;
 import com.mxgraph.view.mxGraph;
 
 import risk.model.RiskBoard;
-import risk.utils.constants.RiskEnum.PlayerColors;
+import risk.model.playerutils.IPlayer;
 import risk.utils.constants.RiskIntegers;
 
 /**
@@ -168,14 +168,14 @@ public class Territory implements Serializable
 	
 	/**
 	 * Set the current owner of the territory
-	 * @param ownerID the ownerID to set
+	 * @param owner the owner 
 	 */
-	public void setOwnerID(int ownerID) 
+	public void setOwnerID(IPlayer owner) 
 	{
-		this.ownerID = ownerID;
+		this.ownerID = owner.getPlayerID();
 		if(graph!= null)
 		{
-			graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, PlayerColors.values()[ownerID].name(), new Object[]{vertex}); 
+			graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, owner.getColor().name(), new Object[]{vertex}); 
 		}
 	}
 	
