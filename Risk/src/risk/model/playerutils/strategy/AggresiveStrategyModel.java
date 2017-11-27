@@ -43,6 +43,9 @@ public class AggresiveStrategyModel implements IStrategy {
 	@Override
 	public Tuple<String, Integer> reinforce() 
 	{
+		if (player.canReinforce()) {
+			
+		}
 		return null;
 	}
 
