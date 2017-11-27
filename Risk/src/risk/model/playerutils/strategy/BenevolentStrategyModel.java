@@ -3,14 +3,17 @@
  */
 package risk.model.playerutils.strategy;
 
+import java.util.ArrayList;
+
 import risk.model.RiskBoard;
+import risk.model.maputils.Territory;
 import risk.model.playerutils.IPlayer;
 import risk.model.playerutils.strategy.IStrategy;
 import risk.utils.Tuple;
 
 /**
  * Implementation of the Strategy Model
- * @author hcanta
+ * @author Mohammad Akif Beg
  */
 public class BenevolentStrategyModel implements IStrategy {
 
@@ -42,6 +45,22 @@ public class BenevolentStrategyModel implements IStrategy {
 	@Override
 	public Tuple<String, Integer> reinforce() 
 	{
+		if(player.canReinforce()){
+			int toBePlaced = player.getNbArmiesToBePlaced();
+			Territory currentTerritory;
+			int weakestTerritory = 0;
+			int getNbArmies = board.getTerritory(player.getTerritoriesOwned().get(0)).getArmyOn();
+			
+			for(int i = 1;i<player.getTerritoriesOwned().size();i++){
+				currentTerritory =  board.getTerritory(player.getTerritoriesOwned().get(i));
+				
+				if (getNbArmies > board.getTerritory(currentTerritory.getTerritoryName()).getArmyOn()) {
+					
+					getNbArmies = board.getTerritory(currentTerritory.getTerritoryName()).getArmyOn();
+					weakestTerritory = i;
+				}
+			}
+		}	
 		return null;
 	}
 
