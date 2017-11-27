@@ -4,6 +4,7 @@
 package risk.model.playerutils.strategy;
 
 import risk.model.RiskBoard;
+import risk.model.maputils.Territory;
 import risk.model.playerutils.IPlayer;
 import risk.model.playerutils.strategy.IStrategy;
 import risk.utils.Tuple;
@@ -45,6 +46,28 @@ public class AggresiveStrategyModel implements IStrategy {
 	{
 		if (player.canReinforce()) {
 			
+			int toBePlaced = player.getNbArmiesToBePlaced();
+			Territory territory;
+			int strongestTerritory=0;
+			int getArmies=0;
+			for (int i = 0; i < player.getTerritoriesOwned().size(); i++) {
+				
+				territory = board.getTerritory(player.getTerritoriesOwned().get(i));
+				//territoryName = territory.getTerritoryName();
+				//getArmies = board.getTerritory(territoryName).getArmyOn();
+				
+				if (getArmies < board.getTerritory(territory.getTerritoryName()).getArmyOn()) {
+			
+					getArmies = board.getTerritory(territory.getTerritoryName()).getArmyOn();
+					strongestTerritory = i;
+				}
+				
+			}
+			
+			String toReinforce = player.getTerritoriesOwned().get(strongestTerritory);
+			
+			Tuple<String, Integer> toReturn = new Tuple<String, Integer>(toReinforce, toBePlaced);
+			return toReturn;
 		}
 		
 		return null;
