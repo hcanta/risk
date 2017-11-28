@@ -53,7 +53,15 @@ public class CheaterStrategyModel implements IStrategy {
 			for(int i =0; i< player.getTerritoriesOwned().size(); i++)
 			{
 				territory = board.getTerritory(player.getTerritoriesOwned().get(i));
+				int armyToBePlaced =  board.getTerritory(territory.getTerritoryName()).getArmyOn()*2;
 				
+				
+				/**
+				 * each territory needs the army to be
+				 * doubled and 
+				 * placed
+				 * 
+				 */
 			}
 			
 			
@@ -75,6 +83,20 @@ public class CheaterStrategyModel implements IStrategy {
 		if(player.canFortify())
 		{
 			
+			Territory  territory;
+			for(int i =0; i< player.getTerritoriesOwned().size(); i++)
+			{
+				territory = board.getTerritory(player.getTerritoriesOwned().get(i));
+				
+				/**
+				 * check which territory is neighbor with other players
+				 * and then double it.
+				 * 
+				 */
+				
+				int armyToBePlaced =  board.getTerritory(territory.getTerritoryName()).getArmyOn()*2;
+				
+			}
 			
 			
 			
@@ -94,10 +116,22 @@ public class CheaterStrategyModel implements IStrategy {
 	@Override
 	public Tuple<String, Tuple<String, Integer>> attack() 
 	{
+		
+		
+		/**
+		 * if the attack is from cheater player 
+		 * it automatically wins the territories neighboring it.
+		 * 
+		 * 
+		 */
+		
+		
 		if(player.canAttack())
 		{
+			return null;
 			
 		}
+		
 		return null;
 	}
 
