@@ -73,19 +73,20 @@ public class AggresiveStrategyModel implements IStrategy {
 	
 	/**
 	 * Finds the territory with the lowest army
-	 * @return the index of weakest territory
+	 * @param territory The current territory loaded from board
+	 * @return the index of weakest neighbour territory
 	 */
-	public int getWeakestNeighbour() {
-		
-		Territory territory;
+	public int getWeakestNeighbour(Territory territory) {
+
 		int weakestNeighbour=1000;
-		territory = board.getTerritory(player.getTerritoriesOwned().get(getStrongestTerritory()));
 		for(int j = 0; j < territory.getNeighbours().size(); j++)
 		{
-			
-			if (weakestNeighbour > board.getTerritory(territory.getNeighbours().get(j)).getArmyOn()) {
+			if (territory.canAttack(territory.getNeighbours().get(j))) {
 				
-				weakestNeighbour = board.getTerritory(territory.getNeighbours().get(j)).getArmyOn();
+				if (weakestNeighbour > board.getTerritory(territory.getNeighbours().get(j)).getArmyOn()) {
+					
+					weakestNeighbour = board.getTerritory(territory.getNeighbours().get(j)).getArmyOn();
+				}
 			}
 		}
 		
@@ -155,10 +156,10 @@ public class AggresiveStrategyModel implements IStrategy {
 			Territory  territory;
 			territory = board.getTerritory(player.getTerritoriesOwned().get(getStrongestTerritory()));
 				
-			if(territory.canAttack(territory.getNeighbours().get(getWeakestNeighbour()))) {
+			if(territory.canAttack(territory.getNeighbours().get(getWeakestNeighbour(territory)))) {
 
 				Tuple<String, Tuple<String,Integer>> toReturn = 
-						new  Tuple<String, Tuple<String,Integer>>(territory.getTerritoryName(), new Tuple<String,Integer>(territory.getNeighbours().get(getWeakestNeighbour()), territory.getArmyOn()));
+						new  Tuple<String, Tuple<String,Integer>>(territory.getTerritoryName(), new Tuple<String,Integer>(territory.getNeighbours().get(getWeakestNeighbour(territory)), territory.getArmyOn()));
 				return toReturn;
 			}			
 		}
