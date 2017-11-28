@@ -3,7 +3,6 @@
  */
 package risk.model.maputils;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -15,12 +14,13 @@ import risk.utils.constants.RiskIntegers;
  * @author hcanta
  * @version 3.0
  */
-public class Continent implements Serializable
+public class Continent extends BoardComponent
 {
+	
 	/**
 	 * Generated Serial Version UID
 	 */
-	private static final long serialVersionUID = 9133545413028996975L;
+	private static final long serialVersionUID = -2804669608728063119L;
 	/**
 	 * Is there a graph
 	 */
@@ -33,7 +33,6 @@ public class Continent implements Serializable
 	 * HashMap Containing a mapping of name to Territory object
 	 */
 	private HashMap<String, Territory> territories;
-	
 	/**
 	 * The current owner of the Continent
 	 */
@@ -58,15 +57,7 @@ public class Continent implements Serializable
 		this.graph = graph;
 	}
 	
-	/**
-	 * Constructor of the continent.
-	 * @param name the name of the continent
-	 * @param continentBonus The associated bonus with the continent
-	 */
-	public Continent(String name, int continentBonus) 
-	{
-		this(name, continentBonus, null);
-	}
+	
 	
 	/**
 	 * Verifies if the territory belongs to the continent
@@ -295,7 +286,9 @@ public class Continent implements Serializable
 		{
 			valid = this.territories.get(territory).validateTerritory();
 			if(!valid)
+			{
 				return false;
+			}
 		}
 		int[][] matrix = new int [territories.keySet().size()][territories.keySet().size()];
 		for(int i =0; i<territories.keySet().size(); i++ )
@@ -336,5 +329,31 @@ public class Continent implements Serializable
 		{
 			this.ownerID = id;
 		}
+	}
+
+
+	/**
+	 * Returns  is there a graph
+	 * @return is there a graph
+	 */
+	public boolean getGraph() {
+		
+		return this.graph!= null;
+	}
+
+
+	/**
+	 * Adds a territory to the continent
+	 * @param name The name of the territory
+	 * @param territory the territory
+	 */
+	public void addTerritory(String name, Territory territory) 
+	{
+		String n_name = name.toLowerCase();
+		if(!territories.containsKey(n_name))
+		{
+			territories.put(n_name, territory);
+		}
+		
 	}
 }

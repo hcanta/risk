@@ -1041,6 +1041,7 @@ public class GameEngine implements Serializable
 	
 	/**
 	 * Helper for the play Game
+	 * @param integer The player id
 	 */
 	private void playHelper(Integer integer)
 	{
@@ -1120,7 +1121,7 @@ public class GameEngine implements Serializable
 				}
 				if(option == 2)
 				{
-					Utils.saveGame(board);
+					saveGame();
 				}
 				else if(option == 3)
 				{
@@ -1192,6 +1193,14 @@ public class GameEngine implements Serializable
 		
 	}
 	
+	/**
+	 * Saves The Game
+	 */
+	private void saveGame() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	/**
 	 * Pause before moving to next state or phase
 	 */

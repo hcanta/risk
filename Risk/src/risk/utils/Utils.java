@@ -5,15 +5,25 @@ package risk.utils;
 
 import java.awt.Color;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Base64;
 import java.util.Stack;
 
 import risk.model.RiskBoard;
+import risk.model.maputils.Continent;
+import risk.model.maputils.Territory;
 import risk.utils.constants.RiskEnum.PlayerColors;
 import risk.utils.constants.RiskIntegers;
 
@@ -22,8 +32,13 @@ import risk.utils.constants.RiskIntegers;
  * @author hcanta
  * @version 3.3
  */
-public class Utils 
+public class Utils implements Serializable
 {
+	/**
+	 * Generated Serial Version UID
+	 */
+	private static final long serialVersionUID = 5550477455386115579L;
+
 	/**
 	 * Load The Map On the RiskBoard
 	 * @param file the file to be loaded in the Risk Board
@@ -182,30 +197,56 @@ public class Utils
 	}
 	
 	/**
-	 * Saves the current Game
-	 * @param board The game engine of the game
+	 * Saves the given territory
+	 * @param territory The Territory to be saved
+	 * @param filePath the file where it must be saved 
 	 * @return If the game was saved successfully or not
 	 */
-	public static boolean saveGame(RiskBoard board)
+	public static boolean saveTerritory(Territory territory, String filePath)
 	{
 		try 
 		{
-			FileOutputStream fileOut =
-			new FileOutputStream("SavedGames\\employee.ser");
+			FileOutputStream fileOut = new FileOutputStream(filePath);
 			ObjectOutputStream out = new ObjectOutputStream(fileOut);
-			out.writeObject(board);
+			out.writeObject(territory);
 			out.close();
 			fileOut.close();
-			System.out.printf("Serialized data is saved in /tmp/employee.ser");
 			return true;
 		} 
 		catch (IOException e) 
 		{
 			e.printStackTrace();
 		}
-			return false;
+		return false;
 	}
+	
+	
 
+	
+	
+	/**
+	 * Loads a territory from a file
+	 * @param relativePath The relative Path to the file
+	 * @return the Territory object
+	 */
+	public static Territory loadTerritory(String relativePath)
+	{
+		Territory obj = null;
+		try 
+		{
+			FileInputStream fileIn = new FileInputStream(relativePath);
+			ObjectInputStream in = new ObjectInputStream(fileIn);
+			obj =(Territory) in.readObject();
+			in.close();
+	        fileIn.close();
+		} 
+		catch (IOException | ClassNotFoundException e) 
+		{
+			e.printStackTrace();
+		}
+		return obj;
+	}
+	
 	/**
 	 * Returns A color object
 	 * @param color The color of the player
@@ -239,5 +280,171 @@ public class Utils
 		}
 		return nColor;
 	}
+	
+	
+	
+	/**
+	 * Saves the given continent
+	 * @param continent The Territory to be saved
+	 * @param filePath the file where it must be saved 
+	 * @return If the game was saved successfully or not
+	 */
+	public static boolean saveContinent(Continent continent, String filePath)
+	{
+		String cont = saveContinentToString(continent);
+		if(cont.length() == 0)
+			return false;
+		Path currentRelativePath = Paths.get("");
+		String path = currentRelativePath.toAbsolutePath().toString()+"\\"+filePath;
+		try 
+		{
+			FileWriter fw = new FileWriter(path);
+			fw.write(cont);
+			fw.close();
+			return true;
+		} 
+		catch (IOException e)
+		{
+			
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * creates a string representation of the continent for saving 
+	 * @param continent The Territory to be saved
+	 * @return A string representation of the continent 
+	 */
+	public static String saveContinentToString(Continent continent)
+	{
+		StringBuffer str = new StringBuffer();
+		
+		str.append(dataToString(continent.getContinentName()));
+		str.append("\n");
+		
+		str.append(dataToString(continent.getContinentBonus()));
+		str.append("\n");
+		
+		str.append(dataToString(continent.getGraph()));
+		str.append("\n");
+		
+		str.append(dataToString(continent.getOwnerID()));
+		str.append("\n");
+		
+		str.append(dataToString(continent.getTerritories().size()));
+		str.append("\n");
+		for(int i =0; i< continent.getTerritories().size();i ++)
+		{
+			str.append(dataToString(continent.getTerritories().get(i)));
+			str.append("\n");
+			str.append(dataToString(continent.getTerritory(continent.getTerritories().get(i))));
+			str.append("\n");
+		}
+		return str.toString();
+		
+	}
+	
+	/**
+	 * Loads a Continent from a file
+	 * @param relativePath The relative Path to the file
+	 * @return the Continent object
+	 */
+	public static Continent loadContinent(String relativePath)
+	{
+		String continentName;
+		Object graph;
+		int ownerID;
+		boolean gra;
+		
+		int bonus;
+		Path currentRelativePath = Paths.get("");
+		try
+		{
+			String path = currentRelativePath.toAbsolutePath().toString()+"\\"+relativePath;
+			FileReader fileReader = new FileReader(new File(path));
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			String line;
+			line = bufferedReader.readLine();
+			continentName = (String)stringToData(line);
+			line = bufferedReader.readLine();
+			bonus = (int)stringToData(line);
+			line = bufferedReader.readLine();
+			gra = (boolean) stringToData(line);
+			graph = gra ?new Object () : null;
+			line = bufferedReader.readLine();
+			ownerID = (int)stringToData(line);
+			line = bufferedReader.readLine();
+			int nbTerritories = (int)stringToData(line);
+			Continent cont = new Continent(continentName,bonus,graph);
+			cont.setOwnerID(ownerID);
+			for(int i =0; i< nbTerritories; i++)
+			{
+				line = bufferedReader.readLine();
+				String name = (String)stringToData(line);
+				line = bufferedReader.readLine();
+				Territory territory = (Territory)stringToData(line);
+				cont.addTerritory(name, territory);
+			}
+			bufferedReader.close();
+			fileReader.close();
+			return cont;
+			
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	/**
+	 * Convert a serializable object to a string
+	 * @param o the object to be converted
+	 * @return the string representation of the object
+	 */ 
+	private static String dataToString(Serializable o)
+	{
+		 ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		 ObjectOutputStream oos;
+		try 
+		{
+			 oos = new ObjectOutputStream( baos );
+			 oos.writeObject( o );
+			 oos.close();
+			 return Base64.getEncoder().encodeToString(baos.toByteArray());
+		} 
+		catch (IOException e) 
+		{
+			
+			e.printStackTrace();
+		}
+		return "";
+	}
+	
+	/**
+	 * Convert from String to Object
+	 * @param str string info
+	 * @return the object
+	 */
+	private static Object stringToData(String str)
+	{
+		 byte [] data = Base64.getDecoder().decode( str );
+		  try 
+		  {
+			ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(data));
+			Object o  = ois.readObject();
+			ois.close();
+			return o;
+		  } 
+		  catch (IOException | ClassNotFoundException e) 
+		  {
+			
+			e.printStackTrace();
+		  }
+		return null;		
+	}
+
 }
 

@@ -3,12 +3,19 @@
  */
 package risk.utils.constants;
 
+import java.io.Serializable;
+
 /**
  * This class contains all the constants final integers
  * @author hcanta
  */
-public class RiskIntegers 
+public class RiskIntegers implements Serializable
 {
+	/**
+	 * Generated Serial Version UID
+	 */
+	private static final long serialVersionUID = -1298262058978720423L;
+
 	/**
 	* Final width size of the playable game screen.
 	*/

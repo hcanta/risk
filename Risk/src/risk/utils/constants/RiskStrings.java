@@ -3,13 +3,19 @@
  */
 package risk.utils.constants;
 
+import java.io.Serializable;
+
 /**
  * This class contains all the constants final strings
  * @author hcanta
  *
  */
-public class RiskStrings 
+public class RiskStrings implements Serializable
 {
+	/**
+	 * Generated Serial Version UID
+	 */
+	private static final long serialVersionUID = -1938371827358414600L;
 	/**
 	 * Risk String
 	 */
@@ -57,6 +63,16 @@ public class RiskStrings
 	 * Map Editor label content
 	 */
 	public static final String TITLE_MAP_EDITOR = "Map Editor";
+	
+	/**
+	 * Territory File Test
+	 */
+	public static final String TERRITORY_FILE_TEST = "SavedGames\\Territory.ser";
+	
+	/**
+	 * Continent  File Test
+	 */
+	public static final String CONTINENT_FILE_TEST = "SavedGames\\Continent.ser";
 	
 	/**
 	 * Help String

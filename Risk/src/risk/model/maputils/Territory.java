@@ -3,7 +3,6 @@
  */
 package risk.model.maputils;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -17,7 +16,7 @@ import risk.views.ui.Vertex;
  * @author hcanta
  * @version 3.1
  */
-public class Territory implements Serializable
+public class Territory extends BoardComponent 
 {
 
 	/**
