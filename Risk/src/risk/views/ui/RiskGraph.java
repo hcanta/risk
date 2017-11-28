@@ -39,7 +39,7 @@ public class RiskGraph extends JPanel implements Serializable, Observer
 	 */
 	public RiskGraph(RiskBoard board) 
 	{
-		super(new GridLayout((board.getNbTerritories()/ RiskIntegers.CELL_PER_ROWS), RiskIntegers.CELL_PER_ROWS, RiskIntegers.GRAPH_CELL_X_OFFSET, RiskIntegers.GRAPH_CELL_Y_OFFSET));
+		super(new GridLayout((int) Math.round(board.getNbTerritories()/ RiskIntegers.CELL_PER_ROWS), RiskIntegers.CELL_PER_ROWS, RiskIntegers.GRAPH_CELL_X_OFFSET, RiskIntegers.GRAPH_CELL_Y_OFFSET));
 		this.setVisible(true);
 		EmptyBorder panelBorder = new EmptyBorder(RiskIntegers.GRAPH_CELL_Y_OFFSET, 10, 10, 10);
 		this.setBorder(panelBorder);

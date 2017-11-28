@@ -216,8 +216,8 @@ public class Utils
 		Color nColor = null;
 		switch(color)
 		{
-			case orange:
-				nColor = Color.orange;
+			case blue:
+				nColor = Color.blue;
 				break;
 			case red:
 				nColor = Color.red;

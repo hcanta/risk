@@ -54,11 +54,8 @@ public class GameEngine implements Serializable
 	/**
 	 * The current Player Name
 	 */
-	private String currentPlayer;
-	/**
-	 * Are we in Game mode
-	 */
-	private boolean gameplay;
+	private String currentPlayer = RiskStrings.RISK_SYSTEM;
+	
 	/**
 	 * Generated Serialization UID
 	 */
@@ -151,7 +148,7 @@ public class GameEngine implements Serializable
 			public void actionPerformed(ActionEvent e)
 			{
 				nbRoundsPlayed= 0;
-				setGamePlay(false);
+				
 				addToHistoryPanel("\n"+RiskStrings.INITIATE_CREATE_MAP);
 				Thread thread = new Thread(new Runnable() {
 			         @Override
@@ -169,7 +166,7 @@ public class GameEngine implements Serializable
 				public void actionPerformed(ActionEvent e)
 				{
 					nbRoundsPlayed= 0;
-					setGamePlay(false);
+					
 					addToHistoryPanel("\n"+RiskStrings.INITIATE_EDIT_MAP);
 					Thread thread = new Thread(new Runnable() {
 				         @Override
@@ -197,7 +194,10 @@ public class GameEngine implements Serializable
 					         @Override
 					         public void run() {
 					             if(deploy(false))
+					             {
+					            	 setState(GameState.NEXT_PLAYER);
 					            	 play();
+					             }
 					         }
 						});
 						thread.start();
@@ -205,14 +205,7 @@ public class GameEngine implements Serializable
 				}
 		});
 		
-		//Adding Save Game action Listener
-		this.gamev.getRiskMenu().getSaveGame().addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				Utils.saveGame(GameEngine.this.board);
-			}
-		});
+		
 	}
 	
 	
@@ -857,7 +850,7 @@ public class GameEngine implements Serializable
 			if ( selected != null )
 			{
 			    String selectedString = selected.toString();
-			    System.out.println(selectedString);
+			  
 			    humanColor = RiskEnum.PlayerColors.valueOf(selectedString);
 			    addHumanPlayer(str, humanColor);
 			    createBots(nbPlayer, tournament, humanColor);
@@ -880,7 +873,7 @@ public class GameEngine implements Serializable
 		pause();
 		placeRemainingArmies();
 		pause();
-		setGamePlay(true);
+		
 		return true;
 	}
 	
@@ -1047,6 +1040,34 @@ public class GameEngine implements Serializable
 	}
 	
 	/**
+	 * Helper for the play Game
+	 */
+	private void playHelper(Integer integer)
+	{
+		switch(this.board.getState())
+		{
+			case NEXT_PLAYER:
+				reinforcePhase(integer);
+				break;
+			case ATTACK:
+				attackPhase(integer);
+				if(isGameOver())
+				{
+					this.setState(GameState.IDLE);
+					this.addToHistoryPanel("The Game is Over");
+					this.addToHistoryPanel("winner: "+ this.players.get(new Integer(board.getOwnerID())).getName());
+					board.update(RiskEvent.GeneralUpdate);
+					return;
+				}
+				break;
+			case FORTIFY:
+				fortifyPhase(integer);
+				break;
+			default:
+				break;
+		}
+	}
+	/**
 	 * Play The Game
 	 */
 	public void play()
@@ -1058,18 +1079,14 @@ public class GameEngine implements Serializable
 				this.nbRoundsPlayed++;
 				board.setCurrentPlayer(players.get(this.playerTurnOrder.get(i)).getName());
 				this.currentPlayer = board.getCurrentPlayer();
-				reinforcePhase(this.playerTurnOrder.get(i));
-				attackPhase(this.playerTurnOrder.get(i));
-				if(isGameOver())
+				
+				do
 				{
-					this.setState(GameState.IDLE);
-					this.addToHistoryPanel("The Game is Over");
-					this.addToHistoryPanel("winner: "+ this.players.get(new Integer(board.getOwnerID())).getName());
-					board.update(RiskEvent.GeneralUpdate);
-					return;
-				}
+					playHelper(this.playerTurnOrder.get(i));
+				}while(board.getState()!=GameState.NEXT_PLAYER);
+				
 					
-				fortifyPhase(this.playerTurnOrder.get(i));
+				
 			}
 			
 		}
@@ -1080,7 +1097,7 @@ public class GameEngine implements Serializable
 	 */
 	private void fortifyPhase(Integer integer) {
 		
-		this.setState(GameState.FORTIFY);
+		
 		//Player Object
 		if(players.get(integer).getType() == RiskEnum.RiskPlayerType.Human)
 		{
@@ -1101,8 +1118,11 @@ public class GameEngine implements Serializable
 					option = 0;
 					return;
 				}
-					
 				if(option == 2)
+				{
+					Utils.saveGame(board);
+				}
+				else if(option == 3)
 				{
 					break;
 				}
@@ -1168,6 +1188,7 @@ public class GameEngine implements Serializable
 		{
 			pause();
 		}
+		this.setState(GameState.NEXT_PLAYER);
 		
 	}
 	
@@ -1188,8 +1209,9 @@ public class GameEngine implements Serializable
 	 * The attack Phase
 	 * @param integer the id Of the Player
 	 */
-	private void attackPhase(Integer integer) {
-		this.setState(GameState.ATTACK);
+	private void attackPhase(Integer integer) 
+	{
+		
 		if(players.get(integer).canAttack())
 		{
 			if(players.get(integer).getType() == RiskEnum.RiskPlayerType.Human)
@@ -1365,6 +1387,7 @@ public class GameEngine implements Serializable
 		}
 
 		pause();
+		this.setState(GameState.FORTIFY);
 		
 	}
 
@@ -1372,7 +1395,8 @@ public class GameEngine implements Serializable
 	 * The reinforcement phase
 	 * @param integer The id of the player
 	 */
-	private void reinforcePhase(Integer integer) {
+	private void reinforcePhase(Integer integer) 
+	{
 		this.setState(GameState.REINFORCE);
 		int newArmies =(int)(players.get(integer).getTerritoriesOwned().size() < 9 ?3 :players.get(integer).getTerritoriesOwned().size()/3);
 		this.addToHistoryPanel(players.get(integer).getName()+" has "+players.get(integer).getTerritoriesOwned().size()+" territories");
@@ -1482,6 +1506,7 @@ public class GameEngine implements Serializable
 		}
 		
 		pause();
+		this.setState(GameState.ATTACK);
 		
 	}
 
@@ -1492,20 +1517,11 @@ public class GameEngine implements Serializable
 	private boolean isGameOver() 
 	{
 		boolean gameOver = board.isGameOver();
-		setGamePlay(!gameOver);
+		
 		return  gameOver;
 	}
 	
-	/**
-	 * Sets the gamePlay
-	 * @param b are we in the game play or not
-	 */
-	private void setGamePlay(boolean b) {
-		this.gameplay = b;
-		this.gamev.getRiskMenu().getSaveGame().setEnabled(true);
-		this.gamev.getRiskMenu().validate();
-		this.gamev.getRiskMenu().repaint();
-	}
+	
 
 	/**
 	 * Returns the amount of armies when the cards are exchanged
@@ -1546,13 +1562,6 @@ public class GameEngine implements Serializable
 	 */
 	public IPlayer getPlayer(int index) {
 		return this.players.get(new Integer(index));
-	}
-
-	/**Returns the gameplay status
-	 * @return the gameplay status
-	 */
-	public boolean getGameplay() {
-		return gameplay;
 	}
 
 	/**

@@ -16,7 +16,7 @@ public class RiskEnum
 	 */
 	public static enum GameState
 	{
-		IDLE, STARTUP, REINFORCE, ATTACK, FORTIFY
+		IDLE, STARTUP, REINFORCE, ATTACK, FORTIFY, NEXT_PLAYER
 	}
 	
 	/**
@@ -25,7 +25,7 @@ public class RiskEnum
 	 */
 	public static enum PlayerColors
 	{
-		red, yellow, gray, green,  pink, orange
+		red, yellow, gray, green,  pink, blue
 	}
 	
 	/**
