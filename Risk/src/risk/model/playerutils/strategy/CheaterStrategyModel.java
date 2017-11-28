@@ -49,7 +49,12 @@ public class CheaterStrategyModel implements IStrategy {
 		if(player.canReinforce())
 		{
 			
-			
+			Territory  territory;
+			for(int i =0; i< player.getTerritoriesOwned().size(); i++)
+			{
+				territory = board.getTerritory(player.getTerritoriesOwned().get(i));
+				
+			}
 			
 			
 			
