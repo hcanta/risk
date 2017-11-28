@@ -41,7 +41,9 @@ public class CheaterStrategyModel implements IStrategy {
 
 	/**
 	 * Reinforce check is performed.
-	 * @return  The country to reinforce and the number of armies to reinforce it with
+	 * @return  The country to reinforce and 
+	 * the number of armies to reinforce it with
+	 * 
 	 */
 	@Override
 	public Tuple<String, Integer> reinforce() 
