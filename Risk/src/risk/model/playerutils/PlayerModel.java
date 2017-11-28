@@ -80,6 +80,7 @@ public class PlayerModel implements IPlayer
 	 * @param turnID the turn of the player
 	 * @param debug set to true for debugging or testing
 	 * @param type the type of player
+	 * @param strategy the strategy being used
 	 */
 	public PlayerModel(String name, PlayerColors color, short turnID, boolean debug, RiskPlayerType type, RiskEnum.Strategy strategy) 
 	{
