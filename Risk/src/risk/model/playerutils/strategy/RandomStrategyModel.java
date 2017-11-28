@@ -18,7 +18,7 @@ import risk.utils.Tuple;
 public class RandomStrategyModel implements IStrategy {
 
 	/**
-	 * Random generatorl
+	 * Random generator
 	 */
 	private Random rand;
 	/**
