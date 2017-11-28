@@ -60,6 +60,10 @@ public class BenevolentStrategyModel implements IStrategy {
 					weakestTerritory = i;
 				}
 			}
+			String toReinforce = player.getTerritoriesOwned().get(weakestTerritory);
+			
+			Tuple<String, Integer> toReturn = new Tuple<String, Integer>(toReinforce, toBePlaced);
+			return toReturn;
 		}	
 		return null;
 	}
