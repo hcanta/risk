@@ -16,6 +16,10 @@ import risk.utils.Tuple;
 public class AggresiveStrategyModel implements IStrategy {
 
 	/**
+	 * Generated Serial Number
+	 */
+	private static final long serialVersionUID = 8979176313128844248L;
+	/**
 	 * The player using the strategy
 	 */
 	@SuppressWarnings("unused")

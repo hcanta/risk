@@ -3,6 +3,7 @@
  */
 package risk.utils;
 
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -12,8 +13,8 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.Stack;
 
-import risk.game.GameEngine;
 import risk.model.RiskBoard;
+import risk.utils.constants.RiskEnum.PlayerColors;
 import risk.utils.constants.RiskIntegers;
 
 /**
@@ -182,17 +183,17 @@ public class Utils
 	
 	/**
 	 * Saves the current Game
-	 * @param gameEngine The game engine of the game
+	 * @param board The game engine of the game
 	 * @return If the game was saved successfully or not
 	 */
-	public static boolean saveGame(GameEngine gameEngine)
+	public static boolean saveGame(RiskBoard board)
 	{
 		try 
 		{
 			FileOutputStream fileOut =
 			new FileOutputStream("SavedGames\\employee.ser");
 			ObjectOutputStream out = new ObjectOutputStream(fileOut);
-			out.writeObject(gameEngine);
+			out.writeObject(board);
 			out.close();
 			fileOut.close();
 			System.out.printf("Serialized data is saved in /tmp/employee.ser");
@@ -203,6 +204,40 @@ public class Utils
 			e.printStackTrace();
 		}
 			return false;
-		}
 	}
+
+	/**
+	 * Returns A color object
+	 * @param color The color of the player
+	 * @return the corresponding Java awt color
+	 */
+	public static Color getColor(PlayerColors color) 
+	{
+		Color nColor = null;
+		switch(color)
+		{
+			case orange:
+				nColor = Color.orange;
+				break;
+			case red:
+				nColor = Color.red;
+				break;
+			case green:
+				nColor = Color.green;
+				break;
+			case gray:
+				nColor = Color.GRAY;
+				break;
+			case pink:
+				nColor = Color.PINK;
+				break;
+			case yellow:
+				nColor = Color.YELLOW;
+				break;
+			default:
+				nColor= Color.white;
+		}
+		return nColor;
+	}
+}
 

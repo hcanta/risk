@@ -3,6 +3,7 @@
  */
 package risk.model.playerutils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import risk.game.cards.Hand;
@@ -16,7 +17,7 @@ import risk.utils.constants.RiskEnum.Strategy;
  * @author hcanta
  * @version 1.2
  */
-public interface IPlayer 
+public interface IPlayer extends Serializable
 {
 	/**
 	 * Returns the color of the player

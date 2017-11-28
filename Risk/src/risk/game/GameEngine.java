@@ -18,7 +18,6 @@ import java.util.Scanner;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-
 import risk.game.cards.Card;
 import risk.model.HumanPlayerModel;
 import risk.model.RiskBoard;
@@ -28,7 +27,6 @@ import risk.model.playerutils.IPlayer;
 import risk.model.playerutils.PlayerModel;
 import risk.utils.Tuple;
 import risk.utils.Utils;
-import risk.utils.constants.OtherConstants;
 import risk.utils.constants.RiskEnum;
 import risk.utils.constants.RiskEnum.CardType;
 import risk.utils.constants.RiskEnum.GameState;
@@ -39,7 +37,6 @@ import risk.utils.constants.RiskEnum.Strategy;
 import risk.utils.constants.RiskIntegers;
 import risk.utils.constants.RiskStrings;
 import risk.views.GameView;
-import risk.views.ui.GraphDisplayPanel;
 import risk.views.ui.MapSelector;
 
 /**
@@ -74,7 +71,6 @@ public class GameEngine implements Serializable
 	 * Number of times cards were exchange
 	 */
 	private int cardExchangeCount;
-
 	
 	/**
 	 * Creates a mapping of player IDs to IPlayer Object
@@ -93,7 +89,7 @@ public class GameEngine implements Serializable
 	/**
 	 * The Game View
 	 */
-	private GameView gamev;
+	private transient GameView gamev;
 	
 	/**
 	 * Set to true if in debugging mode false otherwise
@@ -214,7 +210,7 @@ public class GameEngine implements Serializable
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				Utils.saveGame(GameEngine.this);
+				Utils.saveGame(GameEngine.this.board);
 			}
 		});
 	}
@@ -416,12 +412,9 @@ public class GameEngine implements Serializable
 					
 					if(load)
 					{
-						this.gamev.getCenter().removeAll();
-						this.gamev.getCenter().repaint();
-						this.gamev.getCenter().validate();
-						this.gamev.getCenter().add((new GraphDisplayPanel(RiskBoard.ProperInstance(false).getGraph()).getContentPane()));
-						this.gamev.getCenter().repaint();
-						this.gamev.getCenter().validate();
+						
+						this.gamev.addGraph(RiskBoard.ProperInstance(debug));
+						
 					}
 					return true;
 					
@@ -433,13 +426,8 @@ public class GameEngine implements Serializable
 					board.clear();
 					if(load)
 					{
+						this.gamev.cleanCenter();
 						
-						this.gamev.getCenter().removeAll();
-						this.gamev.getCenter().repaint();
-						this.gamev.getCenter().validate();
-						this.gamev.getCenter().add(OtherConstants.backGround);
-						this.gamev.getCenter().repaint();
-						this.gamev.getCenter().validate();
 					}
 					
 				}

@@ -7,8 +7,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.mxgraph.view.mxGraph;
-
 import risk.utils.Utils;
 import risk.utils.constants.RiskIntegers;
 
@@ -24,9 +22,9 @@ public class Continent implements Serializable
 	 */
 	private static final long serialVersionUID = 9133545413028996975L;
 	/**
-	 * The graph that will be displayed
+	 * Is there a graph
 	 */
-	private mxGraph graph;
+	private Object graph;
 	/**
 	 * The name of the continent
 	 */
@@ -49,9 +47,9 @@ public class Continent implements Serializable
 	 * Constructor of the continent.
 	 * @param name the name of the continent
 	 * @param continentBonus The associated bonus with the continent
-	 * @param graph the graph that will be displayed
+	 * @param graph  is there a graph
 	 */
-	public Continent(String name, int continentBonus,  mxGraph graph) 
+	public Continent(String name, int continentBonus,  Object graph) 
 	{
 		this.continentBonus = continentBonus;
 		this.continentName = name;
@@ -292,19 +290,7 @@ public class Continent implements Serializable
 		boolean valid = true;
 		if(!(this.territories.keySet().size()>=1))
 			return false;
-		ArrayList<String> n_territories = new ArrayList<String>();
-		for(int i =0; i< this.territories.keySet().size(); i++)
-		{
-			if(n_territories.contains((String)this.territories.keySet().toArray()[i]))
-			{
-				return false;
-			}
-			else
-			{
-				n_territories.add((String)this.territories.keySet().toArray()[i]);
-			}
-		}
-		n_territories.clear();
+		
 		for(String territory : this.territories.keySet())
 		{
 			valid = this.territories.get(territory).validateTerritory();

@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Observable;
 
-import com.mxgraph.view.mxGraph;
-
 import risk.model.maputils.Continent;
 import risk.model.maputils.Territory;
 import risk.utils.Utils;
@@ -39,7 +37,7 @@ public class RiskBoard extends Observable implements Serializable
 	/**
 	 * The graph that will be displayed
 	 */
-	private mxGraph graph;
+	private Object graph;
 	
 
 	/**
@@ -59,7 +57,7 @@ public class RiskBoard extends Observable implements Serializable
 	/**
 	 * Singleton Of the RisBoard Object
 	 */
-	private static RiskBoard Instance = new RiskBoard(new mxGraph());
+	private static RiskBoard Instance = new RiskBoard(new Object());
 	
 	/**
 	 * Singleton Of the RisBoard Object for testing purposes
@@ -85,13 +83,13 @@ public class RiskBoard extends Observable implements Serializable
 
 	/**
 	 * Constructor of the Risk Board
-	 * @param mxGraph the graph that will be displayed
+	 * @param graph is there a graph
 	 */
-	public RiskBoard(mxGraph mxGraph) 
+	public RiskBoard(Object graph) 
 	{
 		ownerID = RiskIntegers.INITIAL_OWNER;
 		continents = new HashMap<String, Continent>();
-		this.graph = mxGraph;
+		this.graph = graph;
 		
 		setState(GameState.IDLE);
 	}
@@ -405,7 +403,7 @@ public class RiskBoard extends Observable implements Serializable
 	 * Returns the graph object belonging to the board
 	 * @return The graph object belonging to the board
 	 */
-	public mxGraph getGraph()
+	public Object getGraph()
 	{
 		return this.graph;
 	}

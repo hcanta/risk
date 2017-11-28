@@ -17,11 +17,13 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import risk.model.RiskBoard;
 import risk.utils.constants.OtherConstants;
 import risk.utils.constants.RiskEnum;
 import risk.utils.constants.RiskIntegers;
 import risk.utils.constants.RiskStrings;
 import risk.views.ui.CardExchangePanel;
+import risk.views.ui.RiskGraph;
 import risk.views.ui.RiskMenu;
 import risk.views.ui.SidePanel;
 import risk.views.ui.StatePanel;
@@ -54,13 +56,23 @@ public class GameView implements Observer, Serializable
 	private static SidePanel historyTextPanel;
 	
 	/**
+	 * Text scroller to be contained within the history panel
+	 */
+	private static JScrollPane historyTextScroller;
+	
+	/**
 	 * The info on the various countries
 	 */
 	private static SidePanel countryTextPanel;
 	/**
-	 * Text scroller to be contained within the history panel
+	 * Text scroller that contains the graph
 	 */
-	private static JScrollPane historyTextScroller;
+	private JScrollPane graphScroller = null;
+	
+	/**
+	 * The Risk Graph
+	 */
+	private RiskGraph graph = null;
 	
 	/**
 	 * Text scroller to be contained within the country panel
@@ -131,7 +143,8 @@ public class GameView implements Observer, Serializable
 	    gFrame.setIconImage(new ImageIcon(("img/g1.png")).getImage());
 	    gFrame.setLayout(new BorderLayout());
 	    gFrame.setResizable(false);
-	    gFrame.setBackground(Color.WHITE);
+	    gFrame.setBackground(Color.white);
+	    gFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    
 	    gFrame.setVisible(true);
 	    gFrame.setSize(RiskIntegers.GAME_WIDTH, RiskIntegers.GAME_HEIGHT);
@@ -146,6 +159,7 @@ public class GameView implements Observer, Serializable
 	    historyTextScroller = new JScrollPane(historyTextPanel);
 	    historyTextScroller.setVisible(true);
 	    historyTextScroller.setBackground(Color.WHITE);
+	    
 	    
 	    countryTextScroller = new JScrollPane(countryTextPanel);
 	    countryTextScroller.setVisible(true);
@@ -269,6 +283,10 @@ public class GameView implements Observer, Serializable
 				
 			case CountryUpdate:
 				 countryUpdate(obj, param);
+				 if(graph != null)
+				 {
+					 graph.update(obj, param);
+				 }
 			default:
 				break;
 		}
@@ -317,5 +335,41 @@ public class GameView implements Observer, Serializable
 	 */
 	public JPanel getCenter() {
 		return center;
+	}
+
+	/**
+	 * Adds the Graph to the Game View
+	 * @param board The risk Board
+	 */
+	public void addGraph(RiskBoard board) {
+		this.getCenter().removeAll();
+		this.getCenter().repaint();
+		this.getCenter().validate();
+		graph = new RiskGraph(board);
+		this.graphScroller = new JScrollPane(graph);
+		graphScroller.setVisible(true);
+		center.add(graphScroller);
+		this.getCenter().repaint();
+		this.getCenter().validate();
+		
+	}
+
+	/**
+	 * Cleans The Center of the board
+	 */
+	public void cleanCenter() {
+
+		this.getCenter().removeAll();
+		this.getCenter().repaint();
+		this.getCenter().validate();
+		this.getCenter().add(OtherConstants.backGround);
+		this.getCenter().repaint();
+		this.getCenter().validate();
+		graphScroller.removeAll();
+		graph.removeAll();
+		graph = null;
+		graphScroller = null;
+		
+		
 	}
 }
