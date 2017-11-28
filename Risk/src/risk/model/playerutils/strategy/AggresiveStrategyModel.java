@@ -3,6 +3,9 @@
  */
 package risk.model.playerutils.strategy;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import risk.model.RiskBoard;
 import risk.model.maputils.Territory;
 import risk.model.playerutils.IPlayer;
@@ -29,6 +32,11 @@ public class AggresiveStrategyModel implements IStrategy {
 	private RiskBoard board;
 	
 	/**
+	 * Random generator
+	 */
+	private Random rand;
+	
+	/**
 	 * Constructor for the Strategy Model
 	 * @param debug The current board in use
 	 * @param player The player using the strategy
@@ -37,6 +45,7 @@ public class AggresiveStrategyModel implements IStrategy {
 	{
 		this.board = RiskBoard.ProperInstance(debug);
 		this.player = player;
+		this.rand = new Random();
 	}
 	
 	/**
@@ -111,6 +120,24 @@ public class AggresiveStrategyModel implements IStrategy {
 	{
 		if (player.canFortify()) {
 			
+			ArrayList<Tuple<String,String>> fortifiable = new ArrayList<Tuple<String,String>>();
+			Territory  territory = board.getTerritory(player.getTerritoriesOwned().get(getStrongestTerritory()));
+			
+			for(int j = 0; j < territory.getNeighbours().size(); j++)
+			{
+				if(territory.canFortify(territory.getNeighbours().get(j)))
+				{
+					fortifiable.add(new Tuple<String,String>(territory.getTerritoryName(), territory.getNeighbours().get(j)));
+				}
+			}
+		
+			int index = rand.nextInt(fortifiable.size());
+			String origin = fortifiable.get(index).getSecond();
+			String destination = fortifiable.get(index).getFirst();
+			int armyToMove = board.getTerritory(origin).getArmyOn();
+			Tuple<String, Tuple<String,Integer>> toReturn = 
+					new  Tuple<String, Tuple<String,Integer>>(origin, new Tuple<String,Integer>(destination, armyToMove));
+			return toReturn;
 		}
 		
 		return null;
