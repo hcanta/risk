@@ -19,16 +19,17 @@ public class MapSelector
 
 	/**
 	 * Returns the fileChooser Object of the MapSelector class
+	 * @param extension  The extension we re searching for
 	 * @return the fileChooser
 	 */
-	public static JFileChooser getJFileChooser() 
+	public static JFileChooser getJFileChooser(String extension) 
 	{
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
 		fileChooser.setAcceptAllFileFilterUsed(false);
 
 		fileChooser.setDialogTitle(RiskStrings.CONQUEST_FILECHOOSER_DIALOG_TITLE);
-		fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("MAP File", "map"));
+		fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("MAP File", extension));
 	
 
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);

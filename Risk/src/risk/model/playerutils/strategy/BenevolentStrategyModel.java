@@ -4,6 +4,7 @@
 package risk.model.playerutils.strategy;
 
 import risk.model.RiskBoard;
+import risk.model.maputils.Territory;
 import risk.model.playerutils.IPlayer;
 import risk.model.playerutils.strategy.IStrategy;
 import risk.utils.Tuple;
@@ -11,6 +12,7 @@ import risk.utils.Tuple;
 /**
  * Implementation of the Strategy Model
  * @author hcanta
+ * @author Mohammad Akif Beg
  */
 public class BenevolentStrategyModel implements IStrategy {
 
@@ -21,12 +23,10 @@ public class BenevolentStrategyModel implements IStrategy {
 	/**
 	 * The player using the strategy
 	 */
-	@SuppressWarnings("unused")
 	private IPlayer player;
 	/**
 	 * The current game Board
 	 */
-	@SuppressWarnings("unused")
 	private RiskBoard board;
 	/**
 	 * Constructor for the Strategy Model
@@ -46,6 +46,25 @@ public class BenevolentStrategyModel implements IStrategy {
 	@Override
 	public Tuple<String, Integer> reinforce() 
 	{
+		if(player.canReinforce()){
+			int toBePlaced = player.getNbArmiesToBePlaced();
+			int weakestTerritory = 0;
+
+			int getNbArmies = board.getTerritory(player.getTerritoriesOwned().get(0)).getArmyOn();
+			
+			for(int i = 1;i<player.getTerritoriesOwned().size();i++){
+				Territory currentTerritory = board.getTerritory(player.getTerritoriesOwned().get(i));
+				
+				if (getNbArmies > board.getTerritory(currentTerritory.getTerritoryName()).getArmyOn()) {
+					
+					getNbArmies = board.getTerritory(currentTerritory.getTerritoryName()).getArmyOn();
+					weakestTerritory = i;
+				}
+			}
+			String toReinforce = player.getTerritoriesOwned().get(weakestTerritory);		
+			Tuple<String, Integer> toReturn = new Tuple<String, Integer>(toReinforce, toBePlaced);
+			return toReturn;
+		}	
 		return null;
 	}
 
@@ -56,11 +75,16 @@ public class BenevolentStrategyModel implements IStrategy {
 	@Override
 	public Tuple<String, Tuple<String, Integer>> fortify() 
 	{
+		if(player.canFortify())
+		{
+			
+		}
 		return null;
 	}
 
 	/**
-	 * Decides which country to attack 
+	 * Decides which country to attack
+	 * And In the Benevolent Strategy it will remain abstract 
 	 * @return a tuple of size 2, where the first element is the origin (attacker) and  the second is the destination of the attack (defender)
 	 */
 	@Override
@@ -68,5 +92,4 @@ public class BenevolentStrategyModel implements IStrategy {
 	{
 		return null;
 	}
-
 }

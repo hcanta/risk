@@ -18,14 +18,23 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Stack;
 
+import risk.game.GameEngine;
+import risk.game.cards.Card;
+import risk.game.cards.Hand;
+import risk.model.BotPlayerModel;
+import risk.model.HumanPlayerModel;
 import risk.model.RiskBoard;
 import risk.model.maputils.Continent;
 import risk.model.maputils.Territory;
+import risk.model.playerutils.IPlayer;
 import risk.utils.constants.RiskEnum.GameState;
 import risk.utils.constants.RiskEnum.PlayerColors;
+import risk.utils.constants.RiskEnum.RiskPlayerType;
+import risk.utils.constants.RiskEnum.Strategy;
 import risk.utils.constants.RiskIntegers;
 
 /**
@@ -221,8 +230,52 @@ public class Utils implements Serializable
 		return false;
 	}
 	
-	
+	/**
+	 * Saves the given Card
+	 * @param card The Territory to be saved
+	 * @param filePath the file where it must be saved 
+	 * @return If the card was saved successfully or not
+	 */
+	public static boolean saveCard(Card card, String filePath)
+	{
+		try 
+		{
+			FileOutputStream fileOut = new FileOutputStream(filePath);
+			ObjectOutputStream out = new ObjectOutputStream(fileOut);
+			out.writeObject(card);
+			out.close();
+			fileOut.close();
+			return true;
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+		return false;
+	}
 
+	/**
+	 * Loads a Card from a file
+	 * @param relativePath The relative Path to the file
+	 * @return the Card object
+	 */
+	public static Card loadCard(String relativePath)
+	{
+		Card obj = null;
+		try 
+		{
+			FileInputStream fileIn = new FileInputStream(relativePath);
+			ObjectInputStream in = new ObjectInputStream(fileIn);
+			obj =(Card) in.readObject();
+			in.close();
+	        fileIn.close();
+		} 
+		catch (IOException | ClassNotFoundException e) 
+		{
+			e.printStackTrace();
+		}
+		return obj;
+	}
 	
 	
 	/**
@@ -306,10 +359,8 @@ public class Utils implements Serializable
 		} 
 		catch (IOException e)
 		{
-			
 			e.printStackTrace();
 		}
-		
 		return false;
 	}
 	
@@ -340,6 +391,8 @@ public class Utils implements Serializable
 		}
 		return false;
 	}
+	
+
 	
 	/**
 	 * creates a string representation of the continent for saving 
@@ -412,15 +465,39 @@ public class Utils implements Serializable
 	public static void loadBoard(RiskBoard board, String relativePath)
 	{
 		board.clear();
-		String name, currentPlayer;
-		GameState state;
-		int ownerID, nbContinent;
 		Path currentRelativePath = Paths.get("");
 		try
 		{
 			String path = currentRelativePath.toAbsolutePath().toString()+"\\"+relativePath;
 			FileReader fileReader = new FileReader(new File(path));
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			loadBoard(board, bufferedReader);
+			bufferedReader.close();
+			fileReader.close();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+			
+	}
+	
+	/**
+	 * Loads a Board from a file
+	 * @param board the RiskBoard
+	 * @param bufferedReader The reader of the file
+	 * @return was the board successfully loaded
+	 */
+	private static boolean loadBoard(RiskBoard board, BufferedReader bufferedReader)
+	{
+		board.clear();
+		String name, currentPlayer;
+		GameState state;
+		int ownerID, nbContinent;
+		
+		try
+		{
+
 			String line;
 			line = bufferedReader.readLine();
 			name = (String)stringToData(line);
@@ -441,13 +518,14 @@ public class Utils implements Serializable
 			board.setCurrentPlayer(currentPlayer);
 			board.setOwnerID(ownerID);
 			board.setState(state);
-			bufferedReader.close();
-			fileReader.close();
+			return true;
+		
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
+		return false;
 			
 	}
 	/**
@@ -536,8 +614,8 @@ public class Utils implements Serializable
 		 ObjectOutputStream oos;
 		try 
 		{
-			 oos = new ObjectOutputStream( baos );
-			 oos.writeObject( o );
+			 oos = new ObjectOutputStream(baos);
+			 oos.writeObject(o);
 			 oos.close();
 			 return Base64.getEncoder().encodeToString(baos.toByteArray());
 		} 
@@ -571,6 +649,407 @@ public class Utils implements Serializable
 		  }
 		return null;		
 	}
+	
+	/**
+	 * creates a string representation of the board for saving 
+	 * @param player The risk board to be saved
+	 * @return A string representation of the board 
+	 */
+	private static String savePlayerToString(IPlayer player)
+	{
+		StringBuffer str = new StringBuffer();
+		
+		str.append(dataToString(player.getStrategy()));
+		str.append("\n");
+		str.append(dataToString(player.getType()));
+		str.append("\n");
+		str.append(saveHandToString(player.getHand()));
+		if(player.getHand().size() >= 1)
+			str.append("\n");
+		str.append(dataToString(player.getName()));
+		str.append("\n");
+		str.append(dataToString(player.getPlayerID()));
+		str.append("\n");
+		str.append(dataToString(player.getColor()));
+		str.append("\n");
+		str.append(dataToString(player.getNbArmiesToBePlaced()));
+		str.append("\n");
+		str.append(dataToString(player.getTerritoriesOwned()));
+		str.append("\n");
+		str.append(dataToString(player.getDebug()));
+		return str.toString();
+		
+	}
+	
+	/**
+	 * Saves the given continent
+	 * @param player The player to be saved
+	 * @param filePath the file where it must be saved 
+	 * @return If the game was saved successfully or not
+	 */
+	public static boolean savePlayer(IPlayer player, String filePath)
+	{
+		String strPlayer = savePlayerToString(player);
+		if(strPlayer.length() == 0)
+			return false;
+		Path currentRelativePath = Paths.get("");
+		String path = currentRelativePath.toAbsolutePath().toString()+"\\"+filePath;
+		try 
+		{
+			FileWriter fw = new FileWriter(path);
+			fw.write(strPlayer);
+			fw.close();
+			return true;
+		} 
+		catch (IOException e)
+		{	
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Loads a Player object from a file
+	 * @param relativePath The relative Path to the file
+	 * @return the IPlayer object
+	 */
+	public static IPlayer loadPlayer(String relativePath)
+	{
 
+		Path currentRelativePath = Paths.get("");
+		try
+		{
+			String path = currentRelativePath.toAbsolutePath().toString()+"\\"+relativePath;
+			FileReader fileReader = new FileReader(new File(path));
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			IPlayer player = loadPlayer(bufferedReader);
+			bufferedReader.close();
+			fileReader.close();
+			return player;
+			
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	/**
+	 * Loads a IPlayer from a file
+	 * @param bufferedReader The buffered reader
+	 * @return the Player object
+	 */
+	private static IPlayer loadPlayer(BufferedReader bufferedReader)
+	{
+		try
+		{			
+			String line;
+			line = bufferedReader.readLine();
+			Strategy strategy = (Strategy)(stringToData(line));
+			line = bufferedReader.readLine();
+			RiskPlayerType type = (RiskPlayerType)(stringToData(line));
+			
+			Hand hand = (Hand)(loadHand(bufferedReader));
+			
+			line = bufferedReader.readLine();
+			String name = (String)(stringToData(line));
+			
+			line = bufferedReader.readLine();			
+			short id = (short)(stringToData(line));
+			
+			line = bufferedReader.readLine();
+			PlayerColors color = (PlayerColors)(stringToData(line));
+			
+			line = bufferedReader.readLine();
+			int nbArmies= (int)(stringToData(line));
+			
+			line = bufferedReader.readLine();
+			@SuppressWarnings("unchecked")
+			ArrayList<String> territories = (ArrayList<String>)(stringToData(line));
+			
+			line = bufferedReader.readLine();
+			boolean debug =( boolean)(stringToData(line));	
+			
+			IPlayer player; 
+			if(type == RiskPlayerType.Human)
+			{
+				player = new HumanPlayerModel(name, color, id, debug);
+				player.setNbArmiesToBePlaced(nbArmies);
+				player.setHand(hand);
+				player.setTerritories(territories);
+			}
+			else
+			{
+				player = new BotPlayerModel(name, color, id, debug,strategy);
+				player.setNbArmiesToBePlaced(nbArmies);
+				player.setHand(hand);
+				player.setTerritories(territories);
+			}
+			return player;			
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	/**
+	 * Saves the given continent
+	 * @param engine The game engine to be saved
+	 * @param fileName the file where it must be saved 
+	 * @return If the game was saved successfully or not
+	 */
+	public static boolean saveGame(GameEngine engine, String fileName)
+	{
+		StringBuffer info = new StringBuffer();
+		info.append(saveBoardToString(engine.getBoard()));
+		info.append("\n");
+		info.append(saveEngineSpecificAttribute(engine));
+		
+		if(info.length() == 0)
+			return false;
+		Path currentRelativePath = Paths.get("");
+		String path = currentRelativePath.toAbsolutePath().toString()+"\\SavedGames\\"+fileName+".risk";
+		
+		
+		try 
+		{
+			FileWriter fw = new FileWriter(path);
+			fw.write(info.toString());
+			fw.close();
+			return true;
+		} 
+		catch (IOException e)
+		{
+			
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Saves The attribute specific to the Game Engine
+	 * @param engine The Game Engine
+	 * @return A string representation of the engine Attribute
+	 */
+	private static String saveEngineSpecificAttribute(GameEngine engine) {
+		StringBuffer info = new StringBuffer();
+		info.append(dataToString(engine.getCurrentPlayer()));
+		info.append("\n");
+		info.append(dataToString(engine.getNbRoundsPlayed()));
+		info.append("\n");
+		info.append(dataToString(engine.getMaxRounds()));
+		info.append("\n");
+		info.append(dataToString(engine.getCardExchangeCount()));
+		info.append("\n");
+		info.append(dataToString(engine.getPlayerTurnOrder()));
+		info.append("\n");
+		info.append(dataToString(engine.getDebugStatus()));
+		info.append("\n");
+		info.append(dataToString(engine.getNumberOfPlayers()));
+		info.append("\n");
+		for(int i=0; i< engine.getPlayerTurnOrder().size(); i++)
+		{
+			String str = savePlayerToString(engine.getPlayer(engine.getPlayerTurnOrder().get(i)));
+			if(str == null || str.length() == 0)
+				return null;
+			info.append(str);
+			info.append("\n");
+		}
+		info.append(dataToString(engine.getHistory()));
+		info.append("\n");
+		info.append(dataToString(engine.getCountryInfo()));
+		return info.toString();
+	}
+	
+	/**
+	 * Loads the Game
+	 * @param engine the game engine
+	 * @param gamePath the path to where the game is saved
+	 * @return was the game loaded successfuly
+	 */
+	public static boolean  loadGame(GameEngine engine, String gamePath)
+	{
+		Path currentRelativePath = Paths.get("");
+		try
+		{
+			engine.clear();
+			String path = currentRelativePath.toAbsolutePath().toString()+"\\SavedGames\\"+gamePath;
+			FileReader fileReader = new FileReader(new File(path));
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			
+			if(!loadBoard(engine.getBoard(), bufferedReader))
+				return false;
+			String line; 
+			line = bufferedReader.readLine();
+			String currentPlayer = (String)stringToData(line);
+			engine.setCurrentPlayer(currentPlayer);
+			
+			line = bufferedReader.readLine();
+			int nbRoundsPlayed = (int)stringToData(line);
+			engine.setnbRoundsPlayed(nbRoundsPlayed);
+			
+			line = bufferedReader.readLine();
+			int maxRounds = (int)stringToData(line);
+			engine.setMaxRounds(maxRounds);
+			
+			line = bufferedReader.readLine();
+			int cardExchangeCounts = (int)stringToData(line);
+			engine.setCardExchangeCounts(cardExchangeCounts);
+			
+			line = bufferedReader.readLine();
+			@SuppressWarnings("unchecked")
+			ArrayList<Integer>playerTurnOrder = (ArrayList<Integer>)stringToData(line);
+			engine.setPlayerTurnOrder(playerTurnOrder);
+			
+			line = bufferedReader.readLine();
+			boolean debug = (boolean)stringToData(line);
+			engine.setDebugStatus(debug);
+			
+			line = bufferedReader.readLine();
+			int nbPlayers = (int)stringToData(line);
+			for(int i =0; i<nbPlayers; i++)
+			{
+				
+				IPlayer player = (IPlayer)loadPlayer(bufferedReader);
+				if(player.getType() == RiskPlayerType.Bot)
+				{
+					player = new BotPlayerModel(player);
+				}
+				else
+				{
+					player = new HumanPlayerModel (player);
+				}
+				player.setRiskBoard(engine.getBoard());
+				engine.addPlayer(new Integer(player.getPlayerID()), player);
+			}
+			line = bufferedReader.readLine();
+			String historyInfo =  (String) stringToData(line);
+			line = bufferedReader.readLine();
+			String countryInfo =  (String) stringToData(line);
+			
+			engine.setPanelInfo(historyInfo, countryInfo);
+			
+			bufferedReader.close();
+			fileReader.close();
+			return true;
+			
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	/**
+	 * creates a string representation of the Hand for saving 
+	 * @param hand The continent to be saved
+	 * @return A string representation of the hand 
+	 */
+	private static String saveHandToString(Hand hand)
+	{
+		StringBuffer str = new StringBuffer();
+		
+		
+		str.append(dataToString(hand.size()));
+		str.append("\n");
+		for(int i =0; i< hand.size(); i++)
+		{
+			str.append(dataToString(hand.getCards().get(i)));
+			
+			if( i != hand.size() -1)
+				str.append("\n");
+		}
+		return str.toString();
+		
+	}
+	
+	/**
+	 * Saves the given Hand
+	 * @param hand The hand to be saved
+	 * @param filePath the file where it must be saved 
+	 * @return If the hand was saved successfully or not
+	 */
+	public static boolean saveHand(Hand hand, String filePath)
+	{
+		String cont = saveHandToString(hand);
+		if(cont.length() == 0)
+			return false;
+		Path currentRelativePath = Paths.get("");
+		String path = currentRelativePath.toAbsolutePath().toString()+"\\"+filePath;
+		try 
+		{
+			FileWriter fw = new FileWriter(path);
+			fw.write(cont);
+			fw.close();
+			return true;
+		} 
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	/**
+	 * Loads a hand from a file
+	 * @param relativePath The relative Path to the file
+	 * @return the Territory object
+	 */
+	public static Hand loadHand(String relativePath)
+	{
+		Hand obj = null;
+		Path currentRelativePath = Paths.get("");
+		try
+		{
+			String path = currentRelativePath.toAbsolutePath().toString()+"\\"+relativePath;
+			FileReader fileReader = new FileReader(new File(path));
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			Hand hand = loadHand(bufferedReader);
+			bufferedReader.close();
+			fileReader.close();
+			return hand;
+			
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return obj;
+	}
+
+	/**
+	 * Loads a hand
+	 * @param bufferedReader of the file
+	 * @return the Hand 
+	 */
+	private static Hand loadHand(BufferedReader bufferedReader) {
+		int nb;
+		try
+		{
+			Hand hand = new Hand();
+			String line;
+			line = bufferedReader.readLine();
+			nb = (int)stringToData(line);
+			for(int i =0; i< nb; i++)
+			{
+				line = bufferedReader.readLine();
+				Card card = (Card)stringToData(line);
+				hand.add(card);
+				
+			}
+			return hand;
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return null;
+	}
 }
 

@@ -88,6 +88,8 @@ public class RandomStrategyModel implements IStrategy {
 					}
 				}
 			}
+			if(fortifiable.size() == 0)
+				return null;
 			
 			
 			int index = rand.nextInt(fortifiable.size());

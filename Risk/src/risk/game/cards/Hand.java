@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * This class is for the card that is being used in the game.
  * @author hcanta
  * @author Akif
- * @version 3.1
+ * @version 3.3
  **/
 public class Hand implements Serializable
 {
@@ -20,8 +20,11 @@ public class Hand implements Serializable
 	 */
 	private static final long serialVersionUID = 44005035593304612L;
 
-	private boolean condition;
+
 	
+	/**
+	 * The cards that the player has
+	 */
 	private ArrayList<Card> hand;
 
 	/**
@@ -64,7 +67,7 @@ public class Hand implements Serializable
 	 **/
 	public boolean canTurnInCards() {
 	
-		condition = false;
+		
 		
 		return (hand.size() >= 3);
 	}
@@ -75,12 +78,7 @@ public class Hand implements Serializable
 	 **/
 	public boolean mustTurnInCards() {
 	
-		condition = false;
-		
-		if (hand.size() >= 5) {
-			condition = true;
-		}
-		return condition;
+		return hand.size() >= 5;
 	}
 
 	/**
@@ -106,6 +104,14 @@ public class Hand implements Serializable
 			
 		return str.toString();
 		
+	}
+
+	/**
+	 * Returns the size of the hand
+	 * @return size of the hand
+	 */
+	public int size() {
+		return this.hand.size();
 	}
 
 	

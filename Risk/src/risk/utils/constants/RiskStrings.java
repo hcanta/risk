@@ -75,6 +75,21 @@ public class RiskStrings implements Serializable
 	public static final String CONTINENT_FILE_TEST = "SerTest\\Continent.ser";
 	
 	/**
+	 * Player  File Test
+	 */
+	public static final String PLAYER_FILE_TEST = "SerTest\\Player.ser";
+	
+	/**
+	 * Human Player  File Test
+	 */
+	public static final String HUMAN_PLAYER_FILE_TEST = "SerTest\\HumanPlayer.ser";
+	
+	/**
+	 * Bot Player  File Test
+	 */
+	public static final String BOT_PLAYER_FILE_TEST = "SerTest\\BotPlayer.ser";
+	
+	/**
 	 * Board  File Test
 	 */
 	public static final String BOARD_FILE_TEST = "SerTest\\Board.ser";
@@ -445,4 +460,26 @@ public class RiskStrings implements Serializable
 	 * Risk System String
 	 */
 	public static final String RISK_SYSTEM = "Risk System ";
+	/**
+	 * Attempting to save
+	 */
+	public static final String ATTEMPT_SAVE_GAME = "Attempt Save Game ...";
+	/**
+	 * Attempting Load Game
+	 */
+	public static final String ATTEMPT_LOAD_GAME = "Attempt Load Game ... ";
+	
+	/**
+	 * The card File test
+	 */
+	public static final String CARD_FILE_TEST = "SerTest\\Card.ser";
+	
+	/**
+	 * The card File test
+	 */
+	public static final String HAND_FILE_TEST = "SerTest\\Hand.ser";
+	/**
+	 * hAND bOT Player Test
+	 */
+	public static final String BOT_HAND_PLAYER_FILE_TEST = "SerTest\\HandbotPlayer.ser";
 }

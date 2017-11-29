@@ -54,8 +54,10 @@ public class PlayerModelTest {
 		debug =true;
 		RiskBoard.ProperInstance(debug).clear();
 		Utils.loadFile(new File("Maps/World.map"),debug);
-		player = new PlayerModel("test",PlayerColors.red,(short)0,debug,RiskPlayerType.Human,RiskEnum.Strategy.human);
-		secondPlayer = new PlayerModel("test",PlayerColors.red,(short)1,debug,RiskPlayerType.Bot,RiskEnum.Strategy.random);
+
+		player = new PlayerModel("test",PlayerColors.red,(short)0,debug,RiskPlayerType.Human, RiskEnum.Strategy.human);
+		secondPlayer = new PlayerModel("test",PlayerColors.red,(short)1,debug,RiskPlayerType.Bot, RiskEnum.Strategy.random);
+
 	}
 
 	/**
@@ -179,6 +181,7 @@ public class PlayerModelTest {
 		RiskBoard.ProperInstance(debug).getTerritory("alberta").setOwnerID(player);;
 		Assert.assertFalse(player.fortify("alaska", "alberta",4));
 	}
+
 	
 	/**
 	 * Tests the fortification for territory belonging to player other than the current player 
@@ -210,6 +213,7 @@ public class PlayerModelTest {
 		
 		Assert.assertFalse(player.fortify("alaska", "alberta",1));
 	}
+
 	
 	/**
 	 * Tests the fortification for army movement to a destination which is owned by the player but its not a neighbour
@@ -228,7 +232,7 @@ public class PlayerModelTest {
 	}
 	
 	/**
-	 * Tests the fortification phase
+	 * Test Valid Model Army on  fortification
 	 */
 	@Test
 	public void testFortify() {
@@ -280,6 +284,7 @@ public class PlayerModelTest {
 		RiskBoard.ProperInstance(debug).getTerritory("alaska").setOwnerID(player);;
 		Assert.assertFalse(player.reinforce("peru", 4));
 	}
+
 	
 	/**
 	 * testing the reinforce functionality
@@ -295,6 +300,7 @@ public class PlayerModelTest {
 		Assert.assertTrue(player.getNbArmiesToBePlaced() == 1);
 		
 	}
+
 	
 	/**
 	 * asserts false for reinforcing incorrect army
@@ -307,6 +313,7 @@ public class PlayerModelTest {
 		RiskBoard.ProperInstance(debug).getTerritory("alaska").setOwnerID(player);;
 		Assert.assertFalse(player.reinforce("alaska"));
 	}
+
 	
 	/**
 	 * Reinforce the invalid territory
@@ -320,6 +327,7 @@ public class PlayerModelTest {
 		RiskBoard.ProperInstance(debug).getTerritory("alaska").setOwnerID(player);;
 		Assert.assertFalse(player.reinforce("peru"));
 	}
+
 	
 	/**
 	 * Tests the reinforce functionality with valid territory and correct number of armies
