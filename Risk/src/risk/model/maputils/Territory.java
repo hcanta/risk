@@ -1,3 +1,4 @@
+
 /**
  * The risk.model.maputils package contains the class implementing the territory The riskBoard and the continent classes
  */
@@ -368,3 +369,4 @@ public class Territory extends BoardComponent
 		return this.neighbours.contains(territory) && this.armyOn > 1 && this.ownerID != neighbor.getOwnerID();		
 	}
 }
+

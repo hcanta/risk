@@ -1,3 +1,4 @@
+
 /**
  * This Package contains the testcases for the risk.model package
  */
@@ -17,14 +18,15 @@ import risk.model.playerutils.PlayerModel;
 import risk.utils.Utils;
 import risk.utils.constants.RiskEnum.PlayerColors;
 import risk.utils.constants.RiskEnum.RiskPlayerType;
-import risk.utils.constants.RiskEnum.Strategy;
+
 /**
  * Test cases for The PlayerModel
  * @version 1.0
  * @author hcanta
- * @author addy
+ * @author Karan
  */
 public class PlayerModelTest {
+	
 	/**
 	 * player object
 	 */
@@ -34,22 +36,30 @@ public class PlayerModelTest {
 	 * A second player of object
 	 */
 	private IPlayer secondPlayer;
+	
 	/**
 	 * Are we debugging
 	 */
 	private boolean debug;
+	
+	/**
+	 * Creates the RiskBoard and Player, both human and bots, instances for debugging.
+	 * this function runs before every test case.
+	 * @throws Exception set up failed
+	 */
 	@Before
 	public void setUp() throws Exception 
 	{
 		debug =true;
 		RiskBoard.ProperInstance(debug).clear();
 		Utils.loadFile(new File("Maps/World.map"),debug);
-		player = new PlayerModel("test",PlayerColors.red,(short)0,debug,RiskPlayerType.Human,Strategy.human);
-		secondPlayer = new PlayerModel("test",PlayerColors.red,(short)1,debug,RiskPlayerType.Bot, Strategy.random);
+		player = new PlayerModel("test",PlayerColors.red,(short)0,debug,RiskPlayerType.Human);
+		secondPlayer = new PlayerModel("test",PlayerColors.red,(short)1,debug,RiskPlayerType.Bot);
 	}
 
-	
-
+	/**
+	 * Tests the increment in the number of armies to be placed by the given number Player Model implementation
+	 */
 	@Test
 	public void testUpdateArmiestoBeplaced() {
 		Assert.assertTrue(player.getNbArmiesToBePlaced() == 0);
@@ -57,6 +67,9 @@ public class PlayerModelTest {
 		Assert.assertTrue(player.getNbArmiesToBePlaced() == 5);
 	}
 
+	/**
+	 * Increments the amount of armies to be placed Player Model Implementation
+	 */
 	@Test
 	public void testIncrementArmies() {
 		Assert.assertTrue(player.getNbArmiesToBePlaced() == 0);
@@ -64,6 +77,9 @@ public class PlayerModelTest {
 		Assert.assertTrue(player.getNbArmiesToBePlaced() == 1);
 	}
 
+	/**
+	 * Decrements the amount of armies to be placed Player Model Implementation
+	 */
 	@Test
 	public void testDecrementArmies() {
 		Assert.assertTrue(player.getNbArmiesToBePlaced() == 0);
@@ -73,6 +89,9 @@ public class PlayerModelTest {
 		Assert.assertTrue(player.getNbArmiesToBePlaced() == 4);
 	}
 
+	/**
+	 * Set the Number of Armies to be Placed. Player Model Implementation
+	 */
 	@Test
 	public void testSetNbArmiesToBePlaced() {
 		Assert.assertTrue(player.getNbArmiesToBePlaced() == 0);
@@ -80,12 +99,18 @@ public class PlayerModelTest {
 		Assert.assertTrue(player.getNbArmiesToBePlaced() == 5);
 	}
 
+	/**
+	 * Returns the number of armies to be placed. Player Model Implementation
+	 */
 	@Test
 	public void testGetNbArmiesToBePlaced() {
 		player.updateArmiestoBeplaced(5);
 		Assert.assertTrue(player.getNbArmiesToBePlaced() == 5);
 	}
-
+	
+	/**
+	 * Tests the addition of territory to the list of territories owned. Player Model implementation
+	 */
 	@Test
 	public void testAddTerritory() {
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 0);
@@ -94,6 +119,9 @@ public class PlayerModelTest {
 		
 	}
 
+	/**
+	 * Tests the removal of territory from the list of territories owned. Player Model implementation
+	 */
 	@Test
 	public void testRemoveTerritory() {
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 0);
@@ -103,6 +131,9 @@ public class PlayerModelTest {
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 0);
 	}
 
+	/**
+	 * Tests the fortification for 1 army
+	 */
 	@Test
 	public void testInvalidArmyOneFortify() {
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 0);
@@ -266,3 +297,4 @@ public class PlayerModelTest {
 	}
 
 }
+
