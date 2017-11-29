@@ -244,8 +244,9 @@ public class PlayerModelTest {
 		Assert.assertTrue(RiskBoard.ProperInstance(debug).getTerritory("alaska").getArmyOn() == 2);
 	}
 
-	
-
+	/**
+	 * Increments the amount of armies to be placed by the given amount Player Model Implementation
+	 */
 	@Test
 	public void testIncrementArmiesBy() {
 		Assert.assertTrue(player.getNbArmiesToBePlaced() == 0);
@@ -253,6 +254,9 @@ public class PlayerModelTest {
 		Assert.assertTrue(player.getNbArmiesToBePlaced() == 5);
 	}
 
+	/**
+	 * Invalid army reinforcement for a territory
+	 */
 	@Test
 	public void testInvalidArmyReinforceStringInt() {
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 0);
