@@ -17,6 +17,7 @@ import risk.model.playerutils.PlayerModel;
 import risk.utils.Utils;
 import risk.utils.constants.RiskEnum.PlayerColors;
 import risk.utils.constants.RiskEnum.RiskPlayerType;
+
 /**
  * Test cases for The PlayerModel
  * @version 1.0
@@ -24,6 +25,7 @@ import risk.utils.constants.RiskEnum.RiskPlayerType;
  * @author Karan
  */
 public class PlayerModelTest {
+	
 	/**
 	 * player object
 	 */
@@ -33,10 +35,17 @@ public class PlayerModelTest {
 	 * A second player of object
 	 */
 	private IPlayer secondPlayer;
+	
 	/**
 	 * Are we debugging
 	 */
 	private boolean debug;
+	
+	/**
+	 * Creates the RiskBoard and Player, both human and bots, instances for debugging.
+	 * this function runs before every test case.
+	 * @throws Exception set up failed
+	 */
 	@Before
 	public void setUp() throws Exception 
 	{
@@ -47,8 +56,9 @@ public class PlayerModelTest {
 		secondPlayer = new PlayerModel("test",PlayerColors.red,(short)1,debug,RiskPlayerType.Bot);
 	}
 
-	
-
+	/**
+	 * Tests the increment in the number of armies to be placed by the given number Player Model implementation
+	 */
 	@Test
 	public void testUpdateArmiestoBeplaced() {
 		Assert.assertTrue(player.getNbArmiesToBePlaced() == 0);
@@ -56,6 +66,9 @@ public class PlayerModelTest {
 		Assert.assertTrue(player.getNbArmiesToBePlaced() == 5);
 	}
 
+	/**
+	 * Increments the amount of armies to be placed Player Model Implementation
+	 */
 	@Test
 	public void testIncrementArmies() {
 		Assert.assertTrue(player.getNbArmiesToBePlaced() == 0);
@@ -63,6 +76,9 @@ public class PlayerModelTest {
 		Assert.assertTrue(player.getNbArmiesToBePlaced() == 1);
 	}
 
+	/**
+	 * Decrements the amount of armies to be placed Player Model Implementation
+	 */
 	@Test
 	public void testDecrementArmies() {
 		Assert.assertTrue(player.getNbArmiesToBePlaced() == 0);
@@ -72,6 +88,9 @@ public class PlayerModelTest {
 		Assert.assertTrue(player.getNbArmiesToBePlaced() == 4);
 	}
 
+	/**
+	 * Set the Number of Armies to be Placed. Player Model Implementation
+	 */
 	@Test
 	public void testSetNbArmiesToBePlaced() {
 		Assert.assertTrue(player.getNbArmiesToBePlaced() == 0);
@@ -79,6 +98,9 @@ public class PlayerModelTest {
 		Assert.assertTrue(player.getNbArmiesToBePlaced() == 5);
 	}
 
+	/**
+	 * Returns the number of armies to be placed. Player Model Implementation
+	 */
 	@Test
 	public void testGetNbArmiesToBePlaced() {
 		player.updateArmiestoBeplaced(5);
