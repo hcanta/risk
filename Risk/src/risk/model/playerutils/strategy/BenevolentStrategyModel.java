@@ -97,7 +97,7 @@ public class BenevolentStrategyModel implements IStrategy {
 
 	/**
 	 * Decides which country to attack
-	 * As this is Benevolent Strategy is will remain abstract 
+	 * And In the Benevolent Strategy it will remain abstract 
 	 * @return a tuple of size 2, where the first element is the origin (attacker) and  the second is the destination of the attack (defender)
 	 */
 	@Override
