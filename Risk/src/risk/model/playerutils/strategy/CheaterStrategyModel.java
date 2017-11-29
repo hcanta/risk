@@ -19,7 +19,13 @@ import risk.utils.Tuple;
 public class CheaterStrategyModel implements IStrategy {
 
 	/**
-	 * The Player using this strategy i.
+
+	 * Generated Serial Version UID
+	 */
+	private static final long serialVersionUID = -7062346114363150158L;
+	/**
+	 * The player using the strategy
+
 	 */
 	@SuppressWarnings("unused")
 	private IPlayer player;

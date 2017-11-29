@@ -66,10 +66,7 @@ public class RiskMenu  extends JMenuBar implements Serializable
 	 */
 	private final JMenuItem menuItemOpenMap = new JMenuItem(RiskStrings.MENU_ITEM_OPEN_MAP);
 	
-	/**
-	 * Jmenu Item to save the Game
-	 */
-	private final JMenuItem saveGame = new JMenuItem(RiskStrings.SAVE_GAME);
+	
 	
 	/**
 	 * Jmenu Item to load the Game
@@ -111,8 +108,7 @@ public class RiskMenu  extends JMenuBar implements Serializable
 		
 		menuFile.add(menuItemOpenMap);
 		
-		saveGame.setEnabled(false);
-		menuFile.add(saveGame);
+	
 		menuFile.add(tournament);
 		menuFile.add(menuItemExit);
 		menuFile.add(loadGame);
@@ -216,13 +212,7 @@ public class RiskMenu  extends JMenuBar implements Serializable
 		return this.loadGame;
 	}
 
-	/**
-	 * Return the Jmenu Item to Save The game
-	 * @return the saveGame  Jmenu Item
-	 */
-	public JMenuItem getSaveGame() {
-		return this.saveGame;
-	}
+	
 
 	/**
 	 * Returns the Help Jmenu

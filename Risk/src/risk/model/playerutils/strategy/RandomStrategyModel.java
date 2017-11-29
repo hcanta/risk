@@ -1,3 +1,4 @@
+
 /**
  * The Player utils package contains the classes necessary for the creation and work of a player object
  */
@@ -18,7 +19,11 @@ import risk.utils.Tuple;
 public class RandomStrategyModel implements IStrategy {
 
 	/**
-	 * Random generatorl
+	 * Generated Serial Version UID
+	 */
+	private static final long serialVersionUID = 5927190171534944442L;
+	/**
+	 * Random generator
 	 */
 	private Random rand;
 	/**
@@ -83,6 +88,8 @@ public class RandomStrategyModel implements IStrategy {
 					}
 				}
 			}
+			if(fortifiable.size() == 0)
+				return null;
 			
 			
 			int index = rand.nextInt(fortifiable.size());
@@ -132,3 +139,4 @@ public class RandomStrategyModel implements IStrategy {
 	}
 
 }
+

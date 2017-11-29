@@ -23,7 +23,9 @@ public class BotPlayerModel extends PlayerModel implements Serializable
 	/**
 	 * The strategy for the Bot
 	 */
-	private IStrategy strategy;
+	private IStrategy iStrategy;
+	
+
 	/**
 	 * Generated serial version uid
 	 */
@@ -39,8 +41,9 @@ public class BotPlayerModel extends PlayerModel implements Serializable
 	 * */
 	public BotPlayerModel(String name, PlayerColors color, short playerID, boolean debug, RiskEnum.Strategy strategy) 
 	{
-		super(color, playerID, debug, RiskPlayerType.Bot);
-		this.strategy =  StrategyUtils.strategyGenerator(strategy, debug, this);
+		super(name, color, playerID, debug, RiskPlayerType.Bot, strategy);
+		this.iStrategy =  StrategyUtils.strategyGenerator(strategy, debug, this);
+		
 		
 	}
 	
@@ -51,7 +54,7 @@ public class BotPlayerModel extends PlayerModel implements Serializable
 	@Override
 	public boolean reinforce() 
 	{
-		Tuple<String, Integer> reinforceInfo = this.strategy.reinforce();
+		Tuple<String, Integer> reinforceInfo = this.iStrategy.reinforce();
 		String territory= reinforceInfo.getFirst();
 		int army=reinforceInfo.getSecond();
 		return this.reinforce(territory, army);
@@ -64,7 +67,7 @@ public class BotPlayerModel extends PlayerModel implements Serializable
 	@Override
 	public boolean fortify() 
 	{
-		Tuple<String, Tuple<String, Integer>> fortifyInfo = this.strategy.fortify();
+		Tuple<String, Tuple<String, Integer>> fortifyInfo = this.iStrategy.fortify();
 		String origin= fortifyInfo.getFirst();
 		String destination = fortifyInfo.getSecond().getFirst();
 		int armies=fortifyInfo.getSecond().getSecond();
@@ -78,7 +81,7 @@ public class BotPlayerModel extends PlayerModel implements Serializable
 	@Override
 	public Tuple<String, Tuple<String, Integer>> attack() 
 	{
-		return  strategy.attack();
+		return  iStrategy.attack();
 	}
 
 }
