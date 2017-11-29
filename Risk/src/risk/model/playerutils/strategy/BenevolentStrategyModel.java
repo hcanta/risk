@@ -51,15 +51,7 @@ public class BenevolentStrategyModel implements IStrategy {
 			int weakestTerritory = 0;
 			int getNbArmies = board.getTerritory(player.getTerritoriesOwned().get(0)).getArmyOn();
 			
-			for(int i = 1;i<player.getTerritoriesOwned().size();i++){
-				currentTerritory =  board.getTerritory(player.getTerritoriesOwned().get(i));
-				
-				if (getNbArmies > board.getTerritory(currentTerritory.getTerritoryName()).getArmyOn()) {
-					
-					getNbArmies = board.getTerritory(currentTerritory.getTerritoryName()).getArmyOn();
-					weakestTerritory = i;
-				}
-			}
+			
 			String toReinforce = player.getTerritoriesOwned().get(weakestTerritory);
 			
 			Tuple<String, Integer> toReturn = new Tuple<String, Integer>(toReinforce, toBePlaced);
