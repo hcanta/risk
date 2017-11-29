@@ -266,6 +266,9 @@ public class PlayerModelTest {
 		Assert.assertFalse(player.reinforce("alaska", 4));
 	}
 	
+	/**
+	 * Reinforcement in an invalid territory
+	 */
 	@Test
 	public void testInvalidTerritoryReinforceStringInt() {
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 0);
@@ -275,6 +278,10 @@ public class PlayerModelTest {
 		RiskBoard.ProperInstance(debug).getTerritory("alaska").setOwnerID(player);;
 		Assert.assertFalse(player.reinforce("peru", 4));
 	}
+	
+	/**
+	 * testing the reinforce functionality
+	 */
 	@Test
 	public void testReinforceStringInt() {
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 0);
@@ -287,6 +294,9 @@ public class PlayerModelTest {
 		
 	}
 	
+	/**
+	 * asserts false for reinforcing incorrect army
+	 */
 	@Test
 	public void testInvalidArmyReinforce() {
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 0);
@@ -296,6 +306,9 @@ public class PlayerModelTest {
 		Assert.assertFalse(player.reinforce("alaska"));
 	}
 	
+	/**
+	 * Reinforce the invalid territory
+	 */
 	@Test
 	public void testInvalidTerritoryReinforce() {
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 0);
