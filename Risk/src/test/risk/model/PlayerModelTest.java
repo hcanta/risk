@@ -131,7 +131,7 @@ public class PlayerModelTest {
 	}
 
 	/**
-	 * 
+	 * Tests the fortification for 1 army
 	 */
 	@Test
 	public void testInvalidArmyOneFortify() {
