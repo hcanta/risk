@@ -16,6 +16,7 @@ import risk.model.RiskBoard;
 import risk.model.playerutils.IPlayer;
 import risk.model.playerutils.PlayerModel;
 import risk.utils.Utils;
+import risk.utils.constants.RiskEnum;
 import risk.utils.constants.RiskEnum.PlayerColors;
 import risk.utils.constants.RiskEnum.RiskPlayerType;
 
@@ -53,8 +54,8 @@ public class PlayerModelTest {
 		debug =true;
 		RiskBoard.ProperInstance(debug).clear();
 		Utils.loadFile(new File("Maps/World.map"),debug);
-		player = new PlayerModel("test",PlayerColors.red,(short)0,debug,RiskPlayerType.Human);
-		secondPlayer = new PlayerModel("test",PlayerColors.red,(short)1,debug,RiskPlayerType.Bot);
+		player = new PlayerModel("test",PlayerColors.red,(short)0,debug,RiskPlayerType.Human, RiskEnum.Strategy.human);
+		secondPlayer = new PlayerModel("test",PlayerColors.red,(short)1,debug,RiskPlayerType.Bot, RiskEnum.Strategy.random);
 	}
 
 	/**
