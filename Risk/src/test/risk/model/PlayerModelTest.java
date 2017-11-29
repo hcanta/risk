@@ -193,7 +193,9 @@ public class PlayerModelTest {
 		Assert.assertFalse(player.fortify("alaska", "alberta",2));
 	}
 	
-	
+	/**
+	 * Tests the fortification for army movement to a neihbour which is not owned by the player
+	 */
 	@Test
 	public void testInvalidDestinationNeighBorButNotOwnedFortify() {
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 0);
@@ -207,6 +209,9 @@ public class PlayerModelTest {
 		Assert.assertFalse(player.fortify("alaska", "alberta",1));
 	}
 	
+	/**
+	 * Tests the fortification for army movement to a destination which is owned by the player but its not a neighbour
+	 */
 	@Test
 	public void testInvalidDestinationOwnedButNotNeighbOorFortify() {
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 0);
@@ -220,6 +225,9 @@ public class PlayerModelTest {
 		Assert.assertFalse(player.fortify("alaska", "ontario",2));
 	}
 	
+	/**
+	 * Tests the fortification phase
+	 */
 	@Test
 	public void testFortify() {
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 0);
