@@ -24,6 +24,7 @@ import java.util.Stack;
 import risk.model.RiskBoard;
 import risk.model.maputils.Continent;
 import risk.model.maputils.Territory;
+import risk.model.playerutils.IPlayer;
 import risk.utils.constants.RiskEnum.GameState;
 import risk.utils.constants.RiskEnum.PlayerColors;
 import risk.utils.constants.RiskIntegers;
@@ -341,6 +342,8 @@ public class Utils implements Serializable
 		return false;
 	}
 	
+
+	
 	/**
 	 * creates a string representation of the continent for saving 
 	 * @param continent The continent to be saved
@@ -412,15 +415,38 @@ public class Utils implements Serializable
 	public static void loadBoard(RiskBoard board, String relativePath)
 	{
 		board.clear();
-		String name, currentPlayer;
-		GameState state;
-		int ownerID, nbContinent;
 		Path currentRelativePath = Paths.get("");
 		try
 		{
 			String path = currentRelativePath.toAbsolutePath().toString()+"\\"+relativePath;
 			FileReader fileReader = new FileReader(new File(path));
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			loadBoard(board, bufferedReader);
+			bufferedReader.close();
+			fileReader.close();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+			
+	}
+	
+	/**
+	 * Loads a Board from a file
+	 * @param board the RiskBoard
+	 * @param bufferedReader The reader of the file
+	 */
+	private static void loadBoard(RiskBoard board, BufferedReader bufferedReader)
+	{
+		board.clear();
+		String name, currentPlayer;
+		GameState state;
+		int ownerID, nbContinent;
+		
+		try
+		{
+
 			String line;
 			line = bufferedReader.readLine();
 			name = (String)stringToData(line);
@@ -441,8 +467,7 @@ public class Utils implements Serializable
 			board.setCurrentPlayer(currentPlayer);
 			board.setOwnerID(ownerID);
 			board.setState(state);
-			bufferedReader.close();
-			fileReader.close();
+		
 		}
 		catch(Exception e)
 		{
@@ -536,8 +561,8 @@ public class Utils implements Serializable
 		 ObjectOutputStream oos;
 		try 
 		{
-			 oos = new ObjectOutputStream( baos );
-			 oos.writeObject( o );
+			 oos = new ObjectOutputStream(baos);
+			 oos.writeObject(o);
 			 oos.close();
 			 return Base64.getEncoder().encodeToString(baos.toByteArray());
 		} 
@@ -571,6 +596,96 @@ public class Utils implements Serializable
 		  }
 		return null;		
 	}
+	
+	/**
+	 * creates a string representation of the board for saving 
+	 * @param player The risk board to be saved
+	 * @return A string representation of the board 
+	 */
+	private static String savePlayerToString(IPlayer player)
+	{
+		StringBuffer str = new StringBuffer();
+		str.append(dataToString(player));
+		return str.toString();
+		
+	}
+	
+	/**
+	 * Saves the given continent
+	 * @param player The player to be saved
+	 * @param filePath the file where it must be saved 
+	 * @return If the game was saved successfully or not
+	 */
+	public static boolean savePlayer(IPlayer player, String filePath)
+	{
+		String cont = savePlayerToString(player);
+		if(cont.length() == 0)
+			return false;
+		Path currentRelativePath = Paths.get("");
+		String path = currentRelativePath.toAbsolutePath().toString()+"\\"+filePath;
+		try 
+		{
+			FileWriter fw = new FileWriter(path);
+			fw.write(cont);
+			fw.close();
+			return true;
+		} 
+		catch (IOException e)
+		{	
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Loads a Player object from a file
+	 * @param relativePath The relative Path to the file
+	 * @return the IPlayer object
+	 */
+	public static IPlayer loadPlayer(String relativePath)
+	{
+
+		Path currentRelativePath = Paths.get("");
+		try
+		{
+			String path = currentRelativePath.toAbsolutePath().toString()+"\\"+relativePath;
+			FileReader fileReader = new FileReader(new File(path));
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			IPlayer player = loadPlayer(bufferedReader);
+			bufferedReader.close();
+			fileReader.close();
+			return player;
+			
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	/**
+	 * Loads a IPlayer from a file
+	 * @param bufferedReader The buffered reader
+	 * @return the Player object
+	 */
+	private static IPlayer loadPlayer(BufferedReader bufferedReader)
+	{
+		try
+		{			
+			String line;
+			line = bufferedReader.readLine();
+			IPlayer player = (IPlayer) stringToData(line);			
+			return player;			
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 
 }
 

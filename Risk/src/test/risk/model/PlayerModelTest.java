@@ -148,6 +148,9 @@ public class PlayerModelTest {
 		Assert.assertFalse(player.fortify("alaska", "alberta", 1));
 	}
 	
+	/**
+	 * Test Invalid Model Army on  fortification
+	 */
 	@Test
 	public void testInvalidArmyAllOriginFortify() {
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 0);
@@ -161,6 +164,9 @@ public class PlayerModelTest {
 		Assert.assertFalse(player.fortify("alaska", "alberta", 2));
 	}
 	
+	/**
+	 * Test Invalid Model Army on  fortification
+	 */
 	@Test
 	public void testInvalidArmyAGreaterOriginFortify() {
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 0);
@@ -173,7 +179,9 @@ public class PlayerModelTest {
 		RiskBoard.ProperInstance(debug).getTerritory("alberta").setOwnerID(player);;
 		Assert.assertFalse(player.fortify("alaska", "alberta",4));
 	}
-	
+	/**
+	 * Test Invalid Model Army on  fortification origin is wrong
+	 */
 	@Test
 	public void testInvalidOriginFortify() {
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 0);
@@ -185,7 +193,9 @@ public class PlayerModelTest {
 		RiskBoard.ProperInstance(debug).getTerritory("alberta").setOwnerID(player);;
 		Assert.assertFalse(player.fortify("alaska", "alberta",2));
 	}
-	
+	/**
+	 * Test Invalid Model Army on  fortification Destination is wrong
+	 */
 	@Test
 	public void testInvalidDestinationNeighBorButNotOwnedFortify() {
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 0);
@@ -198,7 +208,9 @@ public class PlayerModelTest {
 		
 		Assert.assertFalse(player.fortify("alaska", "alberta",1));
 	}
-	
+	/**
+	 * Test Invalid Model Army on  fortification not neighbors
+	 */
 	@Test
 	public void testInvalidDestinationOwnedButNotNeighbOorFortify() {
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 0);
@@ -212,6 +224,9 @@ public class PlayerModelTest {
 		Assert.assertFalse(player.fortify("alaska", "ontario",2));
 	}
 	
+	/**
+	 * Test Valid Model Army on  fortification
+	 */
 	@Test
 	public void testFortify() {
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 0);
@@ -229,14 +244,19 @@ public class PlayerModelTest {
 	}
 
 	
-
+	/**
+	 * Test Increment army
+	 */
 	@Test
 	public void testIncrementArmiesBy() {
 		Assert.assertTrue(player.getNbArmiesToBePlaced() == 0);
 		player.incrementArmiesBy(5);
 		Assert.assertTrue(player.getNbArmiesToBePlaced() == 5);
 	}
-
+	
+	/**
+	 * Test Invalid Reinforce on country
+	 */
 	@Test
 	public void testInvalidArmyReinforceStringInt() {
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 0);
@@ -246,6 +266,9 @@ public class PlayerModelTest {
 		Assert.assertFalse(player.reinforce("alaska", 4));
 	}
 	
+	/**
+	 * Test Invalid Reinforce on country
+	 */
 	@Test
 	public void testInvalidTerritoryReinforceStringInt() {
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 0);
@@ -255,6 +278,9 @@ public class PlayerModelTest {
 		RiskBoard.ProperInstance(debug).getTerritory("alaska").setOwnerID(player);;
 		Assert.assertFalse(player.reinforce("peru", 4));
 	}
+	/**
+	 * Test Valid Reinforce on country
+	 */
 	@Test
 	public void testReinforceStringInt() {
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 0);
@@ -266,7 +292,9 @@ public class PlayerModelTest {
 		Assert.assertTrue(player.getNbArmiesToBePlaced() == 1);
 		
 	}
-	
+	/**
+	 * Test Invalid Reinforce on country invalid army
+	 */
 	@Test
 	public void testInvalidArmyReinforce() {
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 0);
@@ -275,7 +303,9 @@ public class PlayerModelTest {
 		RiskBoard.ProperInstance(debug).getTerritory("alaska").setOwnerID(player);;
 		Assert.assertFalse(player.reinforce("alaska"));
 	}
-	
+	/**
+	 * Test Invalid Reinforce on country, invalid territory
+	 */
 	@Test
 	public void testInvalidTerritoryReinforce() {
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 0);
@@ -285,6 +315,9 @@ public class PlayerModelTest {
 		RiskBoard.ProperInstance(debug).getTerritory("alaska").setOwnerID(player);;
 		Assert.assertFalse(player.reinforce("peru"));
 	}
+	/**
+	 * Test Valid Reinforce on country
+	 */
 	@Test
 	public void testReinforceString() {
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 0);
