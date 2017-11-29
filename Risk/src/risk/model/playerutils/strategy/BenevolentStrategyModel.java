@@ -75,6 +75,36 @@ public class BenevolentStrategyModel implements IStrategy {
 	@Override
 	public Tuple<String, Tuple<String, Integer>> fortify() 
 	{
+		if(player.canFortify())
+		{
+			Territory currentTerritory;
+			//this arraylist to store armies owned 
+			ArrayList<Integer> nbOfArmies = new ArrayList<Integer>();
+			int getNbArmies = board.getTerritory(player.getTerritoriesOwned().get(0)).getArmyOn();
+			ArrayList<Tuple<String,String>> fortifiable = new ArrayList<Tuple<String,String>>();
+			Territory  territory;
+			for(int i =0; i< player.getTerritoriesOwned().size(); i++)
+			{
+				territory = board.getTerritory(player.getTerritoriesOwned().get(i));
+				for(int j = 0; j < territory.getNeighbours().size(); j++)
+				{
+					if(territory.canFortify(territory.getNeighbours().get(j)))
+					{
+						fortifiable.add(new Tuple<String,String>(territory.getTerritoryName(), territory.getNeighbours().get(j)));
+					}
+				}
+			}
+			
+			//this loop is for getting armies of all the territories owned
+			for(int i = 1;i<player.getTerritoriesOwned().size();i++){
+				currentTerritory =  board.getTerritory(player.getTerritoriesOwned().get(i));
+				nbOfArmies.add(currentTerritory.getArmyOn());
+			}
+			//now I am confused how to determine the territories/countries as weak and for how many we have 
+			//to do this operation. If its only the weakest country then its fine we sort it and then
+			//use the fortify method.
+			//PLEASE SHARE YOUR VALUABLE INPUT HENRY
+		}
 		return null;
 	}
 
