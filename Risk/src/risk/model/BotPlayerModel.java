@@ -5,6 +5,7 @@ package risk.model;
 
 import java.io.Serializable;
 
+import risk.model.playerutils.IPlayer;
 import risk.model.playerutils.PlayerModel;
 import risk.model.playerutils.strategy.IStrategy;
 import risk.model.playerutils.strategy.StrategyUtils;
@@ -43,10 +44,18 @@ public class BotPlayerModel extends PlayerModel implements Serializable
 	{
 		super(name, color, playerID, debug, RiskPlayerType.Bot, strategy);
 		this.iStrategy =  StrategyUtils.strategyGenerator(strategy, debug, this);
-		
-		
+
 	}
-	
+	/**
+	 * Creates a duplicate of the player Object
+	 * @param player the player Object
+	 */
+	public BotPlayerModel(IPlayer player) {
+		super(player.getName(), player.getColor(), player.getPlayerID(), player.getDebug(), RiskPlayerType.Bot, player.getStrategy());
+		this.setHand(player.getHand());
+		this.iStrategy =  StrategyUtils.strategyGenerator(strategy, debug, this);
+	}
+
 	/**
 	 * Perform a reinforcement implemented on BotModel
 	 * @return true/ false
@@ -88,5 +97,16 @@ public class BotPlayerModel extends PlayerModel implements Serializable
 	{
 		return  iStrategy.attack();
 	}
+	
+	/**
+	 * Set The RiskBoard
+	 * @param board the new RiskBoard
+	 */
+	@Override
+	public void setRiskBoard(RiskBoard board) {
+		this.board  = board;
+		this.iStrategy =  StrategyUtils.strategyGenerator(strategy, board.getGraph() == null, this);
+	}
+
 
 }

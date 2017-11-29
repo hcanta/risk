@@ -11,7 +11,7 @@ import risk.utils.constants.RiskEnum.CardType;
  * This class is for the card that is being used in the game.
  * @author hcanta
  * @author Akif
- * @version 3.1
+ * @version 3.3
  **/
 public final class Card implements Serializable
 {

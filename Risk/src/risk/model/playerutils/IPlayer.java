@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import risk.game.cards.Hand;
+import risk.model.RiskBoard;
 import risk.utils.Tuple;
 import risk.utils.constants.RiskEnum.PlayerColors;
 import risk.utils.constants.RiskEnum.RiskPlayerType;
@@ -181,5 +182,28 @@ public interface IPlayer extends Serializable
 	 */
 	public Strategy getStrategy();
 
+	/**
+	 * Set The RiskBoard
+	 * @param board the new RiskBoard
+	 */
+	public void setRiskBoard(RiskBoard board);
+	
+	/**
+	 * return the debug
+	 * @return the debug Status
+	 */
+	public boolean getDebug();
+	
+	/**
+	 * Sets the hand
+	 * @param hand The hand to be set
+	 */
+	public void setHand(Hand hand);
+
+	/**
+	 * Set the territory list
+	 * @param territories the new list
+	 */
+	public void setTerritories(ArrayList<String> territories);
 
 }

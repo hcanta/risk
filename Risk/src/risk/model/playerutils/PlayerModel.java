@@ -29,12 +29,12 @@ public class PlayerModel implements IPlayer
 	/**
 	 * The strategy
 	 */
-	private Strategy strategy;
+	protected Strategy strategy;
 
 	/**
 	 * The board
 	 */
-	private RiskBoard board;
+	protected transient RiskBoard board;
 	/**
 	 * The type of the player
 	 */
@@ -71,8 +71,7 @@ public class PlayerModel implements IPlayer
 	/**
 	 * Set to true if we re debugging or not
 	 */
-	@SuppressWarnings("unused")
-	private boolean debug;
+	protected boolean debug;
 	/**
 	 * Constructor for the Player Model
 	 * @param name the name of the player
@@ -448,6 +447,45 @@ public class PlayerModel implements IPlayer
 	public Strategy getStrategy() 
 	{
 		return this.strategy;
+	}
+
+	/**
+	 * Set The RiskBoard
+	 * @param board the new RiskBoard
+	 */
+	@Override
+	public void setRiskBoard(RiskBoard board) {
+		this.board  = board;
+		
+	}
+
+	/**
+	 * return the debug
+	 * @return the debug Status
+	 */
+	@Override
+	public boolean getDebug() {
+		return this.debug;
+		
+	}
+
+	/**
+	 * Set the hand
+	 * @param hand the new hand
+	 */
+	@Override
+	public void setHand(Hand hand) {
+		this.hand = hand;
+		
+	}
+	/**
+	 * Set the territory list
+	 * @param territories the new list
+	 */
+	@Override
+	public void setTerritories(ArrayList<String> territories) {
+		this.territoriesOwned =  territories;
+		
 	}
 
 }

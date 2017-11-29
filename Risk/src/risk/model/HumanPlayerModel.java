@@ -5,6 +5,7 @@ package risk.model;
 
 import java.io.Serializable;
 
+import risk.model.playerutils.IPlayer;
 import risk.model.playerutils.PlayerModel;
 import risk.utils.constants.RiskEnum.PlayerColors;
 import risk.utils.constants.RiskEnum.RiskPlayerType;
@@ -32,6 +33,15 @@ public class HumanPlayerModel extends PlayerModel implements Serializable
 	public HumanPlayerModel(String name, PlayerColors color, short playerID, boolean debug) 
 	{
 		super(name, color, playerID, debug, RiskPlayerType.Human, Strategy.human);
+	}
+
+	/**
+	 * Duplicates a player object
+	 * @param player the duplicate player object
+	 */
+	public HumanPlayerModel(IPlayer player) {
+		super(player.getName(), player.getColor(), player.getPlayerID(), player.getDebug(), RiskPlayerType.Human, Strategy.human);
+		this.setHand(player.getHand());
 	}
 
 }
