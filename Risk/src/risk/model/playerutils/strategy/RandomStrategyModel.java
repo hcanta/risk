@@ -18,7 +18,11 @@ import risk.utils.Tuple;
 public class RandomStrategyModel implements IStrategy {
 
 	/**
-	 * Random generatorl
+	 * Generated Serial Version UID
+	 */
+	private static final long serialVersionUID = 5927190171534944442L;
+	/**
+	 * Random generator
 	 */
 	private Random rand;
 	/**

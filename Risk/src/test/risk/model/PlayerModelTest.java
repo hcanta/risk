@@ -17,6 +17,7 @@ import risk.model.playerutils.PlayerModel;
 import risk.utils.Utils;
 import risk.utils.constants.RiskEnum.PlayerColors;
 import risk.utils.constants.RiskEnum.RiskPlayerType;
+import risk.utils.constants.RiskEnum.Strategy;
 /**
  * Test cases for The PlayerModel
  * @version 1.0
@@ -43,8 +44,8 @@ public class PlayerModelTest {
 		debug =true;
 		RiskBoard.ProperInstance(debug).clear();
 		Utils.loadFile(new File("Maps/World.map"),debug);
-		player = new PlayerModel("test",PlayerColors.red,(short)0,debug,RiskPlayerType.Human);
-		secondPlayer = new PlayerModel("test",PlayerColors.red,(short)1,debug,RiskPlayerType.Bot);
+		player = new PlayerModel("test",PlayerColors.red,(short)0,debug,RiskPlayerType.Human,Strategy.human);
+		secondPlayer = new PlayerModel("test",PlayerColors.red,(short)1,debug,RiskPlayerType.Bot, Strategy.random);
 	}
 
 	
