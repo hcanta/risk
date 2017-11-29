@@ -3,6 +3,8 @@
  */
 package risk.model.playerutils.strategy;
 
+import java.io.Serializable;
+
 import risk.utils.Tuple;
 
 /**
@@ -10,7 +12,7 @@ import risk.utils.Tuple;
  * @author hcanta
  * @version 2.2
  */
-public interface IStrategy 
+public interface IStrategy extends Serializable
 {
 	/**
 	 * Performs a reinforce check

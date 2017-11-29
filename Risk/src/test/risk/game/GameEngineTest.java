@@ -13,8 +13,12 @@ import org.junit.Test;
 import risk.game.GameEngine;
 import risk.model.RiskBoard;
 import risk.model.playerutils.IPlayer;
+import risk.model.playerutils.PlayerModel;
 import risk.utils.Utils;
 import risk.utils.constants.RiskEnum;
+import risk.utils.constants.RiskEnum.PlayerColors;
+import risk.utils.constants.RiskEnum.RiskPlayerType;
+import risk.utils.constants.RiskEnum.Strategy;
 
 /**
  * 
@@ -27,6 +31,10 @@ public class GameEngineTest {
 	 * player object
 	 */
 	private IPlayer player;
+	/**
+	 * A second player of object
+	 */
+	private IPlayer secondPlayer;
 	/**
 	 * Are we debugging
 	 */
@@ -52,6 +60,7 @@ public class GameEngineTest {
 		
 		engine.addHumanPlayer("human", RiskEnum.PlayerColors.red);
 		player = engine.getPlayer(engine.testFirstPlayer());
+		secondPlayer = new PlayerModel("test",PlayerColors.red,(short)1,debug,RiskPlayerType.Bot, Strategy.random);
 		engine.createBots(4, false, RiskEnum.PlayerColors.red);
 		engine.generateTurnOrder();
 		
@@ -126,6 +135,8 @@ public class GameEngineTest {
 		engine.setArmiesforPlayers();
 		engine.randomAssignTerritories();
 		player.addTerritory("alaska");	
+		secondPlayer.addTerritory("alberta");
+		RiskBoard.ProperInstance(debug).getTerritory("alberta").setOwnerID(secondPlayer);
 		RiskBoard.ProperInstance(debug).getTerritory("alaska").setOwnerID(player);
 		RiskBoard.ProperInstance(debug).getTerritory("alaska").setArmyOn(5);
 		Assert.assertTrue(player.canAttack());
