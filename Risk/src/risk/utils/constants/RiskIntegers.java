@@ -3,12 +3,19 @@
  */
 package risk.utils.constants;
 
+import java.io.Serializable;
+
 /**
  * This class contains all the constants final integers
  * @author hcanta
  */
-public class RiskIntegers 
+public class RiskIntegers implements Serializable
 {
+	/**
+	 * Generated Serial Version UID
+	 */
+	private static final long serialVersionUID = -1298262058978720423L;
+
 	/**
 	* Final width size of the playable game screen.
 	*/
@@ -47,27 +54,27 @@ public class RiskIntegers
 	/**
 	 * The size of a cell on the graph displayed on the X axis
 	 */
-	public static final int GRAPH_CELL_DIMENTION_X = 80;
+	public static final int GRAPH_CELL_DIMENTION_X = 150;
 	
 	/**
 	 * The size of a cell on the graph displayed on the Y axis
 	 */
-	public static final int GRAPH_CELL_DIMENTION_Y = 15;
+	public static final int GRAPH_CELL_DIMENTION_Y = 40;
 	
 	/**
 	 * x Offset Of center Of Cells
 	 */
-	public static final int GRAPH_CELL_X_OFFSET = 125;
+	public static final int GRAPH_CELL_X_OFFSET = 15;
 	
 	/**
 	 * y Offset Of center Of Cells
 	 */
-	public static final int GRAPH_CELL_Y_OFFSET = 50;
+	public static final int GRAPH_CELL_Y_OFFSET = 20;
 
 	/**
 	 * Number Of Cells per Rows on the graph to be displayed
 	 */
-	public static final int CELL_PER_ROWS = 4;
+	public static final int CELL_PER_ROWS = 3;
 	
 	/**
 	 * Pause Duration
@@ -78,5 +85,10 @@ public class RiskIntegers
 	 * Integer Marking an error
 	 */
 	public static final int ERROR = -1;
+	
+	/**
+	 *  The Y margin
+	 */
+	public static final int GRAPH_CELL_Y_MARGIN = 5;
 
 }

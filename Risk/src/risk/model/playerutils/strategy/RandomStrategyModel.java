@@ -1,3 +1,4 @@
+
 /**
  * The Player utils package contains the classes necessary for the creation and work of a player object
  */
@@ -17,6 +18,10 @@ import risk.utils.Tuple;
  */
 public class RandomStrategyModel implements IStrategy {
 
+	/**
+	 * Generated Serial Version UID
+	 */
+	private static final long serialVersionUID = 5927190171534944442L;
 	/**
 	 * Random generator
 	 */
@@ -124,7 +129,6 @@ public class RandomStrategyModel implements IStrategy {
 			String origin = attack.get(index).getFirst();
 			String destination = attack.get(index).getSecond();
 			int armyToMove = rand.nextInt(board.getTerritory(origin).getArmyOn());
-			
 			Tuple<String, Tuple<String,Integer>> toReturn = 
 					new  Tuple<String, Tuple<String,Integer>>(origin, new Tuple<String,Integer>(destination, armyToMove));
 			return toReturn;
@@ -133,3 +137,4 @@ public class RandomStrategyModel implements IStrategy {
 	}
 
 }
+

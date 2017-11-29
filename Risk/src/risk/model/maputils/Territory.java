@@ -1,25 +1,23 @@
+
 /**
  * The risk.model.maputils package contains the class implementing the territory The riskBoard and the continent classes
  */
 package risk.model.maputils;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import com.mxgraph.util.mxConstants;
-import com.mxgraph.view.mxGraph;
 
 import risk.model.RiskBoard;
 import risk.model.playerutils.IPlayer;
 import risk.utils.constants.RiskIntegers;
+import risk.views.ui.Vertex;
 
 /**
  * This is the implementation of the Territory country class. 
  * @author hcanta
  * @version 3.1
  */
-public class Territory implements Serializable
+public class Territory extends BoardComponent 
 {
 
 	/**
@@ -29,11 +27,14 @@ public class Territory implements Serializable
 	/**
 	 * The graph that will be displayed
 	 */
-	private transient mxGraph graph;
+	private transient Object graph;
+	
+	
 	/**
-	 * Vertex representation on the graph
+	 * The Vertex of the Graph
 	 */
-	private Object vertex = null;
+	private Vertex vertex;
+	
 	/**
 	 * The name of the territory
 	 */
@@ -76,7 +77,7 @@ public class Territory implements Serializable
 	 * @param xcoord coordinate on the graph
 	 * @param ycoord Y coordinate on the graph
 	 */
-	public Territory(String name, String continent, String[] neighbours, mxGraph graph, int xcoord, int ycoord) 
+	public Territory(String name, String continent, String[] neighbours, Object graph, int xcoord, int ycoord) 
 	{
 		this.territoryName = name;
 		this.continent = continent;
@@ -88,10 +89,8 @@ public class Territory implements Serializable
 		this.setyCoord(ycoord);
 		
 		if(graph!= null)
-		{
-			Object parent = graph.getDefaultParent();
-			vertex = graph.insertVertex(parent, null, name, this.xCoord, this.yCoord, RiskIntegers.GRAPH_CELL_DIMENTION_X,
-					RiskIntegers.GRAPH_CELL_DIMENTION_Y);
+		{			
+			vertex = new Vertex(this.territoryName);
 		}
 	}
 	
@@ -99,11 +98,11 @@ public class Territory implements Serializable
 	 * Constructor for the territory class 
 	 * @param name  The name of the territory
 	 * @param continent The name of the continent to which the territory belongs
-	 * @param graph the graph that will be displayed
+	 * @param graph  is there a graph
 	 * @param xcoord coordinate on the graph
 	 * @param ycoord Y coordinate on the graph
 	 */
-	public Territory(String name, String continent,  mxGraph graph, int xcoord, int ycoord) 
+	public Territory(String name, String continent,  Object graph, int xcoord, int ycoord) 
 	{
 		this(name, continent, new String[0], graph, xcoord, ycoord);
 	}
@@ -133,7 +132,7 @@ public class Territory implements Serializable
 	 * Returns the vertex representation on the graph
 	 * @return the vertex presentation on the graph
 	 */
-	public Object getVertex() 
+	public Vertex getVertex() 
 	{
 		return vertex;
 	}
@@ -174,8 +173,8 @@ public class Territory implements Serializable
 	{
 		this.ownerID = owner.getPlayerID();
 		if(graph!= null)
-		{
-			graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, owner.getColor().name(), new Object[]{vertex}); 
+		{ 
+			vertex.setOwner(owner.getColor());
 		}
 	}
 	
@@ -328,13 +327,12 @@ public class Territory implements Serializable
 	public boolean validateTerritory() {
 		if(this.neighbours.size()< 1)
 			return false;
-		
-		for(String neighbour : this.neighbours)
+		for(int i = 0; i< this.neighbours.size(); i++)
 		{
-			if(RiskBoard.ProperInstance(graph == null).getTerritory(neighbour) == null)
+			if(RiskBoard.ProperInstance(graph == null).getTerritory(this.neighbours.get(i)) == null)
+			{
 				return false;
-			if(!RiskBoard.ProperInstance(graph == null).getTerritory(neighbour).getNeighbours().contains(this.territoryName))
-				return false;
+			}
 		}
 		return true;
 	}
@@ -357,7 +355,7 @@ public class Territory implements Serializable
 	public boolean canFortify(String territory)
 	{
 		Territory neighbor = RiskBoard.ProperInstance(graph == null).getTerritory(territory);
-		return this.neighbours.contains(territory) && this.armyOn > 1 && this.ownerID == neighbor.getOwnerID();			
+		return this.neighbours.contains(territory) && this.armyOn > 1&& this.ownerID == neighbor.getOwnerID();			
 	}
 	
 	/**
@@ -371,3 +369,4 @@ public class Territory implements Serializable
 		return this.neighbours.contains(territory) && this.armyOn > 1 && this.ownerID != neighbor.getOwnerID();		
 	}
 }
+

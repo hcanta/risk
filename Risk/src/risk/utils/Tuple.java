@@ -2,12 +2,19 @@
  *  Package contains the various static, constant and helper method of the game and objects
  */
 package risk.utils;
+
+import java.io.Serializable;
+
 /**
  * Implementation of the Tuple class
  * @author hcanta
  */
-public class Tuple <X, Y> 
+public class Tuple <X, Y> implements Serializable
 {
+	/**
+	 * Generated Serial Version UID
+	 */
+	private static final long serialVersionUID = 505151573630349607L;
 	/**
 	 * The first Element of the Tuple
 	 */
