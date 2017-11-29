@@ -4,6 +4,7 @@
  */
 package risk.model.playerutils.strategy;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -18,18 +19,22 @@ import risk.utils.Tuple;
  * @author hcanta
  * @author Karanbir Singh
  */
-public class AggresiveStrategyModel implements IStrategy {
+public class AggresiveStrategyModel implements IStrategy , Serializable
+{
+
+	/**
+	 * Generated Serial Version UID
+	 */
+	private static final long serialVersionUID = 5028528489240863763L;
 
 	/**
 	 * The player using the strategy
 	 */
-	@SuppressWarnings("unused")
 	private IPlayer player;
 	
 	/**
 	 * The current game Board
 	 */
-	@SuppressWarnings("unused")
 	private RiskBoard board;
 	
 	/**
@@ -127,9 +132,10 @@ public class AggresiveStrategyModel implements IStrategy {
 			
 			for(int j = 0; j < territory.getNeighbours().size(); j++)
 			{
-				if(territory.canFortify(territory.getNeighbours().get(j)))
+				Territory t = board.getTerritory(territory.getNeighbours().get(j));
+				if(t.canFortify(territory.getTerritoryName()))
 				{
-					fortifiable.add(new Tuple<String,String>(territory.getTerritoryName(), territory.getNeighbours().get(j)));
+					fortifiable.add(new Tuple<String,String>( territory.getNeighbours().get(j),territory.getTerritoryName()));
 				}
 			}
 		
