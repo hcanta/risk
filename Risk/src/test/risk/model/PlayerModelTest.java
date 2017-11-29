@@ -318,6 +318,10 @@ public class PlayerModelTest {
 		RiskBoard.ProperInstance(debug).getTerritory("alaska").setOwnerID(player);;
 		Assert.assertFalse(player.reinforce("peru"));
 	}
+	
+	/**
+	 * Tests the reinforce functionality with valid territory and correct number of armies
+	 */
 	@Test
 	public void testReinforceString() {
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 0);
