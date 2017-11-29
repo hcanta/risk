@@ -106,7 +106,10 @@ public class PlayerModelTest {
 		player.updateArmiestoBeplaced(5);
 		Assert.assertTrue(player.getNbArmiesToBePlaced() == 5);
 	}
-
+	
+	/**
+	 * Tests the addition of territory to the list of territories owned. Player Model implementation
+	 */
 	@Test
 	public void testAddTerritory() {
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 0);
@@ -115,6 +118,9 @@ public class PlayerModelTest {
 		
 	}
 
+	/**
+	 * Tests the removal of territory from the list of territories owned. Player Model implementation
+	 */
 	@Test
 	public void testRemoveTerritory() {
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 0);
