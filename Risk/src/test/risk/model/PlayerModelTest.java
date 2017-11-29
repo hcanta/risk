@@ -146,6 +146,9 @@ public class PlayerModelTest {
 		Assert.assertFalse(player.fortify("alaska", "alberta", 1));
 	}
 	
+	/**
+	 * Tests the invalid fortification move between two territories
+	 */
 	@Test
 	public void testInvalidArmyAllOriginFortify() {
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 0);
@@ -159,6 +162,9 @@ public class PlayerModelTest {
 		Assert.assertFalse(player.fortify("alaska", "alberta", 2));
 	}
 	
+	/**
+	 * Tests the army movement greater than the territory holding
+	 */
 	@Test
 	public void testInvalidArmyAGreaterOriginFortify() {
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 0);
@@ -172,6 +178,9 @@ public class PlayerModelTest {
 		Assert.assertFalse(player.fortify("alaska", "alberta",4));
 	}
 	
+	/**
+	 * Tests the fortification for territory belonging to player other than the current player 
+	 */
 	@Test
 	public void testInvalidOriginFortify() {
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 0);
@@ -183,6 +192,7 @@ public class PlayerModelTest {
 		RiskBoard.ProperInstance(debug).getTerritory("alberta").setOwnerID(player);;
 		Assert.assertFalse(player.fortify("alaska", "alberta",2));
 	}
+	
 	
 	@Test
 	public void testInvalidDestinationNeighBorButNotOwnedFortify() {
