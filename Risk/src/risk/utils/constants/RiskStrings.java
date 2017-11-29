@@ -3,13 +3,19 @@
  */
 package risk.utils.constants;
 
+import java.io.Serializable;
+
 /**
  * This class contains all the constants final strings
  * @author hcanta
  *
  */
-public class RiskStrings 
+public class RiskStrings implements Serializable
 {
+	/**
+	 * Generated Serial Version UID
+	 */
+	private static final long serialVersionUID = -1938371827358414600L;
 	/**
 	 * Risk String
 	 */
@@ -57,6 +63,36 @@ public class RiskStrings
 	 * Map Editor label content
 	 */
 	public static final String TITLE_MAP_EDITOR = "Map Editor";
+	
+	/**
+	 * Territory File Test
+	 */
+	public static final String TERRITORY_FILE_TEST = "SerTest\\Territory.ser";
+	
+	/**
+	 * Continent  File Test
+	 */
+	public static final String CONTINENT_FILE_TEST = "SerTest\\Continent.ser";
+	
+	/**
+	 * Player  File Test
+	 */
+	public static final String PLAYER_FILE_TEST = "SerTest\\Player.ser";
+	
+	/**
+	 * Human Player  File Test
+	 */
+	public static final String HUMAN_PLAYER_FILE_TEST = "SerTest\\HumanPlayer.ser";
+	
+	/**
+	 * Bot Player  File Test
+	 */
+	public static final String BOT_PLAYER_FILE_TEST = "SerTest\\BotPlayer.ser";
+	
+	/**
+	 * Board  File Test
+	 */
+	public static final String BOARD_FILE_TEST = "SerTest\\Board.ser";
 	
 	/**
 	 * Help String
@@ -350,7 +386,7 @@ public class RiskStrings
 	 */
 	public static final String[] PLAYER_COLORS =
 	{
-		"red", "yellow", "brown", "green",  "pink", "purple"
+		"red", "yellow", "gray", "green",  "pink", "blue"
 	};
 	
 	/**
@@ -362,7 +398,8 @@ public class RiskStrings
 	 * Fortification Options
 	 */
 	public static final String [] FORTIFY_OPTIONS = {"1-Attempt Fortification",
-													 "2-End fortification phase"};
+													 "2-Save Game",
+													 "3-End fortification phase"};
 	
 	/**
 	 * FortiFy String
@@ -418,4 +455,9 @@ public class RiskStrings
 	 * Number Of Armies
 	 */
 	public static final String NUMBER_OF_ARMIES = " Enter The Number Of Armies";
+	
+	/**
+	 * Risk System String
+	 */
+	public static final String RISK_SYSTEM = "Risk System ";
 }

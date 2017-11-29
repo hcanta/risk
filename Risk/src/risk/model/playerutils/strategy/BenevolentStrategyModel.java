@@ -18,6 +18,10 @@ import risk.utils.Tuple;
 public class BenevolentStrategyModel implements IStrategy {
 
 	/**
+	 * Generated Serial Version UID
+	 */
+	private static final long serialVersionUID = 7379901556203948621L;
+	/**
 	 * The player using the strategy
 	 */
 	@SuppressWarnings("unused")

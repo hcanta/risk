@@ -3,20 +3,27 @@
  */
 package risk.utils.constants;
 
+import java.io.Serializable;
+
 /**
  * All the enums necessary for the games
  * @author hcanta
  *
  */
-public class RiskEnum 
+public class RiskEnum implements Serializable
 {
+	/**
+	 * Generated Serial Version UID
+	 */
+	private static final long serialVersionUID = 3630922664686386671L;
+
 	/**
 	 * The Game State  enum
 	 * @author hcanta
 	 */
 	public static enum GameState
 	{
-		IDLE, STARTUP, REINFORCE, ATTACK, FORTIFY
+		IDLE, STARTUP, REINFORCE, ATTACK, FORTIFY, NEXT_PLAYER
 	}
 	
 	/**
@@ -25,7 +32,7 @@ public class RiskEnum
 	 */
 	public static enum PlayerColors
 	{
-		red, yellow, brown, green,  pink, purple
+		red, yellow, gray, green,  pink, blue
 	}
 	
 	/**
@@ -62,7 +69,7 @@ public class RiskEnum
 	 */
 	public static enum Strategy
 	{
-		aggressive, benevolent, random, cheater
+		aggressive, benevolent, random, cheater, human
 	}
 	
 	
