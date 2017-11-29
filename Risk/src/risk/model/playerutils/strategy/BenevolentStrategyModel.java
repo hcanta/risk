@@ -118,5 +118,4 @@ public class BenevolentStrategyModel implements IStrategy {
 	{
 		return null;
 	}
-
 }
