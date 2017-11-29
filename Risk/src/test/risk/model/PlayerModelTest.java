@@ -130,6 +130,9 @@ public class PlayerModelTest {
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 0);
 	}
 
+	/**
+	 * 
+	 */
 	@Test
 	public void testInvalidArmyOneFortify() {
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 0);
