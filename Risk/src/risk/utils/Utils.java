@@ -24,6 +24,7 @@ import java.util.Stack;
 import risk.model.RiskBoard;
 import risk.model.maputils.Continent;
 import risk.model.maputils.Territory;
+import risk.utils.constants.RiskEnum.GameState;
 import risk.utils.constants.RiskEnum.PlayerColors;
 import risk.utils.constants.RiskIntegers;
 
@@ -285,7 +286,7 @@ public class Utils implements Serializable
 	
 	/**
 	 * Saves the given continent
-	 * @param continent The Territory to be saved
+	 * @param continent The continent to be saved
 	 * @param filePath the file where it must be saved 
 	 * @return If the game was saved successfully or not
 	 */
@@ -313,11 +314,39 @@ public class Utils implements Serializable
 	}
 	
 	/**
+	 * Saves the given board
+	 * @param board The board to be saved
+	 * @param filePath the file where it must be saved 
+	 * @return If the game was saved successfully or not
+	 */
+	public static boolean saveBoard(RiskBoard board, String filePath)
+	{
+		String cont = saveBoardToString(board);
+		if(cont.length() == 0)
+			return false;
+		Path currentRelativePath = Paths.get("");
+		String path = currentRelativePath.toAbsolutePath().toString()+"\\"+filePath;
+		try 
+		{
+			FileWriter fw = new FileWriter(path);
+			fw.write(cont);
+			fw.close();
+			return true;
+		} 
+		catch (IOException e)
+		{
+			
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	/**
 	 * creates a string representation of the continent for saving 
-	 * @param continent The Territory to be saved
+	 * @param continent The continent to be saved
 	 * @return A string representation of the continent 
 	 */
-	public static String saveContinentToString(Continent continent)
+	private static String saveContinentToString(Continent continent)
 	{
 		StringBuffer str = new StringBuffer();
 		
@@ -340,12 +369,87 @@ public class Utils implements Serializable
 			str.append(dataToString(continent.getTerritories().get(i)));
 			str.append("\n");
 			str.append(dataToString(continent.getTerritory(continent.getTerritories().get(i))));
+			if( i != continent.getTerritories().size() -1)
+				str.append("\n");
+		}
+		
+		return str.toString();
+		
+	}
+	
+	/**
+	 * creates a string representation of the board for saving 
+	 * @param board The risk board to be saved
+	 * @return A string representation of the board 
+	 */
+	private static String saveBoardToString(RiskBoard board)
+	{
+		StringBuffer str = new StringBuffer();
+		str.append(dataToString(board.getBoardName()));
+		str.append("\n");
+		str.append(dataToString(board.getCurrentPlayer()));
+		str.append("\n");
+		str.append(dataToString(board.getState()));
+		str.append("\n");
+		str.append(dataToString(board.getOwnerID()));
+		str.append("\n");
+		str.append(dataToString(board.getContinents().size()));
+		str.append("\n");
+		for(int i =0; i < board.getContinents().size(); i++)
+		{
+			str.append(saveContinentToString(board.getContinent(board.getContinents().get(i))));
+			if( i!= board.getContinents().size() - 1)
 			str.append("\n");
 		}
 		return str.toString();
 		
 	}
-	
+	/**
+	 * Loads a Board from a file
+	 * @param board the RiskBoard
+	 * @param relativePath The relative path where the board is store
+	 */
+	public static void loadBoard(RiskBoard board, String relativePath)
+	{
+		board.clear();
+		String name, currentPlayer;
+		GameState state;
+		int ownerID, nbContinent;
+		Path currentRelativePath = Paths.get("");
+		try
+		{
+			String path = currentRelativePath.toAbsolutePath().toString()+"\\"+relativePath;
+			FileReader fileReader = new FileReader(new File(path));
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			String line;
+			line = bufferedReader.readLine();
+			name = (String)stringToData(line);
+			line = bufferedReader.readLine();
+			currentPlayer = (String)stringToData(line);
+			line = bufferedReader.readLine();
+			state = (GameState)stringToData(line);;
+			line = bufferedReader.readLine();
+			ownerID = (int)stringToData(line);
+			line = bufferedReader.readLine();
+			nbContinent = (int)stringToData(line);
+			for(int i =0; i< nbContinent; i++)
+			{
+				Continent cont = loadContinent(bufferedReader);
+				board.addContinent(cont);
+			}
+			board.setBoardName(name);
+			board.setCurrentPlayer(currentPlayer);
+			board.setOwnerID(ownerID);
+			board.setState(state);
+			bufferedReader.close();
+			fileReader.close();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+			
+	}
 	/**
 	 * Loads a Continent from a file
 	 * @param relativePath The relative Path to the file
@@ -353,18 +457,41 @@ public class Utils implements Serializable
 	 */
 	public static Continent loadContinent(String relativePath)
 	{
-		String continentName;
-		Object graph;
-		int ownerID;
-		boolean gra;
-		
-		int bonus;
+
 		Path currentRelativePath = Paths.get("");
 		try
 		{
 			String path = currentRelativePath.toAbsolutePath().toString()+"\\"+relativePath;
 			FileReader fileReader = new FileReader(new File(path));
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			Continent cont = loadContinent(bufferedReader);
+			bufferedReader.close();
+			fileReader.close();
+			return cont;
+			
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return null;
+	}
+	/**
+	 * Loads a Continent from a file
+	 * @param bufferedReader The buffered reader
+	 * @return the Continent object
+	 */
+	private static Continent loadContinent(BufferedReader bufferedReader)
+	{
+		String continentName;
+		Object graph;
+		int ownerID;
+		boolean gra;
+		
+		int bonus;
+		try
+		{
+			
 			String line;
 			line = bufferedReader.readLine();
 			continentName = (String)stringToData(line);
@@ -387,8 +514,7 @@ public class Utils implements Serializable
 				Territory territory = (Territory)stringToData(line);
 				cont.addTerritory(name, territory);
 			}
-			bufferedReader.close();
-			fileReader.close();
+			
 			return cont;
 			
 		}

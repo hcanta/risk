@@ -32,6 +32,10 @@ import risk.utils.constants.RiskIntegers;
 public class UtilsTest 
 {
 	/**
+	 * The RiskBoard being used for testing
+	 */
+	private RiskBoard board;
+	/**
 	 * player object
 	 */
 	private IPlayer owner;
@@ -55,7 +59,8 @@ public class UtilsTest
 	@Before
 	public void setUp() throws Exception 
 	{	
-		RiskBoard.ProperInstance(true).clear();
+		board = RiskBoard.ProperInstance(true);
+		board.clear();
 		Utils.loadFile(new File("Maps/World.map"),true);
 		connected = new int[][]{{0,1,0},{1,0,1},{0,1,0}};
 		disconnected = new int[][]{{0,1,0},{1,0,0},{0,0,0}};
@@ -69,9 +74,9 @@ public class UtilsTest
 	@Test
 	public void testSaveFile() {
 		
-		Assert.assertTrue(RiskBoard.ProperInstance(true).getContinents().contains("europe"));
-		Assert.assertFalse(RiskBoard.ProperInstance(true).getContinents().contains("kala"));
-		Assert.assertTrue(RiskBoard.ProperInstance(true).validateMap());
+		Assert.assertTrue(board.getContinents().contains("europe"));
+		Assert.assertFalse(board.getContinents().contains("kala"));
+		Assert.assertTrue(board.validateMap());
 		
 		try {
 
@@ -81,9 +86,9 @@ public class UtilsTest
 			e.printStackTrace();
 		}
 		
-		RiskBoard.ProperInstance(true).clear();
+		board.clear();
 		Assert.assertTrue(Utils.loadFile(new File("Maps/file.map"),true));
-		Assert.assertTrue(RiskBoard.ProperInstance(true).getContinents().contains("europe"));
+		Assert.assertTrue(board.getContinents().contains("europe"));
 	}
 
 	/**
@@ -93,14 +98,14 @@ public class UtilsTest
 	@Test
 	public void testLoadFileValid() {
 		
-		Assert.assertTrue(RiskBoard.ProperInstance(true).getContinents().contains("europe"));
-		Assert.assertFalse(RiskBoard.ProperInstance(true).getContinents().contains("kala"));
-		Assert.assertTrue(RiskBoard.ProperInstance(true).validateMap());
-		RiskBoard.ProperInstance(true).clear();
+		Assert.assertTrue(board.getContinents().contains("europe"));
+		Assert.assertFalse(board.getContinents().contains("kala"));
+		Assert.assertTrue(board.validateMap());
+		board.clear();
 		Utils.loadFile(new File("Maps/Atlantis.map"),true);
-		Assert.assertFalse(RiskBoard.ProperInstance(true).getContinents().contains("europe"));
-		Assert.assertTrue(RiskBoard.ProperInstance(true).getContinents().contains("kala"));
-		Assert.assertTrue(RiskBoard.ProperInstance(true).validateMap());
+		Assert.assertFalse(board.getContinents().contains("europe"));
+		Assert.assertTrue(board.getContinents().contains("kala"));
+		Assert.assertTrue(board.validateMap());
 	}
 
 
@@ -111,9 +116,9 @@ public class UtilsTest
 	@Test 
 	public void testLoadFileInValid() {
 		
-		RiskBoard.ProperInstance(true).clear();
+		board.clear();
 		Assert.assertFalse(Utils.loadFile(new File("Maps/invalidAtlantis.map"),true));
-		RiskBoard.ProperInstance(true).clear();
+		board.clear();
 		Assert.assertTrue(Utils.loadFile(new File("Maps/Atlantis.map"),true));
 	}
 	
@@ -123,7 +128,7 @@ public class UtilsTest
 	@Test 
 	public void testLoadFileInValidDisconnected() {
 		
-		RiskBoard.ProperInstance(true).clear();
+		board.clear();
 		Assert.assertFalse(Utils.loadFile(new File("Maps/Disconnected.map"),true));
 
 	}
@@ -162,9 +167,8 @@ public class UtilsTest
 		{
             Files.deleteIfExists(Paths.get(str));
         }
-        catch(IOException e)
-        {
-        }
+        catch(IOException e){}
+		
 		Assert.assertTrue(Utils.saveTerritory(territory,RiskStrings.TERRITORY_FILE_TEST));
 		Assert.assertTrue(Files.exists(Paths.get(str)));
 	}
@@ -186,9 +190,8 @@ public class UtilsTest
 		{
             Files.deleteIfExists(Paths.get(str));
         }
-        catch(IOException e)
-        {
-        }
+        catch(IOException e){}
+		
 		Utils.saveTerritory(territory,RiskStrings.TERRITORY_FILE_TEST);
 		Assert.assertTrue(Files.exists(Paths.get(str)));
 		territory= null;
@@ -218,9 +221,8 @@ public class UtilsTest
 		{
             Files.deleteIfExists(Paths.get(str));
         }
-        catch(IOException e)
-        {
-        }
+        catch(IOException e){}
+		
 		Continent continent = new Continent("continent", 5, obj);
 		continent.addTerritory("hcanta", adj,0,0);
 		continent.addTerritory("hcanta1", adj,0,0);
@@ -228,9 +230,51 @@ public class UtilsTest
 		Assert.assertTrue(Files.exists(Paths.get(str)));
 	}
 	
+	/**
+	 * Test Save A Board
+	 */
+	@Test
+	public void testSaveBoard()
+	{
+		board.clear();
+		Utils.loadFile(new File("Maps/Demo.map"),true);
+		
+		Path currentRelativePath = Paths.get("");
+		String str = currentRelativePath.toAbsolutePath().toString()+"\\"+RiskStrings.BOARD_FILE_TEST;
+		try
+		{
+            Files.deleteIfExists(Paths.get(str));
+        }
+        catch(IOException e){}
+
+		Assert.assertTrue(Utils.saveBoard(board,RiskStrings.BOARD_FILE_TEST));
+		Assert.assertTrue(Files.exists(Paths.get(str)));
+	}
+	
+	/**
+	 * Test Load Continent
+	 * Test The board
+	 */
+	@Test
+	public void testLoadBoard()
+	{
+		board.clear();
+		Utils.loadFile(new File("Maps/Demo.map"),true);
+		Assert.assertTrue(board.getContinents().size() ==2);
+		board.clear();
+		Assert.assertTrue(board.getContinents().size() == 0);
+		Utils.loadBoard(board, RiskStrings.BOARD_FILE_TEST);
+		Assert.assertTrue(board.getContinents().size() == 2);
+		for(int i =0; i< board.getNbTerritories(); i++)
+		{
+			Territory territory = board.getTerritory(board.getTerritories().get(i));
+			Assert.assertTrue(territory.getNeighbours().size() == 38);
+		}
+			
+	}
 	/** Test LoadContinent.
 	 * We create a continent and load it
-	 * Tests alll the attributes of the continent
+	 * Tests all the attributes of the continent
 	 * Test all the attribute of the territory it contains
 	 * */
 	@Test

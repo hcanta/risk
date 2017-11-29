@@ -546,4 +546,17 @@ public class RiskBoard extends Observable implements Serializable
 	public void setCurrentPlayer(String currentPlayer) {
 		this.currentPlayer = currentPlayer;
 	}
+	
+	/**
+	 * Adds a continent to the board
+	 * @param cont the continent to be added
+	 */
+	public void addContinent (Continent cont) 
+	{
+		String n_name = cont.getContinentName().toLowerCase();
+		if(!continents.containsKey(n_name))
+		{
+			continents.put(n_name, cont);
+		}		
+	}
 }

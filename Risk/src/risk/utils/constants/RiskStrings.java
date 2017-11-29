@@ -67,12 +67,17 @@ public class RiskStrings implements Serializable
 	/**
 	 * Territory File Test
 	 */
-	public static final String TERRITORY_FILE_TEST = "SavedGames\\Territory.ser";
+	public static final String TERRITORY_FILE_TEST = "SerTest\\Territory.ser";
 	
 	/**
 	 * Continent  File Test
 	 */
-	public static final String CONTINENT_FILE_TEST = "SavedGames\\Continent.ser";
+	public static final String CONTINENT_FILE_TEST = "SerTest\\Continent.ser";
+	
+	/**
+	 * Board  File Test
+	 */
+	public static final String BOARD_FILE_TEST = "SerTest\\Board.ser";
 	
 	/**
 	 * Help String
