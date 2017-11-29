@@ -103,7 +103,7 @@ public class BenevolentStrategyModel implements IStrategy {
 			//now I am confused how to determine the territories/countries as weak and for how many we have 
 			//to do this operation. If its only the weakest country then its fine we sort it and then
 			//use the fortify method.
-			//PLEASE SHARE YOUR VALUABLE INPUT HENRY
+			//PLEASE SHARE YOUR VALUABLE INPUT HENRY.
 		}
 		return null;
 	}
