@@ -21,7 +21,7 @@ import risk.utils.constants.RiskEnum.RiskPlayerType;
  * Test cases for The PlayerModel
  * @version 1.0
  * @author hcanta
- * @author addy
+ * @author Karan
  */
 public class PlayerModelTest {
 	/**
