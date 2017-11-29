@@ -365,8 +365,10 @@ public class GameView implements Observer, Serializable
 		this.getCenter().add(OtherConstants.backGround);
 		this.getCenter().repaint();
 		this.getCenter().validate();
-		graphScroller.removeAll();
-		graph.removeAll();
+		if(graphScroller!=null)
+			graphScroller.removeAll();
+		if(graph!=null)
+			graph.removeAll();
 		graph = null;
 		graphScroller = null;
 		

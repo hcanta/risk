@@ -47,9 +47,12 @@ import risk.views.ui.MapSelector;
 public class GameEngine implements Serializable 
 {
 	/**
+	 * max number of rounds
+	 */
+	private int maxRounds;
+	/**
 	 * The number of rounds played;
 	 */
-	@SuppressWarnings("unused")
 	private int nbRoundsPlayed;
 	/**
 	 * The current Player Name
@@ -110,6 +113,7 @@ public class GameEngine implements Serializable
 			addMenuItemActionListener();
 		}
 		this.nbRoundsPlayed = 0;
+		maxRounds = (Integer.MAX_VALUE);
 	}
 	
 	/**
@@ -205,9 +209,80 @@ public class GameEngine implements Serializable
 				}
 		});
 		
+		this.gamev.getRiskMenu().getLoadGame().addActionListener(new ActionListener()
+		{
+			
+			public void actionPerformed(ActionEvent e)
+			{
+				addToHistoryPanel(RiskStrings.ATTEMPT_LOAD_GAME);
+				if(loadGame())
+				{
+					Thread thread = new Thread(new Runnable() {
+				         @Override
+				         public void run() {
+				             
+			            	 play(true);
+				             
+				         }
+					});
+					thread.start();
+				}
+				
+			}
+		});
+		
 		
 	}
 	
+	/**
+	 * Loads the Game
+	 * @return was the game loaded properly
+	 */
+	private boolean loadGame()
+	{
+		JFileChooser fileChooser =  MapSelector.getJFileChooser("risk");
+		int result = fileChooser.showOpenDialog(this.gamev.getFrame());
+		
+		if (result == JFileChooser.APPROVE_OPTION) 
+		{
+			this.addToHistoryPanel("Attempting To Load Game");
+			
+			
+			File file = fileChooser.getSelectedFile();
+			if (!file.exists() && !file.isDirectory()) 
+			{
+				JOptionPane.showMessageDialog(null,
+						RiskStrings.INVALID_FILE_LOCATION
+								+ file.getAbsolutePath());
+				
+				this.addToHistoryPanel(RiskStrings.INVALID_FILE_LOCATION);
+				
+				
+			}
+			else
+			{
+				this.addToHistoryPanel("file name is: " + file.getName());
+				
+				if(Utils.loadGame(this, file.getName()))
+				{
+					this.addToHistoryPanel("The Game File was properly loaded.");	
+					this.gamev.addGraph(RiskBoard.ProperInstance(debug));
+					return true;
+					
+				}
+				else
+				{
+					this.addToHistoryPanel("The Map File was invalid.");
+					
+					board.clear();
+					
+					this.gamev.cleanCenter();
+
+				}
+			}
+		}
+		return false;
+	}
 	
 	/**
 	 * Adds a message to the history panel
@@ -376,7 +451,7 @@ public class GameEngine implements Serializable
 	 */
 	private boolean loadMapHelper(boolean load)
 	{
-		JFileChooser fileChooser =  MapSelector.getJFileChooser();
+		JFileChooser fileChooser =  MapSelector.getJFileChooser("map");
 		int result = fileChooser.showOpenDialog(this.gamev.getFrame());
 		
 		if (result == JFileChooser.APPROVE_OPTION) 
@@ -1069,10 +1144,39 @@ public class GameEngine implements Serializable
 		}
 	}
 	/**
-	 * Play The Game
+	 * Play the game
 	 */
-	public void play()
+	private void play()
 	{
+		play(false);
+	}
+	/**
+	 * Play The Game
+	 * @param gameloaded was the game loaded
+	 */
+	private void play(boolean gameloaded)
+	{
+		if(gameloaded)
+		{
+			ArrayList<Integer> newPlayTurnOrder = new ArrayList<Integer>();
+			int initialIndex =  0;
+			for(int i =0; i< playerTurnOrder.size(); i++)
+			{
+				Integer j = playerTurnOrder.get(i);
+				if(players.get(j).getType() == RiskPlayerType.Human)
+				{
+					initialIndex = i;
+					break;
+				}
+			}
+			for(int i =0; i < playerTurnOrder.size(); i++)
+			{
+				int index = (initialIndex + i) % playerTurnOrder.size();
+				newPlayTurnOrder.add(playerTurnOrder.get(index));
+			}
+			playerTurnOrder = newPlayTurnOrder;
+		}
+		
 		while(!isGameOver())
 		{
 			for(int i =0; i < this.playerTurnOrder.size(); i++)
@@ -1085,9 +1189,7 @@ public class GameEngine implements Serializable
 				{
 					playHelper(this.playerTurnOrder.get(i));
 				}while(board.getState()!=GameState.NEXT_PLAYER);
-				
-					
-				
+
 			}
 			
 		}
@@ -1104,7 +1206,7 @@ public class GameEngine implements Serializable
 		{
 			int option = 0;
 		
-			while(option!=2)
+			while(option!=3)
 			{
 				Object selected = JOptionPane.showInputDialog(null, RiskStrings.FORTIFY, RiskStrings.FORTIFY,
 						JOptionPane.DEFAULT_OPTION,
@@ -1116,18 +1218,25 @@ public class GameEngine implements Serializable
 				}
 				else
 				{
-					option = 0;
-					return;
+					break;
 				}
 				if(option == 2)
 				{
-					saveGame();
+					this.addToHistoryPanel(RiskStrings.ATTEMPT_SAVE_GAME);
+					if(saveGame())
+					{
+						this.addToHistoryPanel(RiskStrings.ATTEMPT_SUCCESFUL);
+					}
+					else
+					{
+						this.addToHistoryPanel(RiskStrings.ATTEMPT_FAILED);
+					}
 				}
 				else if(option == 3)
 				{
 					break;
 				}
-				else if(option == 1)
+				else if(option == 1) // Fortifying getting input from users
 				{
 					String input,str;
 					input =  (String)JOptionPane.showInputDialog(gamev.getFrame(), RiskStrings.ORIGIN_TERRITORY,
@@ -1195,9 +1304,16 @@ public class GameEngine implements Serializable
 	
 	/**
 	 * Saves The Game
+	 * @return was the game saved
 	 */
-	private void saveGame() {
-		// TODO Auto-generated method stub
+	private boolean saveGame() 
+	{
+		String input =  (String)JOptionPane.showInputDialog(gamev.getFrame(), RiskStrings.SAVE_GAME,
+				RiskStrings.RISK_SYSTEM, JOptionPane.PLAIN_MESSAGE, null, null, "");
+		if(input == null || input.length() == 0)
+			return false;
+		return Utils.saveGame(this, input);
+					
 		
 	}
 
@@ -1583,10 +1699,191 @@ public class GameEngine implements Serializable
 	 * @return the ID of the first player for testing purposes
 	 */
 	public Integer testFirstPlayer() 
-	{
-		
+	{	
 		return   new Integer ((int) players.keySet().toArray()[0]);
 	}
+
+	/**
+	 * Returns The Maximum amount of rounds
+	 * @return the maxRounds
+	 */
+	public int getMaxRounds() 
+	{
+		return maxRounds;
+	}
+
+	/**
+	 * The Number of rounds played
+	 * @return the number of rounds played
+	 */
+	public int getNbRoundsPlayed() 
+	{
+		
+		return this.nbRoundsPlayed;
+	}
+
+	/**
+	 * Thea amount of times card were exchanged
+	 * @return The amount of times cards were exchanged
+	 */
+	public int getCardExchangeCount() 
+	{	
+		return this.cardExchangeCount;
+	}
+
+	/**
+	 * Returns The players Turn Order
+	 * @return The playerTurn Order
+	 */
+	public ArrayList<Integer> getPlayerTurnOrder() 
+	{
+		
+		return this.playerTurnOrder;
+	}
+
+	/**
+	 * Returns the current player
+	 * @return The current Player
+	 */
+	public String getCurrentPlayer() {
+		return this.currentPlayer;
+	}
+
+	/**
+	 * Returns the debug status
+	 * @return Debug status boolean
+	 */
+	public boolean getDebugStatus() 
+	{
+		return this.debug;
+	}
+	
+	/**
+	 * Returns  The player 
+	 * @param i the index of the player
+	 * @return the player
+	 */
+	public IPlayer getPlayer(Integer i)
+	{
+		return players.get(i);
+	}
+
+	/**
+	 * The History on the right panel/ history panel
+	 * @return the string of history
+	 */
+	public String getHistory() {
+		return gamev.getHistoryPanel().getInfo();
+	}
+
+	/**
+	 * The content of the History Pane
+	 * @return The country info
+	 */
+	public String getCountryInfo() {
+		return gamev.getCountryPanel().getInfo();
+	}
+
+	/**
+	 * Returns the board object 
+	 * @return the board object
+	 */
+	public RiskBoard getBoard() {
+		
+		return this.board;
+	}
+
+	/**
+	 * Sets The panel Info on both side of the game View
+	 * @param historyInfo History messages
+	 * @param countryInfo Country Messaged
+	 */
+	public void setPanelInfo(String historyInfo, String countryInfo) 
+	{
+		this.gamev.getHistoryPanel().addMessage(historyInfo);
+		this.gamev.getCountryPanel().setText(countryInfo);
+		this.board.update(RiskEvent.GeneralUpdate);
+		
+	}
+
+	/**
+	 * Sets the debug status
+	 * @param debug the debug status
+	 */
+	public void setDebugStatus(boolean debug) {
+		this.debug = debug;
+		
+	}
+
+	/**
+	 * This Method sets the turn Order
+	 * @param playerTurnOrder2 the new TurnOrder
+	 */
+	public void setPlayerTurnOrder(ArrayList<Integer> playerTurnOrder2) {
+		this.playerTurnOrder = playerTurnOrder2;
+		
+	}
+
+	/**
+	 * Sets the number of time cards were exchanged
+	 * @param cardExchangeCounts nb of times cards were exchanged
+	 */
+	public void setCardExchangeCounts(int cardExchangeCounts) 
+	{
+		this.cardExchangeCount = cardExchangeCounts;	
+	}
+	
+	/**
+	 * Sets the Maximum number of rounds
+	 * @param maxRounds2 the new maximum number of rounds
+	 */
+	public void setMaxRounds(int maxRounds2) {
+		this.maxRounds = maxRounds2;
+		
+	}
+
+	/**
+	 * Sets the number of rounds played
+	 * @param nbRoundsPlayed2 new number of rounds played
+	 */
+	public void setnbRoundsPlayed(int nbRoundsPlayed2) {
+		this.nbRoundsPlayed = nbRoundsPlayed2;
+		
+	}
+
+	/**
+	 * Sets the currentPlayer
+	 * @param currentPlayer2 the new Current Player
+	 */
+	public void setCurrentPlayer(String currentPlayer2) {
+		this.currentPlayer = currentPlayer2;
+		
+	}
+
+	/**
+	 * Clears the engine
+	 */
+	public void clear() {
+		this.board.clear();
+		this.players.clear();
+		if (playerTurnOrder != null)
+				this.playerTurnOrder.clear();
+		
+		
+	}
+
+	/**
+	 * Adds a player to the Game
+	 * @param integer the player Id
+	 * @param player a player object
+	 */
+	public void addPlayer(Integer integer, IPlayer player) 
+	{
+		players.put(integer, player);
+		
+	}
+
+	
 	
 
 }

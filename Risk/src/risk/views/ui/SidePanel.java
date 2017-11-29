@@ -83,5 +83,15 @@ public class SidePanel extends JTextArea implements Observer, Serializable
 		this.fTextLog.clear();
 	}
 
+	/**
+	 * Returns the content of the pane
+	 * @return the info displayed
+	 */
+	public String getInfo() 
+	{
+		return this.getText();
+		
+	}
+
 		
 }

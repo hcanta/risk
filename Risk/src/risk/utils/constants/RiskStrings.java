@@ -460,4 +460,26 @@ public class RiskStrings implements Serializable
 	 * Risk System String
 	 */
 	public static final String RISK_SYSTEM = "Risk System ";
+	/**
+	 * Attempting to save
+	 */
+	public static final String ATTEMPT_SAVE_GAME = "Attempt Save Game ...";
+	/**
+	 * Attempting Load Game
+	 */
+	public static final String ATTEMPT_LOAD_GAME = "Attempt Load Game ... ";
+	
+	/**
+	 * The card File test
+	 */
+	public static final String CARD_FILE_TEST = "SerTest\\Card.ser";
+	
+	/**
+	 * The card File test
+	 */
+	public static final String HAND_FILE_TEST = "SerTest\\Hand.ser";
+	/**
+	 * hAND bOT Player Test
+	 */
+	public static final String BOT_HAND_PLAYER_FILE_TEST = "SerTest\\HandbotPlayer.ser";
 }

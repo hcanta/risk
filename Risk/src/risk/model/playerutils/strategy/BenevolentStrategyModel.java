@@ -13,6 +13,7 @@ import risk.utils.Tuple;
 
 /**
  * Implementation of the Strategy Model
+ * @author hcanta
  * @author Mohammad Akif Beg
  */
 public class BenevolentStrategyModel implements IStrategy {
@@ -24,12 +25,10 @@ public class BenevolentStrategyModel implements IStrategy {
 	/**
 	 * The player using the strategy
 	 */
-	@SuppressWarnings("unused")
 	private IPlayer player;
 	/**
 	 * The current game Board
 	 */
-	@SuppressWarnings("unused")
 	private RiskBoard board;
 	/**
 	 * Constructor for the Strategy Model
@@ -51,13 +50,10 @@ public class BenevolentStrategyModel implements IStrategy {
 	{
 		if(player.canReinforce()){
 			int toBePlaced = player.getNbArmiesToBePlaced();
-			Territory currentTerritory;
 			int weakestTerritory = 0;
-			int getNbArmies = board.getTerritory(player.getTerritoriesOwned().get(0)).getArmyOn();
+			board.getTerritory(player.getTerritoriesOwned().get(0)).getArmyOn();	
 			
-			
-			String toReinforce = player.getTerritoriesOwned().get(weakestTerritory);
-			
+			String toReinforce = player.getTerritoriesOwned().get(weakestTerritory);		
 			Tuple<String, Integer> toReturn = new Tuple<String, Integer>(toReinforce, toBePlaced);
 			return toReturn;
 		}	
@@ -76,7 +72,7 @@ public class BenevolentStrategyModel implements IStrategy {
 			Territory currentTerritory;
 			//this arraylist to store armies owned 
 			ArrayList<Integer> nbOfArmies = new ArrayList<Integer>();
-			int getNbArmies = board.getTerritory(player.getTerritoriesOwned().get(0)).getArmyOn();
+			board.getTerritory(player.getTerritoriesOwned().get(0)).getArmyOn();
 			ArrayList<Tuple<String,String>> fortifiable = new ArrayList<Tuple<String,String>>();
 			Territory  territory;
 			for(int i =0; i< player.getTerritoriesOwned().size(); i++)
