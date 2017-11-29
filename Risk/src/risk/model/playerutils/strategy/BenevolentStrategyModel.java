@@ -99,6 +99,8 @@ public class BenevolentStrategyModel implements IStrategy {
 				
 				/*
 				 Can you just write the two statements for fortify from one place to another.
+				 JUST THE MAIN LOGIC OF FORTIFICATION NEEDS TO BE IMPLEMENTED FROM ORIGIN TO DESTINATION
+				 AND NUMBER OF ARMIES.
 				 */
 			}	
 		return null;
