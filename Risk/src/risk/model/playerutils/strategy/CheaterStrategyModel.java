@@ -3,7 +3,10 @@
  */
 package risk.model.playerutils.strategy;
 
+import java.util.ArrayList;
+
 import risk.model.RiskBoard;
+import risk.model.maputils.Territory;
 import risk.model.playerutils.IPlayer;
 import risk.model.playerutils.strategy.IStrategy;
 import risk.utils.Tuple;
@@ -11,28 +14,30 @@ import risk.utils.Tuple;
 /**
  * Implementation of Cheater the Strategy Model
  * @author hcanta
- * @author Karan
+ * @author addy
  */
 public class CheaterStrategyModel implements IStrategy {
 
 	/**
+
 	 * Generated Serial Version UID
 	 */
 	private static final long serialVersionUID = -7062346114363150158L;
 	/**
 	 * The player using the strategy
+
 	 */
 	@SuppressWarnings("unused")
 	private IPlayer player;
 	/**
-	 * The current game Board
+	 * The game board currently active
 	 */
 	@SuppressWarnings("unused")
 	private RiskBoard board;
 	/**
-	 * Constructor for the Strategy Model
-	 * @param debug The current board in use
-	 * @param player The player using the strategy
+	 * Constructor for the Strategy Model Class
+	 * @param debug the current board been used
+	 * @param player it is The player using the strategy
 	 */
 	public CheaterStrategyModel(boolean debug, IPlayer player) 
 	{
@@ -41,32 +46,100 @@ public class CheaterStrategyModel implements IStrategy {
 	}
 
 	/**
-	 * Performs a reinforce check
-	 * @return  The country to reinforce and the amount of army to reinforce it with
+	 * Reinforce check is performed.
+	 * @return  The country to reinforce and 
+	 * the number of armies to reinforce it with
+	 * 
 	 */
 	@Override
 	public Tuple<String, Integer> reinforce() 
 	{
+		if(player.canReinforce())
+		{
+			
+			Territory  territory;
+			for(int i =0; i< player.getTerritoriesOwned().size(); i++)
+			{
+				territory = board.getTerritory(player.getTerritoriesOwned().get(i));
+				int armyToBePlaced =  board.getTerritory(territory.getTerritoryName()).getArmyOn()*2;
+				
+				
+				/**
+				 * each territory needs the army to be
+				 * doubled and 
+				 * placed
+				 * 
+				 */
+			}
+			
+			
+			
+			
+			
+		
+		}
 		return null;
 	}
 
 	/**
-	 * Performs a fortify operation
-	 * @return a tuple containing the origin and a tuple containing the destination and the amount of army to move
+	 * Fortify operation performed
+	 * @return a tuple containing a origin and the tuple containing the destination and the amount of army to move
 	 */
 	@Override
 	public Tuple<String, Tuple<String, Integer>> fortify() 
 	{
+		if(player.canFortify())
+		{
+			
+			Territory  territory;
+			for(int i =0; i< player.getTerritoriesOwned().size(); i++)
+			{
+				territory = board.getTerritory(player.getTerritoriesOwned().get(i));
+				
+				/**
+				 * check which territory is neighbor with other players
+				 * and then double it.
+				 * 
+				 */
+				
+				int armyToBePlaced =  board.getTerritory(territory.getTerritoryName()).getArmyOn()*2;
+				
+			}
+			
+			
+			
+			
+			
+		}
+			
+			
+			
 		return null;
 	}
 
 	/**
-	 * Decides which country to attack 
-	 * @return a tuple of size 2, where the first element is the origin (attacker) and  the second is the destination of the attack (defender)
+	 * The attack is planned and which country to attack on 
+	 * @return a tuple of size 2, where the first element is the (attacker) origin  and  the second is the (defender) destination of the attack 
 	 */
 	@Override
 	public Tuple<String, Tuple<String, Integer>> attack() 
 	{
+		
+		
+		/**
+		 * if the attack is from cheater player 
+		 * it automatically wins the territories neighboring it.
+		 * 
+		 * 
+		 */
+		
+		
+		if(player.canAttack())
+		{
+			return null;
+			
+		}
+		
 		return null;
 	}
 

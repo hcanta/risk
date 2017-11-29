@@ -9,6 +9,7 @@ import risk.utils.constants.RiskEnum;
 /**
  * Some Utils functions
  * @author hcanta
+ * 
  *
  */
 public class StrategyUtils 
