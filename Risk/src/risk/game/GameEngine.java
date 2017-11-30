@@ -1463,7 +1463,7 @@ public class GameEngine implements Serializable
 			}
 			else //Robot Randomly picks a country  belonging to it, and attack one of the neighbors
 			{
-				if(player.getStrategy() != Strategy.cheater) // the type cheater behave widely differently
+				if(player.getStrategy() == Strategy.cheater) // the type cheater behave widely differently
 				{
 					ArrayList<String>nTerritories = new ArrayList<String>();
 					for(int i =0; i < player.getTerritoriesOwned().size(); i++)
@@ -1791,6 +1791,10 @@ public class GameEngine implements Serializable
 		}
 		else // Robot object
 		{
+			this.addToHistoryPanel(players.get(integer).reinforce());
+			this.territoryInfo();
+			board.update(RiskEvent.GeneralUpdate);
+			pause();
 		
 		}
 		
