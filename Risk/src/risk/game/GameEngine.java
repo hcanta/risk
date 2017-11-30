@@ -1896,7 +1896,7 @@ public class GameEngine implements Serializable
 		this.board.update(RiskEvent.GeneralUpdate);
 		
 	}
-
+ 
 	/**
 	 * Sets the debug status
 	 * @param debug the debug status
