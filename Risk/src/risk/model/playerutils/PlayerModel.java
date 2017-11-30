@@ -402,9 +402,9 @@ public class PlayerModel implements IPlayer
 	 * @return true/ false
 	 */
 	@Override
-	public boolean fortify() 
+	public void fortify() 
 	{
-		return false;
+		return;
 	}
 
 	

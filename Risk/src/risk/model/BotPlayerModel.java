@@ -77,15 +77,16 @@ public class BotPlayerModel extends PlayerModel implements Serializable
 	 * @return true/ false
 	 */
 	@Override
-	public boolean fortify() 
+	public void fortify() 
 	{
 		Tuple<String, Tuple<String, Integer>> fortifyInfo = this.iStrategy.fortify();
 		if( fortifyInfo == null)
-			return false;
+			return ;
 		String origin= fortifyInfo.getFirst();
 		String destination = fortifyInfo.getSecond().getFirst();
 		int armies=fortifyInfo.getSecond().getSecond();
-		return this.fortify(origin, destination, armies);
+		this.fortify(origin, destination, armies);
+		return ;
 	}
 
 	/**

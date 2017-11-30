@@ -1299,6 +1299,9 @@ public class GameEngine implements Serializable
 		}
 		else 
 		{
+			players.get(integer).fortify();
+			this.territoryInfo();
+			board.update(RiskEvent.GeneralUpdate);
 			pause();
 		}
 		this.setState(GameState.NEXT_PLAYER);

@@ -159,9 +159,8 @@ public interface IPlayer extends Serializable
 	
 	/**
 	 * Perform a fortification
-	 * @return true/ false
 	 */
-	public boolean fortify();
+	public void fortify();
 	
 	
 	/**
