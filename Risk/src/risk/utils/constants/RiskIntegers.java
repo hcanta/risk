@@ -91,4 +91,14 @@ public class RiskIntegers implements Serializable
 	 */
 	public static final int GRAPH_CELL_Y_MARGIN = 5;
 
+	/**
+	 * The height of the Icon
+	 */
+	public static final int ICON_HEIGHT = STATE_PANEL_HEIGHT - 20;
+	
+	/**
+	 * The width of the Icon
+	 */
+	public static final int ICON_WIDTH =  160;
+
 }

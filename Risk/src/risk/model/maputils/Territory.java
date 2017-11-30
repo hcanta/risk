@@ -189,6 +189,7 @@ public class Territory extends BoardComponent
 		if(!this.neighbours.contains(n_neighbour))
 		{
 			this.neighbours.add(n_neighbour);
+			vertex.setToolTipText(neighbours.toString());
 			return true;
 		}
 		return false;
@@ -367,6 +368,43 @@ public class Territory extends BoardComponent
 	{
 		Territory neighbor = RiskBoard.ProperInstance(graph == null).getTerritory(territory);
 		return this.neighbours.contains(territory) && this.armyOn > 1 && this.ownerID != neighbor.getOwnerID();		
+	}
+	
+	/**
+	 * Returns the Number of dice rolls if you re an attacker
+	 * @return nb of dices rolls
+	 */
+	public int potentialNbOfDiceRollAttack()
+	{
+		int nbOfdiceRollAttacker = 0;
+		if(this.getArmyOn()> 4)
+		{
+			nbOfdiceRollAttacker = 3;
+		}
+		else if(this.getArmyOn() == 3)
+		{
+			nbOfdiceRollAttacker = 2;
+		}
+		else if(this.getArmyOn() == 2)
+		{
+			nbOfdiceRollAttacker = 1;
+		}
+		return nbOfdiceRollAttacker;
+	}
+	
+	/**
+	 * Returns the Number of dice rolls if you re an defender
+	 * @return nb of dices rolls
+	 */
+	public int potentialNbOfDiceRollDefender()
+	{
+		int nbOfdiceRollAttacker = 1;
+		if(this.getArmyOn()>= 2)
+		{
+			nbOfdiceRollAttacker = 2;
+		}
+
+		return nbOfdiceRollAttacker;
 	}
 }
 

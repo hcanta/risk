@@ -8,7 +8,7 @@ import java.io.Serializable;
 /**
  * All the enums necessary for the games
  * @author hcanta
- *
+ * @version 3.3
  */
 public class RiskEnum implements Serializable
 {
@@ -41,7 +41,7 @@ public class RiskEnum implements Serializable
 	 */
 	public static enum CardType
 	{
-		Infantry, Calvary, Artillery
+		Infantry, Cavalry, Artillery
 	}
 	
 	/**

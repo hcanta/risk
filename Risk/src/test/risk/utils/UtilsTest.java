@@ -33,6 +33,7 @@ import risk.utils.constants.RiskIntegers;
 /**
  * TestFileFor the Map Utils
  *@author hcanta
+ *@version 3.4
  */
 public class UtilsTest 
 {
@@ -185,7 +186,7 @@ public class UtilsTest
 	@Test
 	public void testSaveCard()
 	{
-		Card card = new Card(CardType.Calvary, "Canada");
+		Card card = new Card(CardType.Cavalry, "Canada");
 		Path currentRelativePath = Paths.get("");
 		String str = currentRelativePath.toAbsolutePath().toString()+"\\"+RiskStrings.CARD_FILE_TEST;
 		try
@@ -204,7 +205,7 @@ public class UtilsTest
 	@Test
 	public void testSaveLoadCard()
 	{
-		Card card = new Card(CardType.Calvary, "Canada");
+		Card card = new Card(CardType.Cavalry, "Canada");
 		Path currentRelativePath = Paths.get("");
 		String str = currentRelativePath.toAbsolutePath().toString()+"\\"+RiskStrings.CARD_FILE_TEST;
 		try
@@ -218,7 +219,7 @@ public class UtilsTest
 		card= null;
 		Assert.assertNull(card);
 		card = Utils.loadCard(RiskStrings.CARD_FILE_TEST);
-		Assert.assertTrue(card.getType() == CardType.Calvary);
+		Assert.assertTrue(card.getType() == CardType.Cavalry);
 		Assert.assertTrue(card.getTerritory().equals("Canada"));
 		
 	}
@@ -522,7 +523,7 @@ public class UtilsTest
 	@Test
 	public void testSaveHand()
 	{
-		Card card1 = new Card(CardType.Calvary, "Canada");
+		Card card1 = new Card(CardType.Cavalry, "Canada");
 		Card card2 = new Card(CardType.Infantry, "providence");
 		Hand hand = new Hand();
 		hand.add(card1);
@@ -545,7 +546,7 @@ public class UtilsTest
 	@Test
 	public void testSaveLoadHand()
 	{
-		Card card1 = new Card(CardType.Calvary, "Canada");
+		Card card1 = new Card(CardType.Cavalry, "Canada");
 		Card card2 = new Card(CardType.Infantry, "providence");
 		Hand hand = new Hand();
 		hand.add(card1);
@@ -565,7 +566,7 @@ public class UtilsTest
 		hand = Utils.loadHand(RiskStrings.HAND_FILE_TEST);
 		Assert.assertTrue(hand.size() == 2);
 		
-		Assert.assertTrue(hand.getCards().get(0).getType() == CardType.Calvary);
+		Assert.assertTrue(hand.getCards().get(0).getType() == CardType.Cavalry);
 		Assert.assertTrue(hand.getCards().get(0).getTerritory().equals("Canada"));
 		
 		Assert.assertTrue(hand.getCards().get(1).getType() == CardType.Infantry);
@@ -581,7 +582,7 @@ public class UtilsTest
 	{
 
 		owner = new BotPlayerModel("bot",PlayerColors.blue,(short)3,true, Strategy.random);
-		Card card1 = new Card(CardType.Calvary, "Canada");
+		Card card1 = new Card(CardType.Cavalry, "Canada");
 		Card card2 = new Card(CardType.Infantry, "providence");
 		Hand hand = new Hand();
 		hand.add(card1);
@@ -608,7 +609,7 @@ public class UtilsTest
 		Assert.assertTrue(owner.getStrategy()== Strategy.random);
 		Assert.assertTrue(owner.getPlayerID() == 3);
 		hand = owner.getHand();
-		Assert.assertTrue(hand.getCards().get(0).getType() == CardType.Calvary);
+		Assert.assertTrue(hand.getCards().get(0).getType() == CardType.Cavalry);
 		Assert.assertTrue(hand.getCards().get(0).getTerritory().equals("Canada"));
 		
 		Assert.assertTrue(hand.getCards().get(1).getType() == CardType.Infantry);

@@ -287,7 +287,18 @@ public class GameView implements Observer, Serializable
 				 {
 					 graph.update(obj, param);
 				 }
+			case CardTrade:
+				this.getCardPanel().update(obj, param);
+				break;
 			default:
+			case GeneralUpdate:
+				historyUpdate(obj, param);
+				bottom.update(obj, param);
+				 countryUpdate(obj, param);
+				 if(graph != null)
+				 {
+					 graph.update(obj, param);
+				 }
 				break;
 		}
 		
@@ -373,5 +384,14 @@ public class GameView implements Observer, Serializable
 		graphScroller = null;
 		
 		
+	}
+	
+	/**
+	 * The Card Panel
+	 * @return the card panel
+	 */
+	public CardExchangePanel getCardPanel()
+	{
+		return this.cardPanel;
 	}
 }

@@ -402,6 +402,13 @@ public class RiskStrings implements Serializable
 													 "3-End fortification phase"};
 	
 	/**
+	 * Attack Options
+	 */
+	public static final String [] ATTACK_OPTIONS = {"1-Attempt Attack",
+													 "2-Save Game",
+													 "3-End attack phase"};
+	
+	/**
 	 * FortiFy String
 	 */
 	public static final String FORTIFY = "Fortify";
@@ -420,6 +427,11 @@ public class RiskStrings implements Serializable
 	 * Attack Phase
 	 */
 	public static final String ATTACK_PHASE = "Attack Phase In Progress";
+	
+	/**
+	 * Attack 
+	 */
+	public static final String ATTACK = "Attack ";
 	
 	/**
 	 * Fortify Phase
@@ -482,4 +494,16 @@ public class RiskStrings implements Serializable
 	 * hAND bOT Player Test
 	 */
 	public static final String BOT_HAND_PLAYER_FILE_TEST = "SerTest\\HandbotPlayer.ser";
+	/**
+	 * Attack territory
+	 */
+	public static final String ATTACK_TERRITORY = "Enter The Attacking Territory";
+	/**
+	 * Defender territory
+	 */
+	public static final String DEFENDER_TERRITORY = "Enter The Defending Territory";
+	/**
+	 * Dices 
+	 */
+	public static final  String NUMBER_OF_DICES = "Enter The number of dices to roll between 1 and 3";
 }

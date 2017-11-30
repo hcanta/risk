@@ -34,7 +34,7 @@ public class PlayerModel implements IPlayer
 	/**
 	 * The board
 	 */
-	protected transient RiskBoard board;
+	protected  RiskBoard board;
 	/**
 	 * The type of the player
 	 */
@@ -323,7 +323,7 @@ public class PlayerModel implements IPlayer
 		
 			if( this.nbArmiesToBePlaced >= army)
 			{
-				board.getTerritory(territory).setArmyOn(armyOn + 1);
+				board.getTerritory(territory).setArmyOn(armyOn + army);
 				this.nbArmiesToBePlaced -= army;
 				return true;
 				

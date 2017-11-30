@@ -10,8 +10,10 @@ import java.io.Serializable;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import risk.model.playerutils.IPlayer;
 import risk.utils.constants.RiskIntegers;
 
 /**
@@ -27,10 +29,7 @@ public class CardExchangePanel extends JPanel implements Observer, Serializable
 	 */
 	private static final long serialVersionUID = 3498591350211981708L;
 	
-	/**
-	 * The Number of times Card Exchange Happened 
-	 */
-	private int nbCardExhangeRounds;
+
 	
 	/**
 	 * Simple Constructor
@@ -38,38 +37,49 @@ public class CardExchangePanel extends JPanel implements Observer, Serializable
 	public CardExchangePanel()
 	{
 		super();
-		this.setLayout(new GridLayout(2,1));
+		this.setLayout(new GridLayout(1,5));
 		this.setPreferredSize(new Dimension(RiskIntegers.GAME_WIDTH, RiskIntegers.STATE_PANEL_HEIGHT));
 		this.setVisible(true);
-		this.nbCardExhangeRounds = 0;
+		
 	}
 	
-	/**
-	 * Increments the Number of card Exchange rounds By 1
-	 */
-	public void incrementCardExchangeRounds()
-	{
-		this.nbCardExhangeRounds ++;
-	}
-	/**
-	 * Returns the number of nbCard Rounds. The number of card exchange is this number times 3
-	 * @return The number of card Exchange rounds
-	 */
-	public int getNbCardExchangeRounds()
-	{
-		return this.nbCardExhangeRounds;
-	}
+	
 
 	/**
 	 * The Update method for when the observable element notify them
 	 */
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		// TODO Auto-generated method stub
-		
+		this.setVisible(true);
 		this.validate();
 		this.repaint();
 		
+	}
+
+	/**
+	 * Populates The Top screen
+	 * @param nbRoundsPlayed The Number of rounds
+	 * @param cardExchangeCount The number of times Cards were exchanged
+	 * @param player the player Object
+	 */
+	public void populate(int nbRoundsPlayed, int cardExchangeCount, IPlayer player) {
+		this.removeAll();
+		JLabel rounds = new JLabel(" #of rounds played: " + nbRoundsPlayed);
+		
+		rounds.setVisible(true);
+		rounds.setOpaque(true);
+		
+		this.add(rounds);
+		
+		for(int i =0; i< player.getHand().size(); i++)
+		{
+			this.add(new CardPanel(player.getHand().getCards().get(i)));
+		}
+		
+		JLabel card = new JLabel(" #of cards exchanged: " + cardExchangeCount);
+		card.setVisible(true);
+		card.setOpaque(true);
+		this.add(card);
 	}
 	
 	
