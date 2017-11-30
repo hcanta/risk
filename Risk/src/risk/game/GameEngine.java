@@ -218,7 +218,7 @@ public class GameEngine implements Serializable
 					Thread thread = new Thread(new Runnable() {
 				         @Override
 				         public void run() {
-				             
+				        	 
 			            	 play(true,false);
 				             
 				         }
@@ -228,6 +228,30 @@ public class GameEngine implements Serializable
 				
 			}
 		});
+		
+		this.gamev.getRiskMenu().getTournament().addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				nbRoundsPlayed= 0;
+				addToHistoryPanel("\n"+RiskStrings.INITIATE_LOAD_PLAY);
+				
+				
+					
+					setState(GameState.STARTUP);
+					Thread thread = new Thread(new Runnable() {
+				         @Override
+				         public void run() {
+				             if(tournament(true))
+				             {
+				            	
+				             }
+				         }
+					});
+					thread.start();
+				
+			}
+	});
 		
 		
 	}
@@ -441,6 +465,25 @@ public class GameEngine implements Serializable
 		}
 		
 		this.validateAndSave(RiskStrings.MENU_ITEM_CREATE_MAP);
+	}
+	/**
+	 * Returns a file object for the tournament
+	 * @return the file object
+	 */
+	private File tournamentLoader()
+	{
+		JFileChooser fileChooser =  MapSelector.getJFileChooser("map");
+		int result = fileChooser.showOpenDialog(this.gamev.getFrame());
+		
+		if (result == JFileChooser.APPROVE_OPTION) 
+		{
+			this.addToHistoryPanel("Attempting To Load Map");
+			
+			
+			File file = fileChooser.getSelectedFile();
+			return file;
+		}
+		return null;
 	}
 /**
 	 * This function chooses the file to be edited or loaded
@@ -871,7 +914,218 @@ public class GameEngine implements Serializable
 		board.update(RiskEvent.StateChange);
 		this.addToHistoryPanel(this.currentPlayer+" : " + state.name());
 	}
-	
+	/**
+	 * This function is called during the startup phase in order to deploy the game
+	 * @param tournament are we in tournament mode or not
+	 * @return true false, was the deployment successful or not
+	 */
+	private boolean tournament(boolean tournament)
+	{
+		players = new HashMap<Integer, IPlayer>();
+		String input;
+		ArrayList<String> report = new ArrayList<String>();
+		report. add("\nREPORT\nP: ");
+		int nbPlayer = 0;
+		while(!(nbPlayer >=2 && nbPlayer <= 4))
+		{
+			
+			input =  (String)JOptionPane.showInputDialog(gamev.getFrame(),"Set The Number of players between 2 and 4", 
+					RiskStrings.RISK, JOptionPane.PLAIN_MESSAGE, null, null, "");
+			
+			if(input == null)
+				return false;
+			try
+			{
+				nbPlayer = Integer.parseInt(input);
+			}
+			catch(Exception e)
+			{
+				JOptionPane.showMessageDialog(gamev.getFrame(),
+					   RiskStrings.PLEASE_NUMBER,
+					   RiskStrings.MENU_ITEM_CREATE_MAP,
+					    JOptionPane.WARNING_MESSAGE);
+			}  			
+		}
+		ArrayList<Strategy> temp2 = new ArrayList<Strategy>();
+		Strategy[] temp = Strategy.values();
+		for(int i =0; i< temp.length; i++)
+		{
+			if(temp[i] != Strategy.human)
+			{
+				temp2.add(temp[i]);
+			}
+		}
+		ArrayList<Strategy> strategies = new ArrayList<Strategy>();
+		Strategy[] values = new Strategy[temp2.size()];
+		for(int j =0; j< temp2.size(); j++)
+			values[j] = temp2.get(j);
+		for(int i =0; i < nbPlayer; i++)
+		{
+			Object selected = JOptionPane.showInputDialog(null, "Start up", "Choose the strategy for Computer " +i,
+					JOptionPane.DEFAULT_OPTION,
+					null, values,values[0]);
+			if ( selected != null )
+			{
+			    String selectedString = selected.toString().trim();
+			    int option = Utils.getIndexOf(selectedString,values) ;
+			    strategies.add(values[option]);
+			    report.add( (values[option]).name());
+			    if(i!= nbPlayer -1)
+				{
+					report.add(", ");
+				}
+				else
+				{
+					report.add("\n");
+				}
+			}
+			else
+			{
+				return false;
+			}
+		}
+		
+		int nbGames = 0;
+		while(!(nbGames >=1 && nbGames <= 5))
+		{
+			
+			input =  (String)JOptionPane.showInputDialog(gamev.getFrame(),"How Many Games between 1 and 5? ", 
+					RiskStrings.RISK, JOptionPane.PLAIN_MESSAGE, null, null, "");
+			
+			if(input == null)
+				return false;
+			try
+			{
+				nbGames = Integer.parseInt(input);
+			}
+			catch(Exception e)
+			{
+				JOptionPane.showMessageDialog(gamev.getFrame(),
+					   RiskStrings.PLEASE_NUMBER,
+					   RiskStrings.MENU_ITEM_CREATE_MAP,
+					    JOptionPane.WARNING_MESSAGE);
+			}  			
+		}
+		int nbMaps = 0;
+		while(!(nbMaps >=1 && nbMaps <= 5))
+		{
+			
+			input =  (String)JOptionPane.showInputDialog(gamev.getFrame(),"How Many Maps between 1 and 5? ", 
+					RiskStrings.RISK, JOptionPane.PLAIN_MESSAGE, null, null, "");
+			
+			if(input == null)
+				return false;
+			try
+			{
+				nbMaps = Integer.parseInt(input);
+			}
+			catch(Exception e)
+			{
+				JOptionPane.showMessageDialog(gamev.getFrame(),
+					   RiskStrings.PLEASE_NUMBER,
+					   RiskStrings.MENU_ITEM_CREATE_MAP,
+					    JOptionPane.WARNING_MESSAGE);
+			}  			
+		}
+		int nbMaxRounds =0;
+		while(!(nbMaxRounds >=10 && nbMaxRounds <= 50))
+		{
+			
+			input =  (String)JOptionPane.showInputDialog(gamev.getFrame(),"How Many rounds between 10 and 50 ? ", 
+					RiskStrings.RISK, JOptionPane.PLAIN_MESSAGE, null, null, "");
+			
+			if(input == null)
+				return false;
+			try
+			{
+				nbMaxRounds = Integer.parseInt(input);
+			}
+			catch(Exception e)
+			{
+				JOptionPane.showMessageDialog(gamev.getFrame(),
+					   RiskStrings.PLEASE_NUMBER,
+					   RiskStrings.MENU_ITEM_CREATE_MAP,
+					    JOptionPane.WARNING_MESSAGE);
+			}  			
+		}
+		ArrayList<File> maps = new ArrayList<File>();
+		
+		report.add("M: ");
+		for(int i = 0; i< nbMaps; i++)
+		{
+			maps.add( tournamentLoader());
+			report.add(maps.get(i).getName());
+			if(i!= nbMaps -1)
+			{
+				report.add(", ");
+			}
+			else
+			{
+				report.add("\n");
+			}
+		}
+		report.add("G: " + nbGames + "\n");
+		this.maxRounds = nbMaxRounds;
+		report.add("Max Rounds = " +this.maxRounds +"\n");
+		
+		for(int i = 0; i < nbMaps; i++ )
+		{
+			System.out.println("Map: " + (i+1));
+			for(int j = 0; j < nbGames; j++)
+			{
+				System.out.println("Game: " + (j+1));
+				this.nbRoundsPlayed = 0;
+				loadTournament(maps.get(i));
+				createBots(nbPlayer, tournament, PlayerColors.red, strategies);
+				generateTurnOrder();
+				Collections.shuffle(playerTurnOrder);
+				
+				setArmiesforPlayers();
+				this.addToHistoryPanel(RiskStrings.RANDOM_ASSIGNMENT);
+				randomAssignTerritories();
+				this.addToHistoryPanel(RiskStrings.PLACE_REM_ARMIES);
+				pause();
+				placeRemainingArmies();
+				pause();
+				setState(GameState.NEXT_PLAYER);
+	        	play(false,true);
+	        	String winner = "draw";
+	        	if(board.getOwnerID() != RiskIntegers.INITIAL_OWNER)
+	        	{
+	        		winner = players.get(board.getOwnerID()).getStrategy().name();
+	        	}
+	        	report.add(" Game "+ (j+1) +" Map: "+(i+1)+" Winner/Status "+ winner +"\n");
+			}
+		}
+		for(int i =0; i< report.size(); i++)
+		{
+			System.out.print(report.get(i));
+		}
+		
+		
+		
+		
+		
+		
+		return true;
+	}
+	/**
+	 * Loads the map for the tournament 
+	 * @param file the file of the map
+	 * @return was the file loaded properly
+	 */
+	private boolean loadTournament(File file) {
+		this.clear();
+		if(Utils.loadFile(file, this.debug))
+		{
+			this.addToHistoryPanel("The Map File was properly loaded.");
+			this.gamev.addGraph(RiskBoard.ProperInstance(debug));
+			return true;
+		}
+		return false;
+		
+	}
+
 	/**
 	 * This function is called during the startup phase in order to deploy the game
 	 * @param tournament are we in tournament mode or not
@@ -939,6 +1193,14 @@ public class GameEngine implements Serializable
 			}
 			
 		}
+		else
+		{
+			 if(!createBots(nbPlayer, tournament, PlayerColors.red))
+		    {
+				players.clear();
+		    	return false;
+		    }
+		}
 		generateTurnOrder();
 		Collections.shuffle(playerTurnOrder);
 		
@@ -994,6 +1256,18 @@ public class GameEngine implements Serializable
 	 */
 	public boolean createBots(int numberOfPlayers, boolean tournament, RiskEnum.PlayerColors humanColor)
 	{
+		return createBots(numberOfPlayers, tournament, humanColor, null);
+	}
+	/**
+	 * Generates computer player
+	 * @param numberOfPlayers The Number of Players in the game
+	 * @param tournament  are we in tournament mode or not
+	 * @param humanColor the color the human player chose
+	 * @param v the Strategy list
+	 * @return were the bot created properly
+	 */
+	public boolean createBots(int numberOfPlayers, boolean tournament, RiskEnum.PlayerColors humanColor, ArrayList<Strategy> v)
+	{
 		short nbOfbots = (short) (tournament ? 0 : 1);
 		
 		ArrayList<PlayerColors> plColor = new ArrayList<PlayerColors>();
@@ -1008,10 +1282,22 @@ public class GameEngine implements Serializable
 		Collections.shuffle(plColor);
 		ArrayList<Strategy> strategies = new ArrayList<Strategy>();
 		int option;
-		Strategy[] values = Strategy.values();
+		ArrayList<Strategy> temp2 = new ArrayList<Strategy>();
+		Strategy[] temp = Strategy.values();
+		for(int i =0; i< temp.length; i++)
+		{
+			if(temp[i] != Strategy.human)
+			{
+				temp2.add(temp[i]);
+			}
+		}
+		Strategy[] values = new Strategy[temp2.size()];
+		for(int j =0; j< temp2.size(); j++)
+			values[j] = temp2.get(j);
+		
 		for(short i = nbOfbots; i< numberOfPlayers; i++)
 		{
-			if(this.gamev != null)
+			if(this.gamev != null  && v == null)
 			{
 				Object selected = JOptionPane.showInputDialog(null, "Start up", "Choose the strategy for Computer " +i,
 						JOptionPane.DEFAULT_OPTION,
@@ -1026,6 +1312,10 @@ public class GameEngine implements Serializable
 				{
 					return false;
 				}
+			}
+			else if( v!= null)
+			{
+				strategies.add(v.get(i));
 			}
 			else
 			{
@@ -1141,8 +1431,9 @@ public class GameEngine implements Serializable
 	/**
 	 * Helper for the play Game
 	 * @param integer The player id
+	 * @return  end of game
 	 */
-	private void playHelper(Integer integer)
+	private boolean playHelper(Integer integer)
 	{
 		switch(this.board.getState())
 		{
@@ -1157,7 +1448,7 @@ public class GameEngine implements Serializable
 					this.addToHistoryPanel("The Game is Over");
 					this.addToHistoryPanel("winner: "+ this.players.get(new Integer(board.getOwnerID())).getName());
 					board.update(RiskEvent.GeneralUpdate);
-					return;
+					return true;
 				}
 				break;
 			case FORTIFY:
@@ -1166,6 +1457,7 @@ public class GameEngine implements Serializable
 			default:
 				break;
 		}
+		return false;
 	}
 	/**
 	 * Play the game
@@ -1216,9 +1508,19 @@ public class GameEngine implements Serializable
 				
 				do
 				{
-					playHelper(this.playerTurnOrder.get(i));
+					if(playHelper(this.playerTurnOrder.get(i)))
+					{
+						break;
+					}
 				}while(board.getState()!=GameState.NEXT_PLAYER);
-
+				if(this.isGameOver())
+				{
+					break;
+				}
+			}
+			if(this.isGameOver())
+			{
+				break;
 			}
 			
 		}
@@ -1381,7 +1683,7 @@ public class GameEngine implements Serializable
 			{
 				int option = 0;
 				
-				while(option!=3 && player.canAttack())
+				while(option!=2 && player.canAttack())
 				{
 					// Get User Input
 					Object selected = JOptionPane.showInputDialog(null, RiskStrings.ATTACK, RiskStrings.ATTACK,
@@ -1396,19 +1698,7 @@ public class GameEngine implements Serializable
 					{
 						break;
 					}
-					if(option == 2)
-					{
-						this.addToHistoryPanel(RiskStrings.ATTEMPT_SAVE_GAME);
-						if(saveGame())
-						{
-							this.addToHistoryPanel(RiskStrings.ATTEMPT_SUCCESFUL);
-						}
-						else
-						{
-							this.addToHistoryPanel(RiskStrings.ATTEMPT_FAILED);
-						}
-					}
-					else if(option == 3)
+					 if(option == 2)
 					{
 						break;
 					}
@@ -1568,6 +1858,7 @@ public class GameEngine implements Serializable
 	 */
 	private void attackHelper(int dices, Territory attacker, Territory defender, IPlayer player, boolean[] wonOnce, Integer integer)
 	{
+		dices = dices==0? 1 : dices;
 		String input;
 		// Data Obtained Launching Attack Phase
 		int[] attackerDices = new int[dices];
@@ -1736,7 +2027,7 @@ public class GameEngine implements Serializable
 			
 			int option = 0;
 		
-			while(option!=3 && players.get(integer).canReinforce())
+			while(option!=2 && players.get(integer).canReinforce())
 			{
 				Object selected = JOptionPane.showInputDialog(null, "Reinforce", "Number of armies to be placed: " + players.get(integer).getNbArmiesToBePlaced(),
 						JOptionPane.DEFAULT_OPTION,
@@ -1752,12 +2043,7 @@ public class GameEngine implements Serializable
 				}
 				
 
-				if(option == 2)
-				{
-					this.saveGame();
-					break;
-				}
-				else if(option ==3)
+				if(option ==2)
 				{
 					break;
 				}
@@ -1870,8 +2156,6 @@ public class GameEngine implements Serializable
 						}
 						String str = input;
 						str = str.toLowerCase().trim();
-						
-						
 						
 						try
 						{

@@ -916,6 +916,7 @@ public class Utils implements Serializable
 			{
 				
 				IPlayer player = (IPlayer)loadPlayer(bufferedReader);
+				System.out.println(player.getType().name() +" "+player.getStrategy().name() +" "+player.nbTerritoriesOwned());
 				if(player.getType() == RiskPlayerType.Bot)
 				{
 					player = new BotPlayerModel(player);

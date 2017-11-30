@@ -405,15 +405,13 @@ public class RiskStrings implements Serializable
 	 * Attack Options
 	 */
 	public static final String [] ATTACK_OPTIONS = {"1-Attempt Attack",
-													 "2-Save Game",
-													 "3-End attack phase"};
+													 "2-End attack phase"};
 	
 	/**
 	 * Reinforce Options
 	 */
 	public static final String [] REINFORCE_OPTIONS = {"1-Attempt Reinforcement",
-													 "2-Save Game",
-													 "3-End Reinforcement phase"};
+													 "2-End Reinforcement phase"};
 	/**
 	 * FortiFy String
 	 */

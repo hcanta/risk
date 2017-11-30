@@ -21,6 +21,7 @@ import risk.utils.constants.RiskEnum.Strategy;
  */
 public class PlayerModel implements IPlayer
 {
+	
 	/**
 	 * Generated Serial Version UID
 	 */

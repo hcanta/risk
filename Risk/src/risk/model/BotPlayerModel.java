@@ -100,15 +100,15 @@ public class BotPlayerModel extends PlayerModel implements Serializable
 			}
 			else
 			{
-				return this.strategy.name()+" Can't fortify";
+				return this.strategy.name()+" ";
 			}
 		}
 			
 		String origin= fortifyInfo.getFirst();
 		String destination = fortifyInfo.getSecond().getFirst();
-		int armies=fortifyInfo.getSecond().getSecond();
+		int armies=fortifyInfo.getSecond().getSecond() ;
 		this.fortify(origin, destination, armies);
-		return strategy.name()+" Fortify "+ origin+"->"+armies+"->"+destination;
+		return strategy.name()+" Fortify "+ origin+"->"+((armies == 0) ? 1 : armies) +"->"+destination;
 	}
 
 	/**

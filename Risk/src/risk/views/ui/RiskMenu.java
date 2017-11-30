@@ -110,9 +110,9 @@ public class RiskMenu  extends JMenuBar implements Serializable
 		
 	
 		menuFile.add(tournament);
-		menuFile.add(menuItemExit);
-		menuFile.add(loadGame);
 		
+		menuFile.add(loadGame);
+		menuFile.add(menuItemExit);
 		help.add(loggerOff);
 		help.add(countryOff);
 		

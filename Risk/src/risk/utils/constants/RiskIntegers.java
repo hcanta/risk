@@ -79,7 +79,7 @@ public class RiskIntegers implements Serializable
 	/**
 	 * Pause Duration
 	 */
-	public static final int PAUSE_DURATION = 1750;
+	public static final int PAUSE_DURATION = 1050;
 
 	/**
 	 * Integer Marking an error
