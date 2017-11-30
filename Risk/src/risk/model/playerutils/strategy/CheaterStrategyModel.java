@@ -58,6 +58,7 @@ public class CheaterStrategyModel implements IStrategy {
 			{
 				territory = board.getTerritory(player.getTerritoriesOwned().get(i));
 				int armyToBePlaced =  board.getTerritory(territory.getTerritoryName()).getArmyOn()*2;
+				board.getTerritory(territory.getTerritoryName()).setArmyOn(armyToBePlaced);
 			}
 		}
 		return null;
