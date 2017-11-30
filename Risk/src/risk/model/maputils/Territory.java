@@ -444,5 +444,13 @@ public class Territory extends BoardComponent
 		}
 		return false;
 	}
+	/**
+	 * sets the graph for  the territories
+	 * @param g the object to be set;
+	 */
+	public void setGraph(Object g)
+	{
+		this.graph = g;
+	}
 }
 

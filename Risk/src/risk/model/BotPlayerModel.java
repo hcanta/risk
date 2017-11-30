@@ -54,6 +54,10 @@ public class BotPlayerModel extends PlayerModel implements Serializable
 	public BotPlayerModel(IPlayer player) {
 		super(player.getName(), player.getColor(), player.getPlayerID(), player.getDebug(), RiskPlayerType.Bot, player.getStrategy());
 		this.setHand(player.getHand());
+		for(int i =0; i< player.getTerritoriesOwned().size(); i++)
+		{
+			this.addTerritory(player.getTerritoriesOwned().get(i));
+		}
 		this.iStrategy =  StrategyUtils.strategyGenerator(strategy, debug, this);
 	}
 

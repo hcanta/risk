@@ -42,6 +42,10 @@ public class HumanPlayerModel extends PlayerModel implements Serializable
 	public HumanPlayerModel(IPlayer player) {
 		super(player.getName(), player.getColor(), player.getPlayerID(), player.getDebug(), RiskPlayerType.Human, Strategy.human);
 		this.setHand(player.getHand());
+		for(int i =0; i< player.getTerritoriesOwned().size(); i++)
+		{
+			this.addTerritory(player.getTerritoriesOwned().get(i));
+		}
 	}
 
 }

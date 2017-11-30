@@ -884,6 +884,10 @@ public class Utils implements Serializable
 			
 			if(!loadBoard(engine.getBoard(), bufferedReader))
 				return false;
+			for(int i =0; i< engine.getBoard().getNbTerritories(); i++)
+			{
+				engine.getBoard().getTerritory(engine.getBoard().getTerritories().get(i)).setGraph(new Object());
+			}
 			String line; 
 			line = bufferedReader.readLine();
 			String currentPlayer = (String)stringToData(line);
