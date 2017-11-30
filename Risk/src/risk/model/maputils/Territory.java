@@ -406,5 +406,23 @@ public class Territory extends BoardComponent
 
 		return nbOfdiceRollAttacker;
 	}
+
+	/**
+	 * Checks if the territory can be fortified
+	 * @return the territory can be fortified
+	 */
+	public boolean canBeFortified() {
+		
+		for(int i =0; i< this.neighbours.size(); i++)
+		{
+			String territory = this.neighbours.get(i);
+			Territory neighbor = RiskBoard.ProperInstance(graph == null).getTerritory(territory);
+			if(neighbor.canFortify(this.territoryName))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 }
 

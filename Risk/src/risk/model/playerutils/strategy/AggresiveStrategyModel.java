@@ -84,7 +84,7 @@ public class AggresiveStrategyModel implements IStrategy , Serializable
 	 */
 	public int getWeakestNeighbour(Territory territory) {
 
-		int weakestNeighbour=1000;
+		int weakestNeighbour=Integer.MAX_VALUE;
 		for(int j = 0; j < territory.getNeighbours().size(); j++)
 		{
 			if (territory.canAttack(territory.getNeighbours().get(j))) {
