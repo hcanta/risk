@@ -139,5 +139,25 @@ public class RandomStrategyModel implements IStrategy {
 		return null;
 	}
 
+	/**
+	 * Finds the territory with the lowest army
+	 * @param territory The current territory loaded from board
+	 * @return the index of weakest neighbour territory
+	 */
+	@Override
+	public int getWeakestNeighbour(Territory territory) {
+		
+		return 0;
+	}
+	/**
+	 * Finds the territory with the highest army for the respective players
+	 * @return the index of strongest territory
+	 */
+	@Override
+	public int getStrongestTerritory() {
+		
+		return 0;
+	}
+
 }
 

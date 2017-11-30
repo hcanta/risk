@@ -74,7 +74,7 @@ public class BotPlayerModel extends PlayerModel implements Serializable
 			}
 			else
 			{
-				return "Can't Reinforce";
+				return this.strategy.name()+ " Can't Reinforce";
 			}
 		}
 		
@@ -100,7 +100,7 @@ public class BotPlayerModel extends PlayerModel implements Serializable
 			}
 			else
 			{
-				return "Can't fortify";
+				return this.strategy.name()+" Can't fortify";
 			}
 		}
 			

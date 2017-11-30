@@ -349,7 +349,7 @@ public class PlayerModel implements IPlayer
 	 */
 	@Override
 	public boolean canReinforce() {
-		return this.nbArmiesToBePlaced > 0;
+		return this.nbArmiesToBePlaced > 0 && this.territoriesOwned.size() >0;
 	}
 
 	/**
@@ -360,17 +360,20 @@ public class PlayerModel implements IPlayer
 	public boolean canFortify() {
 		Territory territory;
 		String neighbor;
-		for(int i=0; i< this.territoriesOwned.size(); i++)
+		if( this.territoriesOwned.size() >1)
 		{
-			territory = board.getTerritory(territoriesOwned.get(i));
-			for(int j =0; j< territory.getNeighbours().size(); j++)
+			for(int i=0; i< this.territoriesOwned.size(); i++)
 			{
-				neighbor = territory.getNeighbours().get(j);
-				if(this.territoriesOwned.contains(neighbor))
+				territory = board.getTerritory(territoriesOwned.get(i));
+				for(int j =0; j< territory.getNeighbours().size(); j++)
 				{
-					if(territory.getArmyOn() > 1 || board.getTerritory(neighbor).getArmyOn() > 1)
+					neighbor = territory.getNeighbours().get(j);
+					if(this.territoriesOwned.contains(neighbor))
 					{
-						return true;
+						if(territory.getArmyOn() > 1 || board.getTerritory(neighbor).getArmyOn() > 1)
+						{
+							return true;
+						}
 					}
 				}
 			}

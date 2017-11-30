@@ -1051,5 +1051,23 @@ public class Utils implements Serializable
 		}
 		return null;
 	}
+
+	/**
+	 * 
+	 *Search for the index of string given an array
+	 * @param selectedString The string that index we search
+	 * @param values the array in which the search occurs
+	 * @return the index of selectedString in the array
+	 */
+	public static int getIndexOf(String selectedString, Strategy[] values) 
+	{
+
+		String [] array = new String[values.length];
+		for(int i =0; i < values.length; i++)
+		{
+			array[i]= values[i].name().trim();
+		}
+		return getIndexOf(selectedString, array);
+	}
 }
 

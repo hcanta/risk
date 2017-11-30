@@ -58,19 +58,22 @@ public class AggresiveStrategyModel implements IStrategy , Serializable
 	 * Finds the territory with the highest army for the respective players
 	 * @return the index of strongest territory
 	 */
+	@Override
 	public int getStrongestTerritory() {
 		
 		Territory territory;
 		int getArmies=0;
 		int strongestTerritory=Integer.MIN_VALUE;
+		
 		for (int i = 0; i < player.getTerritoriesOwned().size(); i++) {
 			
 			territory = board.getTerritory(player.getTerritoriesOwned().get(i));
 			
-			if (territory.canAttack() && (getArmies < board.getTerritory(territory.getTerritoryName()).getArmyOn())) {
+			if (territory.canAttack() && (getArmies < territory.getArmyOn())) {
 		
 				getArmies = board.getTerritory(territory.getTerritoryName()).getArmyOn();
 				strongestTerritory = i;
+				
 			}			
 		}
 		
@@ -82,6 +85,7 @@ public class AggresiveStrategyModel implements IStrategy , Serializable
 	 * @param territory The current territory loaded from board
 	 * @return the index of weakest neighbour territory
 	 */
+	@Override
 	public int getWeakestNeighbour(Territory territory) {
 
 		int weakestNeighbour=Integer.MAX_VALUE;
@@ -168,6 +172,7 @@ public class AggresiveStrategyModel implements IStrategy , Serializable
 	@Override
 	public Tuple<String, Tuple<String, Integer>> attack() 
 	{
+		
 		if (player.canAttack()) {
 			
 			Territory  territory;

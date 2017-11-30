@@ -219,7 +219,7 @@ public class GameEngine implements Serializable
 				         @Override
 				         public void run() {
 				             
-			            	 play(true);
+			            	 play(true,false);
 				             
 				         }
 					});
@@ -926,7 +926,10 @@ public class GameEngine implements Serializable
 			  
 			    humanColor = RiskEnum.PlayerColors.valueOf(selectedString);
 			    addHumanPlayer(str, humanColor);
-			    createBots(nbPlayer, tournament, humanColor);
+			    if(!createBots(nbPlayer, tournament, humanColor))
+			    {
+			    	return false;
+			    }
 			    
 			}
 			else
@@ -987,33 +990,56 @@ public class GameEngine implements Serializable
 	 * @param numberOfPlayers The Number of Players in the game
 	 * @param tournament  are we in tournament mode or not
 	 * @param humanColor the color the human player chose
+	 * @return were the bot created properly
 	 */
-	public void createBots(int numberOfPlayers, boolean tournament, RiskEnum.PlayerColors humanColor)
+	public boolean createBots(int numberOfPlayers, boolean tournament, RiskEnum.PlayerColors humanColor)
 	{
+		short nbOfbots = (short) (tournament ? 0 : 1);
 		
 		ArrayList<PlayerColors> plColor = new ArrayList<PlayerColors>();
 		for(int i = 0; i < PlayerColors.values().length; i++)
 		{
-			if(humanColor!= PlayerColors.values()[i])
+			if(humanColor!= PlayerColors.values()[i] || tournament)
 			{
 				plColor.add(PlayerColors.values()[i]);
 			}
 		}
 		short id;
 		Collections.shuffle(plColor);
-		if(!tournament)
+		ArrayList<Strategy> strategies = new ArrayList<Strategy>();
+		int option;
+		Strategy[] values = Strategy.values();
+		for(short i = nbOfbots; i< numberOfPlayers; i++)
 		{
-			for(short i = 1; i< numberOfPlayers; i++)
-			{	
-				id = this.IDGenerator();
-				players.put(new Integer(id), new BotPlayerModel("Computer "+ i, plColor.get(i-1), id,debug, Strategy.random));
+			if(this.gamev != null)
+			{
+				Object selected = JOptionPane.showInputDialog(null, "Start up", "Choose the strategy for Computer " +i,
+						JOptionPane.DEFAULT_OPTION,
+						null, values,values[0]);
+				if ( selected != null )
+				{
+				    String selectedString = selected.toString().trim();
+				    option = Utils.getIndexOf(selectedString,values) ;
+				    strategies.add(values[option]);
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else
+			{
+				strategies.add(Strategy.random);
 			}
 		}
-		else //Creating specific bots
-		{
-			players.clear();
-			
+	
+		for(short i = nbOfbots; i< numberOfPlayers; i++)
+		{	
+			id = this.IDGenerator();
+			players.put(new Integer(id), new BotPlayerModel("Computer "+ i, plColor.get(i-nbOfbots), id,debug, strategies.get(i -nbOfbots)));
 		}
+		return true;
+		
 	}
 	
 	/**
@@ -1146,13 +1172,14 @@ public class GameEngine implements Serializable
 	 */
 	private void play()
 	{
-		play(false);
+		play(false,false);
 	}
 	/**
 	 * Play The Game
 	 * @param gameloaded was the game loaded
+	 * @param tournament Is this a tournament
 	 */
-	private void play(boolean gameloaded)
+	private void play(boolean gameloaded, boolean tournament)
 	{
 		if(gameloaded)
 		{
@@ -1194,6 +1221,10 @@ public class GameEngine implements Serializable
 
 			}
 			
+		}
+		if(gamev!=null && !tournament)
+		{
+			JOptionPane.showMessageDialog(this.gamev.getFrame(), "Game Over");
 		}
 	}
 	/**
@@ -1491,6 +1522,12 @@ public class GameEngine implements Serializable
 				{
 					
 					 Tuple<String, Tuple<String, Integer>> data = player.attack();
+					 if(isGameOver())
+					 {
+						 
+						 return;
+					 }
+					 
 					 if(data == null)
 					 {
 						 if(player.getStrategy() == Strategy.benevolent) // check for benevolent
@@ -1499,7 +1536,7 @@ public class GameEngine implements Serializable
 						 }
 						 else
 						 {
-							 this.addToHistoryPanel("Cant' attack");
+							 this.addToHistoryPanel(player.getStrategy().name()+" Cant' attack");
 						 }
 					 }
 					 else
@@ -1508,6 +1545,7 @@ public class GameEngine implements Serializable
 						 Territory defender = board.getTerritory(data.getSecond().getFirst());
 						 this.addToHistoryPanel(player.getType().name() +" Attack "+attacker.getTerritoryName() +" -> " +defender.getTerritoryName());
 						 attackHelper( attacker.potentialNbOfDiceRollAttack(),  attacker,  defender,  player,  wonOnce,  integer);
+						 
 					 }
 				}
 				
@@ -1793,7 +1831,7 @@ public class GameEngine implements Serializable
 	 */
 	private boolean isGameOver() 
 	{
-		boolean gameOver = board.isGameOver();
+		boolean gameOver = board.isGameOver() || this.nbRoundsPlayed >  this.maxRounds;
 		
 		return  gameOver;
 	}

@@ -58,7 +58,7 @@ public class BenevolentStrategyModel implements IStrategy {
 			int toBePlaced = player.getNbArmiesToBePlaced();
 			int weakestTerritory = 0;
 
-			int getNbArmies = board.getTerritory(player.getTerritoriesOwned().get(0)).getArmyOn();
+			int getNbArmies = Integer.MAX_VALUE;
 			
 			for(int i = 1;i<player.getTerritoriesOwned().size();i++){
 				Territory currentTerritory = board.getTerritory(player.getTerritoriesOwned().get(i));
@@ -132,5 +132,25 @@ public class BenevolentStrategyModel implements IStrategy {
 	public Tuple<String, Tuple<String, Integer>> attack() 
 	{
 		return null;
+	}
+
+	/**
+	 * Finds the territory with the lowest army
+	 * @param territory The current territory loaded from board
+	 * @return the index of weakest neighbour territory
+	 */
+	@Override
+	public int getWeakestNeighbour(Territory territory) {
+		
+		return 0;
+	}
+	/**
+	 * Finds the territory with the highest army for the respective players
+	 * @return the index of strongest territory
+	 */
+	@Override
+	public int getStrongestTerritory() {
+		
+		return 0;
 	}
 }

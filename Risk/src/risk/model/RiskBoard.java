@@ -528,6 +528,7 @@ public class RiskBoard extends Observable implements Serializable
 	 * @return true/false is the game over or not
 	 */
 	public boolean isGameOver() {
+		checkOwnerStatus();
 		return this.ownerID != RiskIntegers.INITIAL_OWNER;
 	}
 

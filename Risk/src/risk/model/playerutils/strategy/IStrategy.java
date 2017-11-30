@@ -5,6 +5,7 @@ package risk.model.playerutils.strategy;
 
 import java.io.Serializable;
 
+import risk.model.maputils.Territory;
 import risk.utils.Tuple;
 
 /**
@@ -31,5 +32,17 @@ public interface IStrategy extends Serializable
 	 * @return a tuple of size 2, where the first element is the origin (attacker) and  the second is the destination of the attack (defender)
 	 */
 	public Tuple<String,Tuple<String,Integer>> attack();
+
+	/**
+	 * Finds the territory with the lowest army
+	 * @param territory The current territory loaded from board
+	 * @return the index of weakest neighbour territory
+	 */
+	int getWeakestNeighbour(Territory territory);
+	/**
+	 * Finds the territory with the highest army for the respective players
+	 * @return the index of strongest territory
+	 */
+	int getStrongestTerritory();
 
 }

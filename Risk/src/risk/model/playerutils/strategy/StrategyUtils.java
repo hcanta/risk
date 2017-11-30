@@ -26,6 +26,7 @@ public class StrategyUtils
 		{
 			case aggressive:
 				strat = new AggresiveStrategyModel(debug, player);
+				break;
 			case cheater:
 				strat = new CheaterStrategyModel(debug, player);
 				break;
