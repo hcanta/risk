@@ -424,5 +424,25 @@ public class Territory extends BoardComponent
 		}
 		return false;
 	}
+
+	/**
+	 * Checks if the Territory can attack
+	 * @return Can the territory attack
+	 */
+	public boolean canAttack() {
+		if(this.armyOn > 1)
+		{
+			for(int i =0; i< this.neighbours.size(); i++)
+			{
+				String territory = this.neighbours.get(i);
+				Territory neighbor = RiskBoard.ProperInstance(graph == null).getTerritory(territory);
+				if(neighbor.ownerID != this.ownerID)
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 }
 

@@ -62,12 +62,12 @@ public class AggresiveStrategyModel implements IStrategy , Serializable
 		
 		Territory territory;
 		int getArmies=0;
-		int strongestTerritory=0;
+		int strongestTerritory=Integer.MIN_VALUE;
 		for (int i = 0; i < player.getTerritoriesOwned().size(); i++) {
 			
 			territory = board.getTerritory(player.getTerritoriesOwned().get(i));
 			
-			if (getArmies < board.getTerritory(territory.getTerritoryName()).getArmyOn()) {
+			if (territory.canAttack() && (getArmies < board.getTerritory(territory.getTerritoryName()).getArmyOn())) {
 		
 				getArmies = board.getTerritory(territory.getTerritoryName()).getArmyOn();
 				strongestTerritory = i;
@@ -109,7 +109,12 @@ public class AggresiveStrategyModel implements IStrategy , Serializable
 		if (player.canReinforce()) {
 			
 			int toBePlaced = player.getNbArmiesToBePlaced();
-			String toReinforce = player.getTerritoriesOwned().get(getStrongestTerritory());
+			int index = getStrongestTerritory();
+			if(index == Integer.MIN_VALUE)
+			{
+				return null;
+			}
+			String toReinforce = player.getTerritoriesOwned().get(index);
 			
 			Tuple<String, Integer> toReturn = new Tuple<String, Integer>(toReinforce, toBePlaced);
 			return toReturn;
@@ -128,7 +133,12 @@ public class AggresiveStrategyModel implements IStrategy , Serializable
 		if (player.canFortify()) {
 			
 			ArrayList<Tuple<String,String>> fortifiable = new ArrayList<Tuple<String,String>>();
-			Territory  territory = board.getTerritory(player.getTerritoriesOwned().get(getStrongestTerritory()));
+			int index = getStrongestTerritory();
+			if(index == Integer.MIN_VALUE)
+			{
+				return null;
+			}
+			Territory  territory = board.getTerritory(player.getTerritoriesOwned().get(index));
 			
 			for(int j = 0; j < territory.getNeighbours().size(); j++)
 			{
@@ -139,9 +149,9 @@ public class AggresiveStrategyModel implements IStrategy , Serializable
 				}
 			}
 		
-			int index = rand.nextInt(fortifiable.size());
-			String origin = fortifiable.get(index).getFirst();
-			String destination = fortifiable.get(index).getSecond();
+			int indexx = rand.nextInt(fortifiable.size());
+			String origin = fortifiable.get(indexx).getFirst();
+			String destination = fortifiable.get(indexx).getSecond();
 			int armyToMove = board.getTerritory(destination).getArmyOn() - 1;
 			Tuple<String, Tuple<String,Integer>> toReturn = 
 					new  Tuple<String, Tuple<String,Integer>>(origin, new Tuple<String,Integer>(destination, armyToMove));
@@ -161,8 +171,14 @@ public class AggresiveStrategyModel implements IStrategy , Serializable
 		if (player.canAttack()) {
 			
 			Territory  territory;
-			territory = board.getTerritory(player.getTerritoriesOwned().get(getStrongestTerritory()));
-				
+			int index = getStrongestTerritory();
+			if(index == Integer.MIN_VALUE)
+			{
+				return null;
+			}
+			territory = board.getTerritory(player.getTerritoriesOwned().get(index));
+			
+			
 			if(territory.canAttack(territory.getNeighbours().get(getWeakestNeighbour(territory)))) {
 
 				Tuple<String, Tuple<String,Integer>> toReturn = 
