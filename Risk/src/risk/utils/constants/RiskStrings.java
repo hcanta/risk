@@ -409,6 +409,12 @@ public class RiskStrings implements Serializable
 													 "3-End attack phase"};
 	
 	/**
+	 * Reinforce Options
+	 */
+	public static final String [] REINFORCE_OPTIONS = {"1-Attempt Reinforcement",
+													 "2-Save Game",
+													 "3-End Reinforcement phase"};
+	/**
 	 * FortiFy String
 	 */
 	public static final String FORTIFY = "Fortify";

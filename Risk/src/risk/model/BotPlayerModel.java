@@ -81,7 +81,7 @@ public class BotPlayerModel extends PlayerModel implements Serializable
 		String territory= reinforceInfo.getFirst();
 		int army=reinforceInfo.getSecond();
 		this.reinforce(territory, army);
-		return "Reinforce "+ territory+" With "+army;	
+		return strategy.name()+" Reinforce "+ territory+" With "+army;	
 	}
 
 	/**

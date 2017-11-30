@@ -14,8 +14,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Random;
-import java.util.Scanner;
-
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import risk.game.cards.Card;
@@ -1181,9 +1179,10 @@ public class GameEngine implements Serializable
 		
 		while(!isGameOver())
 		{
+			this.nbRoundsPlayed++;
+			
 			for(int i =0; i < this.playerTurnOrder.size(); i++)
 			{
-				this.nbRoundsPlayed++;
 				this.updateCardExchange(players.get(this.playerTurnOrder.get(i)));
 				board.setCurrentPlayer(players.get(this.playerTurnOrder.get(i)).getName());
 				this.currentPlayer = board.getCurrentPlayer();
@@ -1209,7 +1208,7 @@ public class GameEngine implements Serializable
 		{
 			int option = 0;
 		
-			while(option!=3)
+			while(option!=3 && players.get(integer).canFortify())
 			{
 				Object selected = JOptionPane.showInputDialog(null, RiskStrings.FORTIFY, RiskStrings.FORTIFY,
 						JOptionPane.DEFAULT_OPTION,
@@ -1351,7 +1350,7 @@ public class GameEngine implements Serializable
 			{
 				int option = 0;
 				
-				while(option!=3)
+				while(option!=3 && player.canAttack())
 				{
 					// Get User Input
 					Object selected = JOptionPane.showInputDialog(null, RiskStrings.ATTACK, RiskStrings.ATTACK,
@@ -1461,7 +1460,7 @@ public class GameEngine implements Serializable
 				
 				
 			}
-			else //Robot Randomly picks a country  belonging to it, and attack one of the neighbors
+			else //Robot 
 			{
 				if(player.getStrategy() == Strategy.cheater) // the type cheater behave widely differently
 				{
@@ -1689,101 +1688,86 @@ public class GameEngine implements Serializable
 		this.addToHistoryPanel("Army received: " +newArmies);
 		board.update(RiskEvent.GeneralUpdate);
 		players.get(integer).incrementArmiesBy(newArmies);
+		
+		cardExchangeCheck(integer);
 		//Player Object
 		if(players.get(integer).getType() == RiskEnum.RiskPlayerType.Human)
 		{
-			int extra = 0;
-			boolean mustExchange = false;
-			boolean exchange = false;
-			if(players.get(integer).getHand().mustTurnInCards() || players.get(integer).getHand().canTurnInCards())
-			{
-				if(players.get(integer).getHand().mustTurnInCards())
-				{
-					mustExchange = true;
-					exchange = true;
-					this.addToHistoryPanel(players.get(integer).getName()+" Must Turn In Cards");
-				}
-				
-				if(!mustExchange && players.get(integer).getHand().canTurnInCards())
-				{
-					System.out.println("Do You whish to exchange cards ? 0 for No 1 for yes ");
-					int opt = sc.nextInt();
-					sc.nextLine();
-					exchange = 1 == opt;
-				}
-				if(exchange)
-				{
-					this.addToHistoryPanel("Card Exchange in progress");
-					
-					board.update(RiskEvent.CardTrade);
-					System.out.println("Here are the cards that you own");
-					System.out.println(players.get(integer).getHand().toString());
-					System.out.println("First index of card to be traded");
-					int id1 = sc.nextInt();
-					System.out.println("Second index of card to be traded");
-					int id2 = sc.nextInt();
-					System.out.println("third index of card to be traded");
-					int id3 = sc.nextInt();
-					int iArr[] = {id1, id2, id3};
-					Arrays.sort(iArr);
-					Card card1 = players.get(integer).getHand().getCards().get(id1);
-					Card card2 = players.get(integer).getHand().getCards().get(id2);
-					Card card3 = players.get(integer).getHand().getCards().get(id3);
-					if(players.get(integer).getTerritoriesOwned().contains(card1.getTerritory())
-							||players.get(integer).getTerritoriesOwned().contains(card2.getTerritory())
-							||players.get(integer).getTerritoriesOwned().contains(card3.getTerritory())
-							)
-					{
-						extra = 2;
-						this.addToHistoryPanel("One of the card traded\n shows a country occupied\n by player 2 extra armies ");
-						
-					}
-					players.get(integer).getHand().removeCardsFromHand(iArr[0], iArr[1], iArr[2]);
-					this.addToHistoryPanel("Cards Were traded");
-					
-					board.update(RiskEvent.CardTrade);
-					players.get(integer).incrementArmiesBy(extra);
-					players.get(integer).incrementArmiesBy(getArmiesFromCardExchange());
-					
-					
-				}
-
-			}
+			
 			//Reinforce portion
-
+			
 			int option = 0;
 		
-			while(option!=2)
+			while(option!=3 && players.get(integer).canReinforce())
 			{
-				System.out.println("Number of armies to be placed: " + players.get(integer).getNbArmiesToBePlaced());
-				System.out.println("1-Attempt Reinforcement");
-				System.out.println("2-End Reinforcement phase");
-
+				Object selected = JOptionPane.showInputDialog(null, "Reinforce", "Number of armies to be placed: " + players.get(integer).getNbArmiesToBePlaced(),
+						JOptionPane.DEFAULT_OPTION,
+						null, RiskStrings.REINFORCE_OPTIONS, RiskStrings.REINFORCE_OPTIONS[0]);
+				if ( selected != null )
+				{
+				    String selectedString = selected.toString();
+				    option = Utils.getIndexOf(selectedString,RiskStrings.REINFORCE_OPTIONS) + 1;
+				}
+				else
+				{
+					break;
+				}
 				
-				option = sc.nextInt();
+
 				if(option == 2)
+				{
+					this.saveGame();
+					break;
+				}
+				else if(option ==3)
 				{
 					break;
 				}
 				else if(option == 1)
 				{
-					sc.nextLine();
-					System.out.print("Enter  territory to reinforce: ");
-					String territory = sc.nextLine();
-					System.out.print("Enter number of army to add: ");
-					int army = sc.nextInt();
-					System.out.println(army);
-					sc.nextLine();
+					String input,str;
+					input =  (String)JOptionPane.showInputDialog(gamev.getFrame(), "Enter the territory to reinforce",
+							"Reinforce "+"Number of armies to be placed: " + players.get(integer).getNbArmiesToBePlaced(), JOptionPane.PLAIN_MESSAGE, null, null, "");
+					if(input == null)
+						continue;
+					str = input;
+					str = str.toLowerCase().trim();
+					
+					
+					String territory =str;
+					
+					input =  (String)JOptionPane.showInputDialog(gamev.getFrame(), "Enter number of army to add",
+							"Reinforce "+"Number of armies to be placed: " + players.get(integer).getNbArmiesToBePlaced(), JOptionPane.PLAIN_MESSAGE, null, null, "");
+					if(input == null)
+						continue;
+					str = input;
+					str = str.toLowerCase().trim();
+					
+					
+					int army = 0;
+					try
+					{
+						army = Integer.parseInt(str);
+					}
+					catch(Exception e)
+					{
+						JOptionPane.showMessageDialog(gamev.getFrame(),
+							   RiskStrings.PLEASE_NUMBER,
+							   "Reinforce",
+							    JOptionPane.WARNING_MESSAGE);
+						continue;
+					}      
+					
 					
 					if(players.get(integer).reinforce(territory, army))
 					{
-						System.out.println("Reinforcement was successful");
+						this.addToHistoryPanel("Reinforcement was successful");
 						territoryInfo();
-						System.out.println(board.getTerritory(territory).getArmyOn());
+						
 					}
 					else
 					{
-						System.out.println("Reinforcement was not successful");
+						this.addToHistoryPanel("Reinforcement was not successful");
 					}
 				}
 			}
@@ -1814,7 +1798,100 @@ public class GameEngine implements Serializable
 		return  gameOver;
 	}
 	
-	
+	/**
+	 * Performs a card Exchange
+	 * @param integer the index of the player 
+	 */
+	private void cardExchangeCheck(Integer integer)
+	{
+		int extra = 0;
+		boolean mustExchange = false;
+		boolean exchange = false;
+		if(players.get(integer).getHand().mustTurnInCards() || players.get(integer).getHand().canTurnInCards())
+		{
+			if(players.get(integer).getHand().mustTurnInCards())
+			{
+				mustExchange = true;
+				exchange = true;
+				this.addToHistoryPanel(players.get(integer).getName()+" Must Turn In Cards");
+			}
+			
+			if(players.get(integer).getType() == RiskPlayerType.Human)
+			{
+				if(!mustExchange && players.get(integer).getHand().canTurnInCards())
+				{
+					int opt = -1;
+					while(opt != 0 && opt != 1 )
+					{
+						String input =  (String)JOptionPane.showInputDialog(gamev.getFrame(), "Exchange card (0) /(1)",
+								"Reinforce "  , JOptionPane.PLAIN_MESSAGE, null, null, "");
+						if(input == null)
+						{
+							exchange = false;
+							break;
+						}
+						String str = input;
+						str = str.toLowerCase().trim();
+						
+						
+						
+						try
+						{
+							opt = Integer.parseInt(str);
+						}
+						catch(Exception e)
+						{
+							JOptionPane.showMessageDialog(gamev.getFrame(),
+								   RiskStrings.PLEASE_NUMBER,
+								   "Reinforce",
+								    JOptionPane.WARNING_MESSAGE);
+							opt = -1;
+							continue;
+						}    
+						
+						
+						exchange = opt == 1;
+					}
+				}
+			}
+			if(exchange)
+			{
+				this.addToHistoryPanel("Card Exchange in progress");
+				this.cardExchangeCount ++;
+				updateCardExchange( players.get(integer));
+				pause();
+				
+				int id1 = 0;
+				
+				int id2 = 1;
+				
+				int id3 = 2;
+				int iArr[] = {id1, id2, id3};
+				Arrays.sort(iArr);
+				Card card1 = players.get(integer).getHand().getCards().get(id1);
+				Card card2 = players.get(integer).getHand().getCards().get(id2);
+				Card card3 = players.get(integer).getHand().getCards().get(id3);
+				if(players.get(integer).getTerritoriesOwned().contains(card1.getTerritory())
+						||players.get(integer).getTerritoriesOwned().contains(card2.getTerritory())
+						||players.get(integer).getTerritoriesOwned().contains(card3.getTerritory())
+						)
+				{
+					extra = 2;
+					this.addToHistoryPanel("One of the card traded\n shows a country occupied\n by player 2 extra armies ");
+					
+				}
+				players.get(integer).getHand().removeCardsFromHand(iArr[0], iArr[1], iArr[2]);
+				this.addToHistoryPanel("Cards Were traded");
+				
+				board.update(RiskEvent.CardTrade);
+				players.get(integer).incrementArmiesBy(extra);
+				players.get(integer).incrementArmiesBy(getArmiesFromCardExchange());
+				updateCardExchange( players.get(integer));
+
+			}
+
+		}
+	}
 
 	/**
 	 * Returns the amount of armies when the cards are exchanged
@@ -1857,10 +1934,7 @@ public class GameEngine implements Serializable
 		return this.players.get(new Integer(index));
 	}
 
-	/**
-	 * The Scanner object to read from standard input
-	 */
-	private Scanner sc = new Scanner(System.in);
+
 	
 	/**
 	 * Returns the ID of the first player for testing purposes
