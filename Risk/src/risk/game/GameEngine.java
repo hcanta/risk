@@ -19,12 +19,12 @@ import java.util.Scanner;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import risk.game.cards.Card;
+import risk.model.BotPlayerModel;
 import risk.model.HumanPlayerModel;
 import risk.model.RiskBoard;
 import risk.model.maputils.Continent;
 import risk.model.maputils.Territory;
 import risk.model.playerutils.IPlayer;
-import risk.model.playerutils.PlayerModel;
 import risk.utils.Tuple;
 import risk.utils.Utils;
 import risk.utils.constants.RiskEnum;
@@ -1008,7 +1008,7 @@ public class GameEngine implements Serializable
 			for(short i = 1; i< numberOfPlayers; i++)
 			{	
 				id = this.IDGenerator();
-				players.put(new Integer(id), new PlayerModel("Computer "+ i, plColor.get(i-1), id,debug,RiskPlayerType.Bot, Strategy.random));
+				players.put(new Integer(id), new BotPlayerModel("Computer "+ i, plColor.get(i-1), id,debug, Strategy.random));
 			}
 		}
 		else //Creating specific bots
@@ -1299,7 +1299,7 @@ public class GameEngine implements Serializable
 		}
 		else 
 		{
-			players.get(integer).fortify();
+			this.addToHistoryPanel(players.get(integer).fortify());
 			this.territoryInfo();
 			board.update(RiskEvent.GeneralUpdate);
 			pause();

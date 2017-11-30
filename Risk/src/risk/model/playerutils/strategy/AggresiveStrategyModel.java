@@ -140,8 +140,8 @@ public class AggresiveStrategyModel implements IStrategy , Serializable
 			}
 		
 			int index = rand.nextInt(fortifiable.size());
-			String origin = fortifiable.get(index).getSecond();
-			String destination = fortifiable.get(index).getFirst();
+			String origin = fortifiable.get(index).getFirst();
+			String destination = fortifiable.get(index).getSecond();
 			int armyToMove = board.getTerritory(destination).getArmyOn() - 1;
 			Tuple<String, Tuple<String,Integer>> toReturn = 
 					new  Tuple<String, Tuple<String,Integer>>(origin, new Tuple<String,Integer>(destination, armyToMove));

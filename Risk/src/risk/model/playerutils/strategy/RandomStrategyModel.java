@@ -96,6 +96,7 @@ public class RandomStrategyModel implements IStrategy {
 			String origin = fortifiable.get(index).getFirst();
 			String destination = fortifiable.get(index).getSecond();
 			int armyToMove = rand.nextInt(board.getTerritory(origin).getArmyOn());
+			armyToMove = armyToMove == 0 ? 1 : armyToMove;
 			Tuple<String, Tuple<String,Integer>> toReturn = 
 					new  Tuple<String, Tuple<String,Integer>>(origin, new Tuple<String,Integer>(destination, armyToMove));
 			return toReturn;

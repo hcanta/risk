@@ -13,6 +13,7 @@ import risk.utils.Tuple;
 import risk.utils.constants.RiskEnum;
 import risk.utils.constants.RiskEnum.PlayerColors;
 import risk.utils.constants.RiskEnum.RiskPlayerType;
+import risk.utils.constants.RiskEnum.Strategy;
 
 /**
  * Implementation of the bot model
@@ -61,15 +62,26 @@ public class BotPlayerModel extends PlayerModel implements Serializable
 	 * @return true/ false
 	 */
 	@Override
-	public boolean reinforce() 
+	public String reinforce() 
 	{
 		
 		Tuple<String, Integer> reinforceInfo = this.iStrategy.reinforce();
 		if( reinforceInfo == null)
-			return false;
+		{
+			if(this.strategy == Strategy.cheater)
+			{
+				return "Cheater Reinforce";
+			}
+			else
+			{
+				return "Can't Reinforce";
+			}
+		}
+		
 		String territory= reinforceInfo.getFirst();
 		int army=reinforceInfo.getSecond();
-		return this.reinforce(territory, army);
+		this.reinforce(territory, army);
+		return "Reinforce "+ territory+" With "+army;	
 	}
 
 	/**
@@ -77,16 +89,26 @@ public class BotPlayerModel extends PlayerModel implements Serializable
 	 * @return true/ false
 	 */
 	@Override
-	public void fortify() 
+	public String fortify() 
 	{
 		Tuple<String, Tuple<String, Integer>> fortifyInfo = this.iStrategy.fortify();
 		if( fortifyInfo == null)
-			return ;
+		{
+			if(this.strategy == Strategy.cheater)
+			{
+				return "Cheater Fortification";
+			}
+			else
+			{
+				return "Can't fortify";
+			}
+		}
+			
 		String origin= fortifyInfo.getFirst();
 		String destination = fortifyInfo.getSecond().getFirst();
 		int armies=fortifyInfo.getSecond().getSecond();
 		this.fortify(origin, destination, armies);
-		return ;
+		return strategy.name()+" Fortify "+ origin+"->"+armies+"->"+destination;
 	}
 
 	/**

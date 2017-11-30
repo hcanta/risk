@@ -389,22 +389,22 @@ public class PlayerModel implements IPlayer
 
 	/**
 	 * Perform a reinforcement To be fully implemented on BotModel
-	 * @return true/ false
+	 * @return reinforcement result message
 	 */
 	@Override
-	public boolean reinforce() 
+	public String reinforce() 
 	{
-		return false;
+		return "";
 	}
 
 	/**
 	 * Perform a fortification To be fully implemented on BotModel
-	 * @return true/ false
+	 * @return fortify result message
 	 */
 	@Override
-	public void fortify() 
+	public String fortify() 
 	{
-		return;
+		return "";
 	}
 
 	

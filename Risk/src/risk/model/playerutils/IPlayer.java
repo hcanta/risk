@@ -153,14 +153,15 @@ public interface IPlayer extends Serializable
 	
 	/**
 	 * Perform a reinforcement
-	 * @return true/ false
+	 * @return reinforcement result message
 	 */
-	public boolean reinforce();
+	public String reinforce();
 	
 	/**
 	 * Perform a fortification
+	 * @return fortify result message
 	 */
-	public void fortify();
+	public String fortify();
 	
 	
 	/**
