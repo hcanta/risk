@@ -5,9 +5,6 @@
 package risk.model.playerutils.strategy;
 
 import java.util.ArrayList;
-import java.util.Random;
-
-import risk.model.RiskBoard;
 import risk.model.maputils.Territory;
 import risk.model.playerutils.IPlayer;
 import risk.utils.Tuple;
@@ -15,35 +12,23 @@ import risk.utils.Tuple;
 /**
  * Implementation of the Random Strategy Model
  * @author hcanta
+ * @version 4.1
  */
-public class RandomStrategyModel implements IStrategy {
+public class RandomStrategyModel extends Strategy {
 
 	/**
 	 * Generated Serial Version UID
 	 */
 	private static final long serialVersionUID = 5927190171534944442L;
 	/**
-	 * Random generator
-	 */
-	private Random rand;
-	/**
-	 * The player using the strategy
-	 */
-	private IPlayer player;
-	/**
-	 * The current game Board
-	 */
-	private RiskBoard board;
+	
 	/**
 	 * Constructor for the Strategy Model
-	 * @param debug The current board in use
 	 * @param player The player using the strategy
 	 */
-	public RandomStrategyModel(boolean debug, IPlayer player) 
+	public RandomStrategyModel(IPlayer player) 
 	{
-		this.board = RiskBoard.ProperInstance(debug);
-		this.player = player;
-		this.rand = new Random();
+		super(player);
 	}
 
 	/**

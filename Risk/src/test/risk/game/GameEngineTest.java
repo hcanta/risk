@@ -35,10 +35,7 @@ public class GameEngineTest {
 	 * A second player of object
 	 */
 	private IPlayer secondPlayer;
-	/**
-	 * Are we debugging
-	 */
-	private boolean debug;
+
 	/**
 	 * The Game Engine in uses
 	 */
@@ -51,16 +48,12 @@ public class GameEngineTest {
 	@Before
 	public void setUp() throws Exception 
 	{
-		debug = true;
-		
-		risk.model.RiskBoard.ProperInstance(debug);
-		
-		this.engine = new GameEngine(null, debug);
-		Utils.loadFile(new File("Maps/World.map"),debug);
+		this.engine = new GameEngine(null);
+		Utils.loadFile(new File("Maps/World.map"));
 		
 		engine.addHumanPlayer("human", RiskEnum.PlayerColors.red);
 		player = engine.getPlayer(engine.testFirstPlayer());
-		secondPlayer = new PlayerModel("test",PlayerColors.red,(short)1,debug,RiskPlayerType.Bot, Strategy.random);
+		secondPlayer = new PlayerModel("test",PlayerColors.red,(short)1,RiskPlayerType.Bot, Strategy.random);
 		engine.createBots(4, false, RiskEnum.PlayerColors.red);
 		engine.generateTurnOrder();
 		
@@ -106,12 +99,12 @@ public class GameEngineTest {
 	}
 	
 	/**
-	 * testing the random assignation of armies and territories.
+	 * testing the random assignment of armies and territories.
 	 */
 	@Test
 	public void testRandomAssign() {
-		risk.model.RiskBoard.ProperInstance(debug).clear();
-		Utils.loadFile(new File("Maps/World.map"),debug);
+		risk.model.RiskBoard.Instance.clear();
+		Utils.loadFile(new File("Maps/World.map"));
 		
 		engine.addHumanPlayer("human", RiskEnum.PlayerColors.red);
 		Integer id =  new Integer (engine.testFirstPlayer());
@@ -136,9 +129,9 @@ public class GameEngineTest {
 		engine.randomAssignTerritories();
 		player.addTerritory("alaska");	
 		secondPlayer.addTerritory("alberta");
-		RiskBoard.ProperInstance(debug).getTerritory("alberta").setOwnerID(secondPlayer);
-		RiskBoard.ProperInstance(debug).getTerritory("alaska").setOwnerID(player);
-		RiskBoard.ProperInstance(debug).getTerritory("alaska").setArmyOn(5);
+		RiskBoard.Instance.getTerritory("alberta").setOwnerID(secondPlayer);
+		RiskBoard.Instance.getTerritory("alaska").setOwnerID(player);
+		RiskBoard.Instance.getTerritory("alaska").setArmyOn(5);
 		Assert.assertTrue(player.canAttack());
 	}
 }

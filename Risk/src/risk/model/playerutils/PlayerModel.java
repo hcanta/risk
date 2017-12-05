@@ -69,20 +69,16 @@ public class PlayerModel implements IPlayer
 	
 	private ArrayList<String>territoriesOwned;
 	
-	/**
-	 * Set to true if we re debugging or not
-	 */
-	protected boolean debug;
+	
 	/**
 	 * Constructor for the Player Model
 	 * @param name the name of the player
 	 * @param color the color of the player
 	 * @param turnID the turn of the player
-	 * @param debug set to true for debugging or testing
 	 * @param type the type of player
 	 * @param strategy the strategy being used
 	 */
-	public PlayerModel(String name, PlayerColors color, short turnID, boolean debug, RiskPlayerType type, RiskEnum.Strategy strategy) 
+	public PlayerModel(String name, PlayerColors color, short turnID, RiskPlayerType type, RiskEnum.Strategy strategy) 
 	{
 		this.hand = new Hand();
 		this.playerName=name;
@@ -90,9 +86,8 @@ public class PlayerModel implements IPlayer
 		this.color = color;
 		this.nbArmiesToBePlaced = 0;
 		territoriesOwned = new ArrayList<String>();
-		this.debug = debug;
 		this.type = type;
-		this.board = RiskBoard.ProperInstance(debug);
+		this.board = RiskBoard.Instance;
 		this.strategy = strategy;
 		
 	}
@@ -101,12 +96,11 @@ public class PlayerModel implements IPlayer
 	 * Constructor for the Player Model this constructor is used to create computer players
 	 * @param color the color of the player
 	 * @param turnID the turn of the player
-	 * @param debug set to true for debugging or testing
 	 * @param type the type of the player
 	 */
-	public PlayerModel(PlayerColors color, short turnID, boolean debug, RiskPlayerType type) 
+	public PlayerModel(PlayerColors color, short turnID, RiskPlayerType type) 
 	{
-		 this("Computer Player", color,turnID, debug, type,  RiskEnum.Strategy.random) ;
+		 this("Computer Player", color,turnID, type,  RiskEnum.Strategy.random) ;
 	}
 
 	/** 
@@ -463,15 +457,7 @@ public class PlayerModel implements IPlayer
 		
 	}
 
-	/**
-	 * return the debug
-	 * @return the debug Status
-	 */
-	@Override
-	public boolean getDebug() {
-		return this.debug;
-		
-	}
+
 
 	/**
 	 * Set the hand

@@ -38,11 +38,11 @@ public interface IStrategy extends Serializable
 	 * @param territory The current territory loaded from board
 	 * @return the index of weakest neighbour territory
 	 */
-	int getWeakestNeighbour(Territory territory);
+	public int getWeakestNeighbour(Territory territory);
 	/**
 	 * Finds the territory with the highest army for the respective players
 	 * @return the index of strongest territory
 	 */
-	int getStrongestTerritory();
+	public int getStrongestTerritory();
 
 }

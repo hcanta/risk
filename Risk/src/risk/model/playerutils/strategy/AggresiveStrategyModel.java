@@ -4,22 +4,18 @@
  */
 package risk.model.playerutils.strategy;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Random;
-
-import risk.model.RiskBoard;
 import risk.model.maputils.Territory;
 import risk.model.playerutils.IPlayer;
-import risk.model.playerutils.strategy.IStrategy;
 import risk.utils.Tuple;
 
 /**
  * Implementation of the  AggressiveStrategy Model
  * @author hcanta
  * @author Karanbir Singh
+ * @version 4.1
  */
-public class AggresiveStrategyModel implements IStrategy , Serializable
+public class AggresiveStrategyModel extends Strategy 
 {
 
 	/**
@@ -27,31 +23,15 @@ public class AggresiveStrategyModel implements IStrategy , Serializable
 	 */
 	private static final long serialVersionUID = 5028528489240863763L;
 
-	/**
-	 * The player using the strategy
-	 */
-	private IPlayer player;
 	
-	/**
-	 * The current game Board
-	 */
-	private RiskBoard board;
-	
-	/**
-	 * Random generator
-	 */
-	private Random rand;
 	
 	/**
 	 * Constructor for the Strategy Model
-	 * @param debug The current board in use
 	 * @param player The player using the strategy
 	 */
-	public AggresiveStrategyModel(boolean debug, IPlayer player) 
+	public AggresiveStrategyModel( IPlayer player) 
 	{
-		this.board = RiskBoard.ProperInstance(debug);
-		this.player = player;
-		this.rand = new Random();
+		super(player);
 	}
 	
 	/**

@@ -22,17 +22,17 @@ public class RiskBoardTest {
 	@Before
 	public void setUp() throws Exception 
 	{
-		RiskBoard.ProperInstance(true).clear();
-		Utils.loadFile(new File("Maps/World.map"),true);
+		RiskBoard.Instance.clear();
+		Utils.loadFile(new File("Maps/World.map"));
 	}
 	/**
 	 * This function runs before the test cases.is to test the added continent.
 	 */
 	@Test
 	public void testAddContinent() {
-		Assert.assertFalse(RiskBoard.ProperInstance(true).getContinents().contains("testcontinent"));
-		RiskBoard.ProperInstance(true).addContinent("testcontinent", 3);
-		Assert.assertTrue(RiskBoard.ProperInstance(true).getContinents().contains("testcontinent"));
+		Assert.assertFalse(RiskBoard.Instance.getContinents().contains("testcontinent"));
+		RiskBoard.Instance.addContinent("testcontinent", 3);
+		Assert.assertTrue(RiskBoard.Instance.getContinents().contains("testcontinent"));
 		
 	}
 	/**
@@ -40,9 +40,9 @@ public class RiskBoardTest {
 	 */
 	@Test
 	public void testRemoveContinent() {		
-		Assert.assertTrue(RiskBoard.ProperInstance(true).getContinents().contains("europe"));
-		RiskBoard.ProperInstance(true).removeContinent("europe");
-		Assert.assertFalse(RiskBoard.ProperInstance(true).getContinents().contains("europe"));
+		Assert.assertTrue(RiskBoard.Instance.getContinents().contains("europe"));
+		RiskBoard.Instance.removeContinent("europe");
+		Assert.assertFalse(RiskBoard.Instance.getContinents().contains("europe"));
 				
 	}
 
@@ -52,9 +52,9 @@ public class RiskBoardTest {
 	@Test
 	public void testAddTerritoryStringString() 
 	{
-		Assert.assertFalse(RiskBoard.ProperInstance(true).getContinent("europe").containsTerritory("lalaland"));
-		RiskBoard.ProperInstance(true).addTerritory("europe", "lalaland");
-		Assert.assertTrue(RiskBoard.ProperInstance(true).getContinent("europe").containsTerritory("lalaland"));
+		Assert.assertFalse(RiskBoard.Instance.getContinent("europe").containsTerritory("lalaland"));
+		RiskBoard.Instance.addTerritory("europe", "lalaland");
+		Assert.assertTrue(RiskBoard.Instance.getContinent("europe").containsTerritory("lalaland"));
 		
 	}
 
@@ -64,23 +64,23 @@ public class RiskBoardTest {
 	 */
 	@Test
 	public void testValidateMap() {
-		Assert.assertTrue(RiskBoard.ProperInstance(true).validateMap());
-		RiskBoard.ProperInstance(true).addContinent("testcontinent", 3);
-		Assert.assertFalse(RiskBoard.ProperInstance(true).validateMap());
-		Assert.assertFalse(Utils.loadFile(new File("Maps/invalidAtlantis.map"),true));
-		Assert.assertFalse(Utils.loadFile(new File("Maps/invalidUSA.map"),true));
-		Assert.assertFalse(Utils.loadFile(new File("Maps/invalidWorld.map"),true));
+		Assert.assertTrue(RiskBoard.Instance.validateMap());
+		RiskBoard.Instance.addContinent("testcontinent", 3);
+		Assert.assertFalse(RiskBoard.Instance.validateMap());
+		Assert.assertFalse(Utils.loadFile(new File("Maps/invalidAtlantis.map")));
+		Assert.assertFalse(Utils.loadFile(new File("Maps/invalidUSA.map")));
+		Assert.assertFalse(Utils.loadFile(new File("Maps/invalidWorld.map")));
 	}
 	/**
 	 * this test case checks the removed map.
 	 */
 	@Test
 	public void testRemoveTerritory() {
-		Assert.assertTrue(RiskBoard.ProperInstance(true).getContinent("europe").containsTerritory("iceland"));
-		Assert.assertTrue(RiskBoard.ProperInstance(true).validateMap());
-		RiskBoard.ProperInstance(true).removeTerritory("europe", "iceland");
-		Assert.assertFalse(RiskBoard.ProperInstance(true).getContinent("europe").containsTerritory("lalaland"));
-		Assert.assertTrue(RiskBoard.ProperInstance(true).validateMap());
+		Assert.assertTrue(RiskBoard.Instance.getContinent("europe").containsTerritory("iceland"));
+		Assert.assertTrue(RiskBoard.Instance.validateMap());
+		RiskBoard.Instance.removeTerritory("europe", "iceland");
+		Assert.assertFalse(RiskBoard.Instance.getContinent("europe").containsTerritory("lalaland"));
+		Assert.assertTrue(RiskBoard.Instance.validateMap());
 	}
 
 }

@@ -12,7 +12,7 @@ import risk.utils.constants.RiskIntegers;
 /**
  * This is the implementation of the Continent class, a continent continent contains territory.
  * @author hcanta
- * @version 3.0
+ * @version 4.1`
  */
 public class Continent extends BoardComponent
 {
@@ -21,10 +21,7 @@ public class Continent extends BoardComponent
 	 * Generated Serial Version UID
 	 */
 	private static final long serialVersionUID = -2804669608728063119L;
-	/**
-	 * Is there a graph
-	 */
-	private Object graph;
+
 	/**
 	 * The name of the continent
 	 */
@@ -46,15 +43,13 @@ public class Continent extends BoardComponent
 	 * Constructor of the continent.
 	 * @param name the name of the continent
 	 * @param continentBonus The associated bonus with the continent
-	 * @param graph  is there a graph
 	 */
-	public Continent(String name, int continentBonus,  Object graph) 
+	public Continent(String name, int continentBonus) 
 	{
 		this.continentBonus = continentBonus;
 		this.continentName = name;
 		this.ownerID = RiskIntegers.INITIAL_OWNER;
 		territories = new HashMap<String, Territory>();
-		this.graph = graph;
 	}
 	
 	
@@ -100,7 +95,7 @@ public class Continent extends BoardComponent
 		String n_name = name.toLowerCase();
 		if(!territories.containsKey(n_name))
 		{
-			territories.put(n_name, new Territory(n_name,this.continentName,this.graph,xCoord,yCoord));
+			territories.put(n_name, new Territory(n_name,this.continentName,xCoord,yCoord));
 		}
 	}
 	
@@ -114,7 +109,7 @@ public class Continent extends BoardComponent
 		String n_name = name.toLowerCase();
 		if(!territories.containsKey(n_name))
 		{
-			territories.put(n_name, new Territory(n_name,this.continentName,this.graph, 0, 0));
+			territories.put(n_name, new Territory(n_name,this.continentName, 0, 0));
 			return true;
 		}
 		return false;
@@ -130,7 +125,7 @@ public class Continent extends BoardComponent
 		String n_name = name.toLowerCase();
 		if(!territories.containsKey(n_name))
 		{
-			territories.put(n_name, new Territory(n_name,this.continentName, neighbours,this.graph, 0, 0));
+			territories.put(n_name, new Territory(n_name,this.continentName, neighbours, 0, 0));
 		}
 		
 	}
@@ -147,7 +142,7 @@ public class Continent extends BoardComponent
 		String n_name = name.toLowerCase();
 		if(!territories.containsKey(n_name))
 		{
-			territories.put(n_name, new Territory(n_name,this.continentName, neighbours,this.graph,xCoord,yCoord));
+			territories.put(n_name, new Territory(n_name,this.continentName, neighbours,xCoord,yCoord));
 		}
 		
 	}
@@ -332,14 +327,7 @@ public class Continent extends BoardComponent
 	}
 
 
-	/**
-	 * Returns  is there a graph
-	 * @return is there a graph
-	 */
-	public boolean getGraph() {
-		
-		return this.graph!= null;
-	}
+
 
 
 	/**

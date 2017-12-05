@@ -15,7 +15,7 @@ import risk.views.ui.Vertex;
 /**
  * This is the implementation of the Territory country class. 
  * @author hcanta
- * @version 3.1
+ * @version 4.1
  */
 public class Territory extends BoardComponent 
 {
@@ -24,11 +24,6 @@ public class Territory extends BoardComponent
 	 * Generated Serial Version UID
 	 */
 	private static final long serialVersionUID = 7319805127272223817L;
-	/**
-	 * The graph that will be displayed
-	 */
-	private transient Object graph;
-	
 	
 	/**
 	 * The Vertex of the Graph
@@ -73,38 +68,32 @@ public class Territory extends BoardComponent
 	 * @param name  The name of the territory
 	 * @param continent The name of the continent to which the territory belongs
 	 * @param neighbours The array of neighbors to said territory
-	 * @param graph the graph that will be displayed
+
 	 * @param xcoord coordinate on the graph
 	 * @param ycoord Y coordinate on the graph
 	 */
-	public Territory(String name, String continent, String[] neighbours, Object graph, int xcoord, int ycoord) 
+	public Territory(String name, String continent, String[] neighbours, int xcoord, int ycoord) 
 	{
 		this.territoryName = name;
 		this.continent = continent;
 		this.neighbours = new ArrayList<String>(Arrays.asList(neighbours));
 		this.ownerID = RiskIntegers.INITIAL_OWNER;
 		this.armyOn = 1;
-		this.graph = graph;
 		this.setxCoord(xcoord);
-		this.setyCoord(ycoord);
-		
-		if(graph!= null)
-		{			
-			vertex = new Vertex(this.territoryName);
-		}
+		this.setyCoord(ycoord);			
+		vertex = new Vertex(this.territoryName);
 	}
 	
 	/**
 	 * Constructor for the territory class 
 	 * @param name  The name of the territory
 	 * @param continent The name of the continent to which the territory belongs
-	 * @param graph  is there a graph
 	 * @param xcoord coordinate on the graph
 	 * @param ycoord Y coordinate on the graph
 	 */
-	public Territory(String name, String continent,  Object graph, int xcoord, int ycoord) 
+	public Territory(String name, String continent, int xcoord, int ycoord) 
 	{
-		this(name, continent, new String[0], graph, xcoord, ycoord);
+		this(name, continent, new String[0], xcoord, ycoord);
 	}
 	
 	/**
@@ -115,7 +104,7 @@ public class Territory extends BoardComponent
 	 */
 	public Territory(String name, String continent, String[] neighbours) 
 	{
-		this(name, continent, neighbours, null, 0, 0);
+		this(name, continent, neighbours, 0, 0);
 	}
 	
 	/**
@@ -125,7 +114,7 @@ public class Territory extends BoardComponent
 	 */
 	public Territory(String name, String continent) 
 	{
-		this(name, continent, new String[0], null, 0, 0);
+		this(name, continent, new String[0], 0, 0);
 	}
 	
 	/**
@@ -172,10 +161,8 @@ public class Territory extends BoardComponent
 	public void setOwnerID(IPlayer owner) 
 	{
 		this.ownerID = owner.getPlayerID();
-		if(graph!= null)
-		{ 
-			vertex.setOwner(owner.getColor());
-		}
+		vertex.setOwner(owner.getColor());
+		
 	}
 	
 	/**
@@ -314,7 +301,7 @@ public class Territory extends BoardComponent
 		{
 			try
 			{
-				RiskBoard.ProperInstance(graph == null).getTerritory(this.neighbours.get(i)).removeNeighbours(this.territoryName);		
+				RiskBoard.Instance.getTerritory(this.neighbours.get(i)).removeNeighbours(this.territoryName);		
 			}
 			catch(Exception e){}
 		}
@@ -330,7 +317,7 @@ public class Territory extends BoardComponent
 			return false;
 		for(int i = 0; i< this.neighbours.size(); i++)
 		{
-			if(RiskBoard.ProperInstance(graph == null).getTerritory(this.neighbours.get(i)) == null)
+			if(RiskBoard.Instance.getTerritory(this.neighbours.get(i)) == null)
 			{
 				return false;
 			}
@@ -355,7 +342,7 @@ public class Territory extends BoardComponent
 	 */
 	public boolean canFortify(String territory)
 	{
-		Territory neighbor = RiskBoard.ProperInstance(graph == null).getTerritory(territory);
+		Territory neighbor = RiskBoard.Instance.getTerritory(territory);
 		return this.neighbours.contains(territory) && this.armyOn > 1&& this.ownerID == neighbor.getOwnerID();			
 	}
 	
@@ -366,7 +353,7 @@ public class Territory extends BoardComponent
 	 */
 	public boolean canAttack(String territory)
 	{
-		Territory neighbor = RiskBoard.ProperInstance(graph == null).getTerritory(territory);
+		Territory neighbor = RiskBoard.Instance.getTerritory(territory);
 		return this.neighbours.contains(territory) && this.armyOn > 1 && this.ownerID != neighbor.getOwnerID();		
 	}
 	
@@ -416,7 +403,7 @@ public class Territory extends BoardComponent
 		for(int i =0; i< this.neighbours.size(); i++)
 		{
 			String territory = this.neighbours.get(i);
-			Territory neighbor = RiskBoard.ProperInstance(graph == null).getTerritory(territory);
+			Territory neighbor = RiskBoard.Instance.getTerritory(territory);
 			if(neighbor.canFortify(this.territoryName))
 			{
 				return true;
@@ -435,7 +422,7 @@ public class Territory extends BoardComponent
 			for(int i =0; i< this.neighbours.size(); i++)
 			{
 				String territory = this.neighbours.get(i);
-				Territory neighbor = RiskBoard.ProperInstance(graph == null).getTerritory(territory);
+				Territory neighbor = RiskBoard.Instance.getTerritory(territory);
 				if(neighbor.ownerID != this.ownerID)
 				{
 					return true;
@@ -444,13 +431,6 @@ public class Territory extends BoardComponent
 		}
 		return false;
 	}
-	/**
-	 * sets the graph for  the territories
-	 * @param g the object to be set;
-	 */
-	public void setGraph(Object g)
-	{
-		this.graph = g;
-	}
+	
 }
 

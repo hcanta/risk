@@ -38,13 +38,12 @@ public class BotPlayerModel extends PlayerModel implements Serializable
 	 * @param name the name of the player
 	 * @param color the color of the player
 	 * @param playerID the turn/player id of the player
-	 * @param debug set to true for debugging or testing
 	 * @param strategy the strategy the bot is using
 	 * */
-	public BotPlayerModel(String name, PlayerColors color, short playerID, boolean debug, RiskEnum.Strategy strategy) 
+	public BotPlayerModel(String name, PlayerColors color, short playerID, RiskEnum.Strategy strategy) 
 	{
-		super(name, color, playerID, debug, RiskPlayerType.Bot, strategy);
-		this.iStrategy =  StrategyUtils.strategyGenerator(strategy, debug, this);
+		super(name, color, playerID, RiskPlayerType.Bot, strategy);
+		this.iStrategy =  StrategyUtils.strategyGenerator(strategy, this);
 
 	}
 	/**
@@ -52,13 +51,13 @@ public class BotPlayerModel extends PlayerModel implements Serializable
 	 * @param player the player Object
 	 */
 	public BotPlayerModel(IPlayer player) {
-		super(player.getName(), player.getColor(), player.getPlayerID(), player.getDebug(), RiskPlayerType.Bot, player.getStrategy());
+		super(player.getName(), player.getColor(), player.getPlayerID(), RiskPlayerType.Bot, player.getStrategy());
 		this.setHand(player.getHand());
 		for(int i =0; i< player.getTerritoriesOwned().size(); i++)
 		{
 			this.addTerritory(player.getTerritoriesOwned().get(i));
 		}
-		this.iStrategy =  StrategyUtils.strategyGenerator(strategy, debug, this);
+		this.iStrategy =  StrategyUtils.strategyGenerator(strategy,  this);
 	}
 
 	/**
@@ -132,7 +131,7 @@ public class BotPlayerModel extends PlayerModel implements Serializable
 	@Override
 	public void setRiskBoard(RiskBoard board) {
 		this.board  = board;
-		this.iStrategy =  StrategyUtils.strategyGenerator(strategy, board.getGraph() == null, this);
+		this.iStrategy =  StrategyUtils.strategyGenerator(strategy, this);
 	}
 
 

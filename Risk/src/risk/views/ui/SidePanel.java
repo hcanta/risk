@@ -10,6 +10,9 @@ import java.util.Observer;
 
 import javax.swing.JTextArea;
 
+import risk.model.RiskBoard;
+import risk.utils.constants.RiskEnum.RiskEvent;
+
 /**
  * The Side Panel  extends JTextArea Implements Observer It is used to log and display the History of the various
  * State And step taken throughout the game, as well as the info on the various countries
@@ -52,15 +55,29 @@ public class SidePanel extends JTextArea implements Observer, Serializable
 	
 	/**
 	 * Updates the content of the Text to be displayed
+	 * @param board the Riskboard object
+	 * @param obj, an object
 	 */
 	@Override
-	public void update(Observable arg0, Object arg1) 
+	public void update(Observable board, Object obj) 
 	{	
-		refreshText();
+		RiskEvent event = (RiskEvent)obj;
+		
+		if(event ==  RiskEvent.HistoryUpdate)
+		{
+			this.fTextLog = new ArrayList<String>(((RiskBoard)board).getHistory());
+			refreshText();
+			
+		}
+		else if(event ==  RiskEvent.CountryUpdate)
+		{
+			this.setText((((RiskBoard)board).getountryInfo()));
+		}
 		this.setVisible(true);
 		this.validate();
 		this.repaint();
 	}
+	
 		
 	/**
 	 * Refresh the content of the textArea
@@ -83,15 +100,6 @@ public class SidePanel extends JTextArea implements Observer, Serializable
 		this.fTextLog.clear();
 	}
 
-	/**
-	 * Returns the content of the pane
-	 * @return the info displayed
-	 */
-	public String getInfo() 
-	{
-		return this.getText();
-		
-	}
 
 		
 }

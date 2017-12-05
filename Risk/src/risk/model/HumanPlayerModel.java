@@ -28,11 +28,10 @@ public class HumanPlayerModel extends PlayerModel implements Serializable
 	 * @param name the name of the player
 	 * @param color the color of the player
 	 * @param playerID the turn/player id of the player
-	 * @param debug set to true for debugging or testing
 	 */
-	public HumanPlayerModel(String name, PlayerColors color, short playerID, boolean debug) 
+	public HumanPlayerModel(String name, PlayerColors color, short playerID) 
 	{
-		super(name, color, playerID, debug, RiskPlayerType.Human, Strategy.human);
+		super(name, color, playerID, RiskPlayerType.Human, Strategy.human);
 	}
 
 	/**
@@ -40,7 +39,7 @@ public class HumanPlayerModel extends PlayerModel implements Serializable
 	 * @param player the duplicate player object
 	 */
 	public HumanPlayerModel(IPlayer player) {
-		super(player.getName(), player.getColor(), player.getPlayerID(), player.getDebug(), RiskPlayerType.Human, Strategy.human);
+		super(player.getName(), player.getColor(), player.getPlayerID(), RiskPlayerType.Human, Strategy.human);
 		this.setHand(player.getHand());
 		for(int i =0; i< player.getTerritoriesOwned().size(); i++)
 		{

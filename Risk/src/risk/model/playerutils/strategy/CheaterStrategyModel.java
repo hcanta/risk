@@ -6,7 +6,6 @@ package risk.model.playerutils.strategy;
 import risk.model.RiskBoard;
 import risk.model.maputils.Territory;
 import risk.model.playerutils.IPlayer;
-import risk.model.playerutils.strategy.IStrategy;
 import risk.utils.Tuple;
 
 /**
@@ -14,31 +13,25 @@ import risk.utils.Tuple;
  * @author hcanta
  * @author addy
  */
-public class CheaterStrategyModel implements IStrategy {
+public class CheaterStrategyModel extends Strategy {
 
 	/**
 
 	 * Generated Serial Version UID
 	 */
 	private static final long serialVersionUID = -7062346114363150158L;
-	/**
-	 * The player using the strategy
 
-	 */
-	private IPlayer player;
 	/**
 	 * The game board currently active
 	 */
 	private RiskBoard board;
 	/**
 	 * Constructor for the Strategy Model Class
-	 * @param debug the current board been used
 	 * @param player it is The player using the strategy
 	 */
-	public CheaterStrategyModel(boolean debug, IPlayer player) 
+	public CheaterStrategyModel( IPlayer player) 
 	{
-		this.board = RiskBoard.ProperInstance(debug);
-		this.player = player;
+		super(player);
 	}
 
 	/**

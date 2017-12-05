@@ -33,7 +33,7 @@ import risk.utils.constants.RiskIntegers;
 /**
  * TestFileFor the Map Utils
  *@author hcanta
- *@version 3.4
+ *@version 4.1
  */
 public class UtilsTest 
 {
@@ -65,12 +65,12 @@ public class UtilsTest
 	@Before
 	public void setUp() throws Exception 
 	{	
-		board = RiskBoard.ProperInstance(true);
+		board = RiskBoard.Instance;
 		board.clear();
-		Utils.loadFile(new File("Maps/World.map"),true);
+		Utils.loadFile(new File("Maps/World.map"));
 		connected = new int[][]{{0,1,0},{1,0,1},{0,1,0}};
 		disconnected = new int[][]{{0,1,0},{1,0,0},{0,0,0}};
-		owner = new PlayerModel("test",PlayerColors.red,(short)1,true,RiskPlayerType.Bot, Strategy.aggressive);
+		owner = new PlayerModel("test",PlayerColors.red,(short)1,RiskPlayerType.Bot, Strategy.aggressive);
 		owner.addTerritory("territory");
 	}
 	
@@ -87,14 +87,14 @@ public class UtilsTest
 		
 		try {
 
-			Utils.saveMap("file",true);
+			Utils.saveMap("file");
 		} catch (IOException e) {
 			
 			e.printStackTrace();
 		}
 		
 		board.clear();
-		Assert.assertTrue(Utils.loadFile(new File("Maps/file.map"),true));
+		Assert.assertTrue(Utils.loadFile(new File("Maps/file.map")));
 		Assert.assertTrue(board.getContinents().contains("europe"));
 	}
 
@@ -109,7 +109,7 @@ public class UtilsTest
 		Assert.assertFalse(board.getContinents().contains("kala"));
 		Assert.assertTrue(board.validateMap());
 		board.clear();
-		Utils.loadFile(new File("Maps/Atlantis.map"),true);
+		Utils.loadFile(new File("Maps/Atlantis.map"));
 		Assert.assertFalse(board.getContinents().contains("europe"));
 		Assert.assertTrue(board.getContinents().contains("kala"));
 		Assert.assertTrue(board.validateMap());
@@ -124,9 +124,9 @@ public class UtilsTest
 	public void testLoadFileInValid() {
 		
 		board.clear();
-		Assert.assertFalse(Utils.loadFile(new File("Maps/invalidAtlantis.map"),true));
+		Assert.assertFalse(Utils.loadFile(new File("Maps/invalidAtlantis.map")));
 		board.clear();
-		Assert.assertTrue(Utils.loadFile(new File("Maps/Atlantis.map"),true));
+		Assert.assertTrue(Utils.loadFile(new File("Maps/Atlantis.map")));
 	}
 	
 	/**
@@ -136,7 +136,7 @@ public class UtilsTest
 	public void testLoadFileInValidDisconnected() {
 		
 		board.clear();
-		Assert.assertFalse(Utils.loadFile(new File("Maps/Disconnected.map"),true));
+		Assert.assertFalse(Utils.loadFile(new File("Maps/Disconnected.map")));
 
 	}
 
@@ -167,7 +167,7 @@ public class UtilsTest
 	public void testSaveTerritory()
 	{
 		String[] adj = new String[] {"left", "right","top","bottom"};
-		Territory territory = new Territory("hcanta","continent", adj,new Object(),0,0);
+		Territory territory = new Territory("hcanta","continent", adj,0,0);
 		Path currentRelativePath = Paths.get("");
 		String str = currentRelativePath.toAbsolutePath().toString()+"\\"+RiskStrings.TERRITORY_FILE_TEST;
 		try
@@ -232,7 +232,7 @@ public class UtilsTest
 	public void testLoadTerritory()
 	{
 		String[] adj = new String[] {"left", "right","top","bottom"};
-		Territory territory = new Territory("hcanta","continent", adj,new Object(),0,0);
+		Territory territory = new Territory("hcanta","continent", adj,0,0);
 		Path currentRelativePath = Paths.get("");
 		String str = currentRelativePath.toAbsolutePath().toString()+"\\"+RiskStrings.TERRITORY_FILE_TEST;
 		territory.setArmyOn(5);
@@ -264,7 +264,7 @@ public class UtilsTest
 	public void testSaveContinent()
 	{
 		String[] adj = new String[] {"left", "right","top","bottom"};
-		Object obj = new Object();
+		
 		
 		Path currentRelativePath = Paths.get("");
 		String str = currentRelativePath.toAbsolutePath().toString()+"\\"+RiskStrings.CONTINENT_FILE_TEST;
@@ -274,7 +274,7 @@ public class UtilsTest
         }
         catch(IOException e){}
 		
-		Continent continent = new Continent("continent", 5, obj);
+		Continent continent = new Continent("continent", 5);
 		continent.addTerritory("hcanta", adj,0,0);
 		continent.addTerritory("hcanta1", adj,0,0);
 		Assert.assertTrue(Utils.saveContinent(continent,RiskStrings.CONTINENT_FILE_TEST));
@@ -288,7 +288,7 @@ public class UtilsTest
 	public void testSaveBoard()
 	{
 		board.clear();
-		Utils.loadFile(new File("Maps/Demo.map"),true);
+		Utils.loadFile(new File("Maps/Demo.map"));
 		
 		Path currentRelativePath = Paths.get("");
 		String str = currentRelativePath.toAbsolutePath().toString()+"\\"+RiskStrings.BOARD_FILE_TEST;
@@ -310,7 +310,7 @@ public class UtilsTest
 	public void testLoadBoard()
 	{
 		board.clear();
-		Utils.loadFile(new File("Maps/Demo.map"),true);
+		Utils.loadFile(new File("Maps/Demo.map"));
 		Assert.assertTrue(board.getContinents().size() ==2);
 		board.clear();
 		Assert.assertTrue(board.getContinents().size() == 0);
@@ -332,7 +332,7 @@ public class UtilsTest
 	public void testLoadContinent()
 	{
 		String[] adj = new String[] {"left", "right","top","bottom"};
-		Object obj = new Object();
+		
 		
 		Path currentRelativePath = Paths.get("");
 		String str = currentRelativePath.toAbsolutePath().toString()+"\\"+RiskStrings.CONTINENT_FILE_TEST;
@@ -343,7 +343,7 @@ public class UtilsTest
         catch(IOException e)
         {
         }
-		Continent continent = new Continent("continent", 5, obj);
+		Continent continent = new Continent("continent", 5);
 		continent.addTerritory("hcanta", adj,0,0);
 		continent.addTerritory("hcanta1", adj,0,0);
 		Utils.saveContinent(continent,RiskStrings.CONTINENT_FILE_TEST);
@@ -399,7 +399,7 @@ public class UtilsTest
 	public void testSaveHumanPlayerModel()
 	{
 
-		owner = new HumanPlayerModel("test",PlayerColors.red,(short)1,true);
+		owner = new HumanPlayerModel("test",PlayerColors.red,(short)1);
 		Path currentRelativePath = Paths.get("");
 		String str = currentRelativePath.toAbsolutePath().toString()+"\\"+RiskStrings.HUMAN_PLAYER_FILE_TEST;
 		try
@@ -419,7 +419,7 @@ public class UtilsTest
 	public void testSaveBotPlayerModel()
 	{
 
-		owner = new BotPlayerModel("test",PlayerColors.red,(short)1,true, Strategy.random);
+		owner = new BotPlayerModel("test",PlayerColors.red,(short)1, Strategy.random);
 		Path currentRelativePath = Paths.get("");
 		String str = currentRelativePath.toAbsolutePath().toString()+"\\"+RiskStrings.BOT_PLAYER_FILE_TEST;
 		try
@@ -467,7 +467,7 @@ public class UtilsTest
 	public void testSaveAndLoadHumanPlayerModel()
 	{
 
-		owner = new HumanPlayerModel("human",PlayerColors.green,(short)2,true);
+		owner = new HumanPlayerModel("human",PlayerColors.green,(short)2);
 		Path currentRelativePath = Paths.get("");
 		String str = currentRelativePath.toAbsolutePath().toString()+"\\"+RiskStrings.HUMAN_PLAYER_FILE_TEST;
 		try
@@ -495,7 +495,7 @@ public class UtilsTest
 	public void testSaveAndLoadBotPlayerModel()
 	{
 
-		owner = new BotPlayerModel("bot",PlayerColors.blue,(short)3,true, Strategy.random);
+		owner = new BotPlayerModel("bot",PlayerColors.blue,(short)3, Strategy.random);
 		Path currentRelativePath = Paths.get("");
 		String str = currentRelativePath.toAbsolutePath().toString()+"\\"+RiskStrings.BOT_PLAYER_FILE_TEST;
 		try
@@ -581,7 +581,7 @@ public class UtilsTest
 	public void testSaveAndLoadBotPlayerModelWithHand()
 	{
 
-		owner = new BotPlayerModel("bot",PlayerColors.blue,(short)3,true, Strategy.random);
+		owner = new BotPlayerModel("bot",PlayerColors.blue,(short)3, Strategy.random);
 		Card card1 = new Card(CardType.Cavalry, "Canada");
 		Card card2 = new Card(CardType.Infantry, "providence");
 		Hand hand = new Hand();

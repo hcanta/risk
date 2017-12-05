@@ -188,11 +188,7 @@ public interface IPlayer extends Serializable
 	 */
 	public void setRiskBoard(RiskBoard board);
 	
-	/**
-	 * return the debug
-	 * @return the debug Status
-	 */
-	public boolean getDebug();
+
 	
 	/**
 	 * Sets the hand

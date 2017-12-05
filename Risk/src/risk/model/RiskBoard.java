@@ -18,10 +18,14 @@ import risk.utils.constants.RiskIntegers;
 /**
  * This class implements the RiskBoard it contains all the elements of the board. continents and territories
  * @author hcanta
- * @version 2.4
+ * @version 4.1
  */
 public class RiskBoard extends Observable implements Serializable
 {
+	/**
+	 * The number of rounds played;
+	 */
+	private int nbRoundsPlayed;
 	/**
 	 * Generated Serial Version UID
 	 */
@@ -34,11 +38,21 @@ public class RiskBoard extends Observable implements Serializable
 	 * The state of the game
 	 */
 	private GameState state;
+
 	/**
-	 * The graph that will be displayed
+	 * Number of times cards were exchange
 	 */
-	private Object graph;
+	private int cardExchangeCount;
 	
+	/**
+	 *  The Log of Information
+	 */
+	public ArrayList<String> log;
+	
+	/**
+	 * The information on the continents
+	 */
+	private StringBuffer territoryInfo;
 
 	/**
 	 * The Owner of the Board
@@ -57,50 +71,23 @@ public class RiskBoard extends Observable implements Serializable
 	/**
 	 * Singleton Of the RisBoard Object
 	 */
-	private static RiskBoard Instance = new RiskBoard(new Object());
-	
-	/**
-	 * Singleton Of the RisBoard Object for testing purposes
-	 */
-	private static RiskBoard TestInstance = new RiskBoard();
-	
-	/**
-	 * Returns the Proper Risk board one for play or the one for testing/debugging
-	 * @param debug set to true for debugging or testing
-	 * @return The proper risk board
-	 */
-	public static RiskBoard ProperInstance(boolean debug)
-	{
-		if(debug)
-		{
-			return TestInstance;
-		}
-		else
-		{
-			return Instance;
-		}
-	}
+	public static RiskBoard Instance = new RiskBoard();
+
 
 	/**
 	 * Constructor of the Risk Board
-	 * @param graph is there a graph
-	 */
-	public RiskBoard(Object graph) 
-	{
-		ownerID = RiskIntegers.INITIAL_OWNER;
-		continents = new HashMap<String, Continent>();
-		this.graph = graph;
-		
-		setState(GameState.IDLE);
-	}
-	
-	/**
-	 * Constructor of the Risk Board mainly for debugging
 	 */
 	public RiskBoard() 
 	{
-		this(null);
+		ownerID = RiskIntegers.INITIAL_OWNER;
+		continents = new HashMap<String, Continent>();
+		this.cardExchangeCount = 0;
+		setState(GameState.IDLE);
+		log = new ArrayList<String>();
+		territoryInfo = new StringBuffer();
+		nbRoundsPlayed = 0;
 	}
+	
 
 
 	/**
@@ -173,7 +160,7 @@ public class RiskBoard extends Observable implements Serializable
 		String n_name = name.toLowerCase();
 		if(!continents.containsKey(n_name))
 		{
-			continents.put(n_name, new Continent(n_name,bonus, graph));
+			continents.put(n_name, new Continent(n_name,bonus));
 		}
 	}
 	
@@ -399,14 +386,7 @@ public class RiskBoard extends Observable implements Serializable
 		this.notifyObservers(event);
 	}
 	
-	/**
-	 * Returns the graph object belonging to the board
-	 * @return The graph object belonging to the board
-	 */
-	public Object getGraph()
-	{
-		return this.graph;
-	}
+
 
 	/**
 	 * Returns the current game state
@@ -559,5 +539,161 @@ public class RiskBoard extends Observable implements Serializable
 		{
 			continents.put(n_name, cont);
 		}		
+	}
+
+
+
+	/**
+	 * Returns the amount of times the cards were exchanged
+	 * @return the cardExchangeCount
+	 */
+	public int getCardExchangeCount() {
+		return cardExchangeCount;
+	}
+
+
+
+	/**
+	 * Increments the card Count Exchange by 1
+	 */
+	public void incrementExchangeCardCount() {
+		this.cardExchangeCount++;
+	}
+
+
+	/**
+	 * Adds a message to the history panel
+	 * @param message The message to be added
+	 */
+	public void addMessage(String message) {
+		this.log.add(message);
+		
+	}
+	
+	/**
+	 * Returns a copy of the Log
+	 * @return a copy of the log
+	 */
+	public ArrayList<String> getHistory()
+	{
+		return new ArrayList<String>(log);
+	}
+	/**
+	 * Returns the content of the pane
+	 * @return the info displayed
+	 */
+	public String getHistoryInfo() 
+	{
+		StringBuilder toPrint = new StringBuilder();
+		for (String text : log)
+		{
+			toPrint.append(" "+text + "\n");
+		}
+		return (toPrint.toString());
+	}
+
+
+
+	/**
+	 * Returns a string containing all the territory Info
+	 * @return string containing all the territory Info
+	 */
+	public String getountryInfo() 
+	{
+		return this.territoryInfo.toString();
+	}
+
+	/**
+	 * Returns the String Buffer that contains the territory
+	 * @return the territory String buffer
+	 */
+	public StringBuffer getTerritoryInfo() 
+	{
+		
+		return this.territoryInfo;
+	}
+	
+	/**
+	 * Resets the number of rounds played
+	 */
+	public void resetRoundPlayed()
+	{
+		this.nbRoundsPlayed = 0;
+	}
+	
+	/**
+	 * Returns the number of rounds played
+	 * @return the number of rounds played
+	 */
+	public int getnbRoundsPlayed()
+	{
+		return this.nbRoundsPlayed;
+	}
+	
+	/**
+	 * Increments the number of rounds played
+	 */
+	public void incrementRoundsPlayed()
+	{
+		 this.nbRoundsPlayed ++;
+	}
+	
+	/**
+	 * Decrements the number of rounds played
+	 */
+	public void decrementRoundsPlayed()
+	{
+		 this.nbRoundsPlayed --;
+	}
+	
+	/**
+	 * Sets the amount of rounds that were played
+	 * @param rounds The number of rounds that were played
+	 */
+	public void setNbRoundsPlayed(int rounds)
+	{
+		this.nbRoundsPlayed = rounds;
+	}
+	
+	/**
+	 * Resets the number of card exchanged
+	 */
+	public void resetCardExchangeCount()
+	{
+		this.cardExchangeCount = 0;
+	}
+	
+	/**
+	 * Returns the number of card exchanged
+	 * @return The number of times cars were exchanged
+	 */
+	public int getnbCardExchanged()
+	{
+		return this.cardExchangeCount;
+	}
+	
+	/**
+	 * Increments the number of card exchanged
+	 */
+	public void incrementCardExchanged()
+	{
+		 this.cardExchangeCount ++;
+	}
+	
+	/**
+	 * Decrements the number of card exchanged
+	 */
+	public void decrementCardExchanged()
+	{
+		 this.cardExchangeCount --;
+	}
+	
+	/**
+	 * Sets the amount of cards that were exchanged
+	 * @param count The number of cards that were exchanged
+	 */
+	public void setNbCardsExchanged(int count)
+	{
+		this.cardExchangeCount = count;
 	}
 }

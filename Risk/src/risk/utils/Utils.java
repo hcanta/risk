@@ -52,18 +52,17 @@ public class Utils implements Serializable
 	/**
 	 * Load The Map On the RiskBoard
 	 * @param file the file to be loaded in the Risk Board
-	 * @param debug are we in debug mode or not
 	 * @return  was the map loaded valid or not
 	 */
-	public static boolean loadFile(File file, boolean debug) {
-		RiskBoard.ProperInstance(debug).clear();
+	public static boolean loadFile(File file) {
+		RiskBoard.Instance.clear();
 		try
 		{
 			FileReader fileReader = new FileReader(file);
 			@SuppressWarnings("resource")
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
 			String line;
-			RiskBoard.ProperInstance(debug).setBoardName(file.getName());
+			RiskBoard.Instance.setBoardName(file.getName());
 			
 			while ((line = bufferedReader.readLine()) != null) 
 			{
@@ -85,7 +84,7 @@ public class Utils implements Serializable
 					String[] parts = line.split("=");
 					if(parts.length == 2)
 					{
-						RiskBoard.ProperInstance(debug).addContinent(parts[0].toLowerCase().trim(), Integer.parseInt(parts[1].trim()));
+						RiskBoard.Instance.addContinent(parts[0].toLowerCase().trim(), Integer.parseInt(parts[1].trim()));
 					}
 				}
 			}
@@ -112,7 +111,7 @@ public class Utils implements Serializable
 						{
 							neighbours[i-4] = parts[i].toLowerCase().trim();
 						}
-						RiskBoard.ProperInstance(debug).addTerritory(continentName, territoryName, neighbours,xcoord, ycoord);
+						RiskBoard.Instance.addTerritory(continentName, territoryName, neighbours,xcoord, ycoord);
 					}
 					else
 					{
@@ -126,7 +125,7 @@ public class Utils implements Serializable
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return RiskBoard.ProperInstance(debug).validateMap();
+		return RiskBoard.Instance.validateMap();
 		
 	}
 	
@@ -169,10 +168,9 @@ public class Utils implements Serializable
 	/**
 	 * Save the Map to a .map file
 	 * @param filename the name of the file where the risk board will be saved
-	 * @param debug set to true for debugging or testing
 	 * @throws IOException Could not open/write to file
 	 */
-	public static void saveMap(String filename, boolean debug) throws IOException
+	public static void saveMap(String filename) throws IOException
 	{
 		String n_filename = "Maps\\"+filename + ".map";
 		FileWriter fw = new FileWriter(n_filename);
@@ -180,10 +178,10 @@ public class Utils implements Serializable
 		fw.write("[Map]\n");
 		fw.write("author = team1\n\n");
 		fw.write("[Continents]\n");
-		fw.write(RiskBoard.ProperInstance(debug).continentsToString());
+		fw.write(RiskBoard.Instance.continentsToString());
 		fw.write("\n[Territories]\n");
 		
-		fw.write(RiskBoard.ProperInstance(debug).territoriesToString());
+		fw.write(RiskBoard.Instance.territoriesToString());
 		
 		fw.close();
 	}
@@ -409,9 +407,6 @@ public class Utils implements Serializable
 		str.append(dataToString(continent.getContinentBonus()));
 		str.append("\n");
 		
-		str.append(dataToString(continent.getGraph()));
-		str.append("\n");
-		
 		str.append(dataToString(continent.getOwnerID()));
 		str.append("\n");
 		
@@ -562,9 +557,8 @@ public class Utils implements Serializable
 	private static Continent loadContinent(BufferedReader bufferedReader)
 	{
 		String continentName;
-		Object graph;
+	
 		int ownerID;
-		boolean gra;
 		
 		int bonus;
 		try
@@ -576,13 +570,10 @@ public class Utils implements Serializable
 			line = bufferedReader.readLine();
 			bonus = (int)stringToData(line);
 			line = bufferedReader.readLine();
-			gra = (boolean) stringToData(line);
-			graph = gra ?new Object () : null;
-			line = bufferedReader.readLine();
 			ownerID = (int)stringToData(line);
 			line = bufferedReader.readLine();
 			int nbTerritories = (int)stringToData(line);
-			Continent cont = new Continent(continentName,bonus,graph);
+			Continent cont = new Continent(continentName,bonus);
 			cont.setOwnerID(ownerID);
 			for(int i =0; i< nbTerritories; i++)
 			{
@@ -675,8 +666,7 @@ public class Utils implements Serializable
 		str.append(dataToString(player.getNbArmiesToBePlaced()));
 		str.append("\n");
 		str.append(dataToString(player.getTerritoriesOwned()));
-		str.append("\n");
-		str.append(dataToString(player.getDebug()));
+
 		return str.toString();
 		
 	}
@@ -768,21 +758,19 @@ public class Utils implements Serializable
 			line = bufferedReader.readLine();
 			@SuppressWarnings("unchecked")
 			ArrayList<String> territories = (ArrayList<String>)(stringToData(line));
-			
-			line = bufferedReader.readLine();
-			boolean debug =( boolean)(stringToData(line));	
+				
 			
 			IPlayer player; 
 			if(type == RiskPlayerType.Human)
 			{
-				player = new HumanPlayerModel(name, color, id, debug);
+				player = new HumanPlayerModel(name, color, id);
 				player.setNbArmiesToBePlaced(nbArmies);
 				player.setHand(hand);
 				player.setTerritories(territories);
 			}
 			else
 			{
-				player = new BotPlayerModel(name, color, id, debug,strategy);
+				player = new BotPlayerModel(name, color, id,strategy);
 				player.setNbArmiesToBePlaced(nbArmies);
 				player.setHand(hand);
 				player.setTerritories(territories);
@@ -848,8 +836,6 @@ public class Utils implements Serializable
 		info.append("\n");
 		info.append(dataToString(engine.getPlayerTurnOrder()));
 		info.append("\n");
-		info.append(dataToString(engine.getDebugStatus()));
-		info.append("\n");
 		info.append(dataToString(engine.getNumberOfPlayers()));
 		info.append("\n");
 		for(int i=0; i< engine.getPlayerTurnOrder().size(); i++)
@@ -884,18 +870,12 @@ public class Utils implements Serializable
 			
 			if(!loadBoard(engine.getBoard(), bufferedReader))
 				return false;
-			for(int i =0; i< engine.getBoard().getNbTerritories(); i++)
-			{
-				engine.getBoard().getTerritory(engine.getBoard().getTerritories().get(i)).setGraph(new Object());
-			}
+
 			String line; 
 			line = bufferedReader.readLine();
 			String currentPlayer = (String)stringToData(line);
 			engine.setCurrentPlayer(currentPlayer);
-			
-			line = bufferedReader.readLine();
-			int nbRoundsPlayed = (int)stringToData(line);
-			engine.setnbRoundsPlayed(nbRoundsPlayed);
+
 			
 			line = bufferedReader.readLine();
 			int maxRounds = (int)stringToData(line);
@@ -909,10 +889,7 @@ public class Utils implements Serializable
 			@SuppressWarnings("unchecked")
 			ArrayList<Integer>playerTurnOrder = (ArrayList<Integer>)stringToData(line);
 			engine.setPlayerTurnOrder(playerTurnOrder);
-			
-			line = bufferedReader.readLine();
-			boolean debug = (boolean)stringToData(line);
-			engine.setDebugStatus(debug);
+
 			
 			line = bufferedReader.readLine();
 			int nbPlayers = (int)stringToData(line);

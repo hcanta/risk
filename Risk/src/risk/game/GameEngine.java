@@ -40,7 +40,7 @@ import risk.views.ui.MapSelector;
 /**
  * The Implementation of the Game Engine
  * @author hcanta
- * @version 3.3
+ * @version 4.1
  */
 public class GameEngine implements Serializable 
 {
@@ -48,10 +48,7 @@ public class GameEngine implements Serializable
 	 * max number of rounds
 	 */
 	private int maxRounds;
-	/**
-	 * The number of rounds played;
-	 */
-	private int nbRoundsPlayed;
+
 	/**
 	 * The current Player Name
 	 */
@@ -65,10 +62,7 @@ public class GameEngine implements Serializable
 	 * Random Generator for the class
 	 */
 	private Random rand;
-	/**
-	 * Number of times cards were exchange
-	 */
-	private int cardExchangeCount;
+
 	
 	/**
 	 * Creates a mapping of player IDs to IPlayer Object
@@ -89,28 +83,23 @@ public class GameEngine implements Serializable
 	 */
 	private transient GameView gamev;
 	
-	/**
-	 * Set to true if in debugging mode false otherwise
-	 */
-	private boolean debug;
+
 	/**
 	 *Constructor Of the Game Engine
 	 *@param gamev The game View
-	 *@param debug set to true for debugging or testing
 	 */
-	public GameEngine(GameView gamev, boolean debug) 
+	public GameEngine(GameView gamev) 
 	{
 		this.players = new HashMap<Integer, IPlayer>();
 		rand = new Random();
-		this.cardExchangeCount = 0;
+
 		this.gamev = gamev;
-		this.debug = debug;
-		board = RiskBoard.ProperInstance(debug);
+		board = RiskBoard.Instance;
 		if(gamev !=null)
 		{
 			addMenuItemActionListener();
 		}
-		this.nbRoundsPlayed = 0;
+		this.board.resetRoundPlayed();
 		maxRounds = (Integer.MAX_VALUE);
 	}
 	
@@ -119,21 +108,21 @@ public class GameEngine implements Serializable
 	 */
 	public GameEngine()
 	{
-		this(null, true);
+		this(null);
 	}
 	
 	private void territoryInfo()
 	{
-		if(gamev == null)
-			return;
-		this.gamev.getCountryPanel().clearMessages();
+
+		board.getTerritoryInfo().setLength(0); 
 		String territory;
 		for(int i =0; i< board.getTerritories().size(); i++)
 		{
 			territory = board.getTerritories().get(i);
 			String[] info = board.getTerritory(territory).basicInfo();
-			this.gamev.getCountryPanel().addMessage(info[1]);
-			this.gamev.getCountryPanel().addMessage("Owner: "+players.get(Integer.parseInt(info[0])).getName()+"\n");
+			board.getTerritoryInfo().append(info[1]);
+			board.getTerritoryInfo().append("\n");
+			board.getTerritoryInfo().append("Owner: "+players.get(Integer.parseInt(info[0])).getName()+"\n\n");
 		}
 		board.update(RiskEvent.CountryUpdate);
 	}
@@ -149,7 +138,7 @@ public class GameEngine implements Serializable
 		
 			public void actionPerformed(ActionEvent e)
 			{
-				nbRoundsPlayed= 0;
+				board.resetRoundPlayed();
 				
 				addToHistoryPanel("\n"+RiskStrings.INITIATE_CREATE_MAP);
 				Thread thread = new Thread(new Runnable() {
@@ -167,7 +156,7 @@ public class GameEngine implements Serializable
 		{
 				public void actionPerformed(ActionEvent e)
 				{
-					nbRoundsPlayed= 0;
+					board.resetRoundPlayed();
 					
 					addToHistoryPanel("\n"+RiskStrings.INITIATE_EDIT_MAP);
 					Thread thread = new Thread(new Runnable() {
@@ -185,7 +174,7 @@ public class GameEngine implements Serializable
 		{
 				public void actionPerformed(ActionEvent e)
 				{
-					nbRoundsPlayed= 0;
+					board.resetRoundPlayed();
 					addToHistoryPanel("\n"+RiskStrings.INITIATE_LOAD_PLAY);
 					
 					if(loadMapHelper(true))
@@ -233,7 +222,7 @@ public class GameEngine implements Serializable
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				nbRoundsPlayed= 0;
+				board.resetRoundPlayed();
 				addToHistoryPanel("\n"+RiskStrings.INITIATE_LOAD_PLAY);
 				
 				
@@ -288,7 +277,7 @@ public class GameEngine implements Serializable
 				if(Utils.loadGame(this, file.getName()))
 				{
 					this.addToHistoryPanel("The Game File was properly loaded.");	
-					this.gamev.addGraph(RiskBoard.ProperInstance(debug));
+					this.gamev.addGraph(RiskBoard.Instance);
 					return true;
 					
 				}
@@ -312,7 +301,7 @@ public class GameEngine implements Serializable
 	 */
 	private void addToHistoryPanel(String message)
 	{
-		gamev.getHistoryPanel().addMessage(message);
+		board.addMessage(message);
 		board.update(RiskEvent.HistoryUpdate);
 	}
 	/**
@@ -372,7 +361,7 @@ public class GameEngine implements Serializable
 			}
 		}
 		
-		JOptionPane.showMessageDialog(gamev.getHistoryPanel(),
+		JOptionPane.showMessageDialog(gamev.getFrame(),
 				RiskStrings.CONTINENT_CREATED+"\n\n"+board.continentsToString());
 		
 		// Adding countries
@@ -515,14 +504,14 @@ public class GameEngine implements Serializable
 			{
 				this.addToHistoryPanel("file name is: " + file.getName());
 				
-				if(Utils.loadFile(file, this.debug))
+				if(Utils.loadFile(file))
 				{
 					this.addToHistoryPanel("The Map File was properly loaded.");
 					
 					if(load)
 					{
 						
-						this.gamev.addGraph(RiskBoard.ProperInstance(debug));
+						this.gamev.addGraph(RiskBoard.Instance);
 						
 					}
 					return true;
@@ -662,7 +651,7 @@ public class GameEngine implements Serializable
 			 }
 			 this.addToHistoryPanel("\n"+RiskStrings.MAP_SAVED+str);
 			 try {
-				Utils.saveMap(str, debug);
+				Utils.saveMap(str);
 				this.addToHistoryPanel("\n"+RiskStrings.DONE);
 				
 				board.clear();
@@ -674,7 +663,7 @@ public class GameEngine implements Serializable
 		else
 		{
 			 this.addToHistoryPanel("\n"+RiskStrings.INVALID_MAP);
-			 JOptionPane.showMessageDialog(gamev.getHistoryPanel(),
+			 JOptionPane.showMessageDialog(gamev.getFrame(),
 					 RiskStrings.INVALID_MAP);
 			
 			 board.clear();
@@ -1074,7 +1063,7 @@ public class GameEngine implements Serializable
 			for(int j = 0; j < nbGames; j++)
 			{
 				System.out.println("Game: " + (j+1));
-				this.nbRoundsPlayed = 0;
+				this.board.resetRoundPlayed();
 				loadTournament(maps.get(i));
 				createBots(nbPlayer, tournament, PlayerColors.red, strategies);
 				generateTurnOrder();
@@ -1116,10 +1105,10 @@ public class GameEngine implements Serializable
 	 */
 	private boolean loadTournament(File file) {
 		this.clear();
-		if(Utils.loadFile(file, this.debug))
+		if(Utils.loadFile(file))
 		{
 			this.addToHistoryPanel("The Map File was properly loaded.");
-			this.gamev.addGraph(RiskBoard.ProperInstance(debug));
+			this.gamev.addGraph(RiskBoard.Instance);
 			return true;
 		}
 		return false;
@@ -1224,7 +1213,7 @@ public class GameEngine implements Serializable
 	{	
 		players.clear();
 		short id = IDGenerator();
-		players.put(new Integer(id),new HumanPlayerModel(name, humanColor, id, debug));		
+		players.put(new Integer(id),new HumanPlayerModel(name, humanColor, id));		
 	}
 	
 	/**
@@ -1326,7 +1315,7 @@ public class GameEngine implements Serializable
 		for(short i = nbOfbots; i< numberOfPlayers; i++)
 		{	
 			id = this.IDGenerator();
-			players.put(new Integer(id), new BotPlayerModel("Computer "+ i, plColor.get(i-nbOfbots), id,debug, strategies.get(i -nbOfbots)));
+			players.put(new Integer(id), new BotPlayerModel("Computer "+ i, plColor.get(i-nbOfbots), id, strategies.get(i -nbOfbots)));
 		}
 		return true;
 		
@@ -1364,10 +1353,10 @@ public class GameEngine implements Serializable
 		{
 			players.get(players.keySet().toArray()[i]).setNbArmiesToBePlaced(nbArmiesToBePlaced);
 		}
-		if(gamev != null)
-		{
-			this.addToHistoryPanel(""+players.keySet().size()+" players,\n Armies assigned : "+nbArmiesToBePlaced);
-		}
+	
+		
+		this.addToHistoryPanel(""+players.keySet().size()+" players,\n Armies assigned : "+nbArmiesToBePlaced);
+	
 		board.update(RiskEvent.GeneralUpdate);
 		return nbArmiesToBePlaced;
 	}
@@ -1492,13 +1481,13 @@ public class GameEngine implements Serializable
 				newPlayTurnOrder.add(playerTurnOrder.get(index));
 			}
 			playerTurnOrder = newPlayTurnOrder;
-			if(nbRoundsPlayed > 0)
-				nbRoundsPlayed--;
+			if(board.getnbRoundsPlayed() > 0)
+				board.decrementRoundsPlayed();
 		}
 		
 		while(!isGameOver())
 		{
-			this.nbRoundsPlayed++;
+			this.board.incrementRoundsPlayed();
 			
 			for(int i =0; i < this.playerTurnOrder.size(); i++)
 			{
@@ -2117,7 +2106,7 @@ public class GameEngine implements Serializable
 	 */
 	private boolean isGameOver() 
 	{
-		boolean gameOver = board.isGameOver() || this.nbRoundsPlayed >  this.maxRounds;
+		boolean gameOver = board.isGameOver() || this.board.getnbRoundsPlayed() >  this.maxRounds;
 		
 		return  gameOver;
 	}
@@ -2179,7 +2168,7 @@ public class GameEngine implements Serializable
 			if(exchange)
 			{
 				this.addToHistoryPanel("Card Exchange in progress");
-				this.cardExchangeCount ++;
+				this.board.incrementCardExchanged();
 				updateCardExchange( players.get(integer));
 				pause();
 				
@@ -2222,18 +2211,18 @@ public class GameEngine implements Serializable
 	private int getArmiesFromCardExchange()
 	{
 		int armies = 0;
-		this.cardExchangeCount ++;
-		if(this.cardExchangeCount <= 5)
+		this.board.incrementCardExchanged();;
+		if(this.board.getCardExchangeCount() <= 5)
 		{
-			armies = this.cardExchangeCount * 2 + 2;
+			armies = this.board.getCardExchangeCount() * 2 + 2;
 		}
-		else if(this.cardExchangeCount == 6)
+		else if(this.board.getCardExchangeCount() == 6)
 		{
 			armies = 15;
 		}
 		else
 		{
-			armies = 15  + ((this.cardExchangeCount - 6)*5);
+			armies = 15  + ((this.board.getCardExchangeCount() - 6)*5);
 		}
 		return armies;
 	}
@@ -2283,7 +2272,7 @@ public class GameEngine implements Serializable
 	public int getNbRoundsPlayed() 
 	{
 		
-		return this.nbRoundsPlayed;
+		return this.board.getnbRoundsPlayed();
 	}
 
 	/**
@@ -2292,7 +2281,7 @@ public class GameEngine implements Serializable
 	 */
 	public int getCardExchangeCount() 
 	{	
-		return this.cardExchangeCount;
+		return this.board.getCardExchangeCount();
 	}
 
 	/**
@@ -2313,14 +2302,7 @@ public class GameEngine implements Serializable
 		return this.currentPlayer;
 	}
 
-	/**
-	 * Returns the debug status
-	 * @return Debug status boolean
-	 */
-	public boolean getDebugStatus() 
-	{
-		return this.debug;
-	}
+
 	
 	/**
 	 * Returns  The player 
@@ -2337,7 +2319,7 @@ public class GameEngine implements Serializable
 	 * @return the string of history
 	 */
 	public String getHistory() {
-		return gamev.getHistoryPanel().getInfo();
+		return board.getHistoryInfo();
 	}
 
 	/**
@@ -2345,7 +2327,7 @@ public class GameEngine implements Serializable
 	 * @return The country info
 	 */
 	public String getCountryInfo() {
-		return gamev.getCountryPanel().getInfo();
+		return board.getountryInfo();
 	}
 
 	/**
@@ -2364,20 +2346,13 @@ public class GameEngine implements Serializable
 	 */
 	public void setPanelInfo(String historyInfo, String countryInfo) 
 	{
-		this.gamev.getHistoryPanel().addMessage(historyInfo);
+		this.board.addMessage(historyInfo);
 		this.gamev.getCountryPanel().setText(countryInfo);
 		this.board.update(RiskEvent.GeneralUpdate);
 		
 	}
  
-	/**
-	 * Sets the debug status
-	 * @param debug the debug status
-	 */
-	public void setDebugStatus(boolean debug) {
-		this.debug = debug;
-		
-	}
+	
 
 	/**
 	 * This Method sets the turn Order
@@ -2394,7 +2369,7 @@ public class GameEngine implements Serializable
 	 */
 	public void setCardExchangeCounts(int cardExchangeCounts) 
 	{
-		this.cardExchangeCount = cardExchangeCounts;	
+		this.board.setNbCardsExchanged(cardExchangeCounts);	
 	}
 	
 	/**
@@ -2411,7 +2386,7 @@ public class GameEngine implements Serializable
 	 * @param nbRoundsPlayed2 new number of rounds played
 	 */
 	public void setnbRoundsPlayed(int nbRoundsPlayed2) {
-		this.nbRoundsPlayed = nbRoundsPlayed2;
+		this.board.setNbRoundsPlayed(nbRoundsPlayed2);
 		
 	}
 
@@ -2452,7 +2427,7 @@ public class GameEngine implements Serializable
 	 */
 	public void updateCardExchange(IPlayer player)
 	{
-		this.gamev.getCardPanel().populate(this.nbRoundsPlayed, this.cardExchangeCount, player);
+		this.gamev.getCardPanel().populate(this.board.getnbRoundsPlayed(), this.board.getCardExchangeCount(), player);
 		board.update(RiskEvent.CardTrade);
 	}
 

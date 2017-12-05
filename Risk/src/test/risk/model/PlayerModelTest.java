@@ -38,10 +38,7 @@ public class PlayerModelTest {
 	 */
 	private IPlayer secondPlayer;
 	
-	/**
-	 * Are we debugging
-	 */
-	private boolean debug;
+
 	
 	/**
 	 * Creates the RiskBoard and Player, both human and bots, instances for debugging.
@@ -51,11 +48,10 @@ public class PlayerModelTest {
 	@Before
 	public void setUp() throws Exception 
 	{
-		debug =true;
-		RiskBoard.ProperInstance(debug).clear();
-		Utils.loadFile(new File("Maps/World.map"),debug);
-		player = new PlayerModel("test",PlayerColors.red,(short)0,debug,RiskPlayerType.Human, RiskEnum.Strategy.human);
-		secondPlayer = new PlayerModel("test",PlayerColors.red,(short)1,debug,RiskPlayerType.Bot, RiskEnum.Strategy.random);
+		RiskBoard.Instance.clear();
+		Utils.loadFile(new File("Maps/World.map"));
+		player = new PlayerModel("test",PlayerColors.red,(short)0,RiskPlayerType.Human, RiskEnum.Strategy.human);
+		secondPlayer = new PlayerModel("test",PlayerColors.red,(short)1,RiskPlayerType.Bot, RiskEnum.Strategy.random);
 	}
 
 	/**
@@ -140,11 +136,11 @@ public class PlayerModelTest {
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 0);
 		player.addTerritory("alaska");
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 1);
-		RiskBoard.ProperInstance(debug).getTerritory("alaska").setOwnerID(player);;
-		RiskBoard.ProperInstance(debug).getTerritory("alaska").setArmyOn(1);
+		RiskBoard.Instance.getTerritory("alaska").setOwnerID(player);;
+		RiskBoard.Instance.getTerritory("alaska").setArmyOn(1);
 		player.addTerritory("alberta");
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 2);
-		RiskBoard.ProperInstance(debug).getTerritory("alberta").setOwnerID(player);;
+		RiskBoard.Instance.getTerritory("alberta").setOwnerID(player);;
 		Assert.assertFalse(player.fortify("alaska", "alberta", 1));
 	}
 	
@@ -156,11 +152,11 @@ public class PlayerModelTest {
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 0);
 		player.addTerritory("alaska");
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 1);
-		RiskBoard.ProperInstance(debug).getTerritory("alaska").setOwnerID(player);;
-		RiskBoard.ProperInstance(debug).getTerritory("alaska").setArmyOn(2);
+		RiskBoard.Instance.getTerritory("alaska").setOwnerID(player);;
+		RiskBoard.Instance.getTerritory("alaska").setArmyOn(2);
 		player.addTerritory("alberta");
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 2);
-		RiskBoard.ProperInstance(debug).getTerritory("alberta").setOwnerID(player);;
+		RiskBoard.Instance.getTerritory("alberta").setOwnerID(player);;
 		Assert.assertFalse(player.fortify("alaska", "alberta", 2));
 	}
 	
@@ -172,11 +168,11 @@ public class PlayerModelTest {
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 0);
 		player.addTerritory("alaska");
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 1);
-		RiskBoard.ProperInstance(debug).getTerritory("alaska").setOwnerID(player);;
-		RiskBoard.ProperInstance(debug).getTerritory("alaska").setArmyOn(3);
+		RiskBoard.Instance.getTerritory("alaska").setOwnerID(player);;
+		RiskBoard.Instance.getTerritory("alaska").setArmyOn(3);
 		player.addTerritory("alberta");
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 2);
-		RiskBoard.ProperInstance(debug).getTerritory("alberta").setOwnerID(player);;
+		RiskBoard.Instance.getTerritory("alberta").setOwnerID(player);;
 		Assert.assertFalse(player.fortify("alaska", "alberta",4));
 	}
 	/**
@@ -186,11 +182,11 @@ public class PlayerModelTest {
 	public void testInvalidOriginFortify() {
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 0);
 		
-		RiskBoard.ProperInstance(debug).getTerritory("alaska").setOwnerID(secondPlayer);
-		RiskBoard.ProperInstance(debug).getTerritory("alaska").setArmyOn(3);
+		RiskBoard.Instance.getTerritory("alaska").setOwnerID(secondPlayer);
+		RiskBoard.Instance.getTerritory("alaska").setArmyOn(3);
 		player.addTerritory("alberta");
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 1);
-		RiskBoard.ProperInstance(debug).getTerritory("alberta").setOwnerID(player);;
+		RiskBoard.Instance.getTerritory("alberta").setOwnerID(player);;
 		Assert.assertFalse(player.fortify("alaska", "alberta",2));
 	}
 	/**
@@ -201,8 +197,8 @@ public class PlayerModelTest {
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 0);
 		player.addTerritory("alaska");
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 1);
-		RiskBoard.ProperInstance(debug).getTerritory("alaska").setOwnerID(player);;
-		RiskBoard.ProperInstance(debug).getTerritory("alaska").setArmyOn(3);
+		RiskBoard.Instance.getTerritory("alaska").setOwnerID(player);;
+		RiskBoard.Instance.getTerritory("alaska").setArmyOn(3);
 		
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 1);
 		
@@ -216,11 +212,11 @@ public class PlayerModelTest {
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 0);
 		player.addTerritory("alaska");
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 1);
-		RiskBoard.ProperInstance(debug).getTerritory("alaska").setOwnerID(player);;
-		RiskBoard.ProperInstance(debug).getTerritory("alaska").setArmyOn(3);
+		RiskBoard.Instance.getTerritory("alaska").setOwnerID(player);;
+		RiskBoard.Instance.getTerritory("alaska").setArmyOn(3);
 		player.addTerritory("ontario");
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 2);
-		RiskBoard.ProperInstance(debug).getTerritory("ontario").setOwnerID(player);;
+		RiskBoard.Instance.getTerritory("ontario").setOwnerID(player);;
 		Assert.assertFalse(player.fortify("alaska", "ontario",2));
 	}
 	
@@ -232,15 +228,15 @@ public class PlayerModelTest {
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 0);
 		player.addTerritory("alaska");
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 1);
-		RiskBoard.ProperInstance(debug).getTerritory("alaska").setOwnerID(player);;
-		RiskBoard.ProperInstance(debug).getTerritory("alaska").setArmyOn(3);
+		RiskBoard.Instance.getTerritory("alaska").setOwnerID(player);;
+		RiskBoard.Instance.getTerritory("alaska").setArmyOn(3);
 		player.addTerritory("alberta");
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 2);
-		RiskBoard.ProperInstance(debug).getTerritory("alberta").setOwnerID(player);;
-		RiskBoard.ProperInstance(debug).getTerritory("alberta").setArmyOn(3);
+		RiskBoard.Instance.getTerritory("alberta").setOwnerID(player);;
+		RiskBoard.Instance.getTerritory("alberta").setArmyOn(3);
 		Assert.assertTrue(player.fortify("alaska", "alberta",1));
-		Assert.assertTrue(RiskBoard.ProperInstance(debug).getTerritory("alberta").getArmyOn() == 4);
-		Assert.assertTrue(RiskBoard.ProperInstance(debug).getTerritory("alaska").getArmyOn() == 2);
+		Assert.assertTrue(RiskBoard.Instance.getTerritory("alberta").getArmyOn() == 4);
+		Assert.assertTrue(RiskBoard.Instance.getTerritory("alaska").getArmyOn() == 2);
 	}
 
 	
@@ -262,7 +258,7 @@ public class PlayerModelTest {
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 0);
 		player.addTerritory("alaska");
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 1);
-		RiskBoard.ProperInstance(debug).getTerritory("alaska").setOwnerID(player);;
+		RiskBoard.Instance.getTerritory("alaska").setOwnerID(player);;
 		Assert.assertFalse(player.reinforce("alaska", 4));
 	}
 	
@@ -275,7 +271,7 @@ public class PlayerModelTest {
 		player.addTerritory("alaska");
 		player.incrementArmiesBy(5);
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 1);
-		RiskBoard.ProperInstance(debug).getTerritory("alaska").setOwnerID(player);;
+		RiskBoard.Instance.getTerritory("alaska").setOwnerID(player);;
 		Assert.assertFalse(player.reinforce("peru", 4));
 	}
 	/**
@@ -287,7 +283,7 @@ public class PlayerModelTest {
 		player.addTerritory("alaska");
 		player.incrementArmiesBy(5);
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 1);
-		RiskBoard.ProperInstance(debug).getTerritory("alaska").setOwnerID(player);;
+		RiskBoard.Instance.getTerritory("alaska").setOwnerID(player);;
 		Assert.assertTrue(player.reinforce("alaska", 4));
 		Assert.assertTrue(player.getNbArmiesToBePlaced() == 1);
 		
@@ -300,7 +296,7 @@ public class PlayerModelTest {
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 0);
 		player.addTerritory("alaska");
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 1);
-		RiskBoard.ProperInstance(debug).getTerritory("alaska").setOwnerID(player);;
+		RiskBoard.Instance.getTerritory("alaska").setOwnerID(player);;
 		Assert.assertFalse(player.reinforce("alaska"));
 	}
 	/**
@@ -312,7 +308,7 @@ public class PlayerModelTest {
 		player.addTerritory("alaska");
 		player.incrementArmiesBy(5);
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 1);
-		RiskBoard.ProperInstance(debug).getTerritory("alaska").setOwnerID(player);;
+		RiskBoard.Instance.getTerritory("alaska").setOwnerID(player);;
 		Assert.assertFalse(player.reinforce("peru"));
 	}
 	/**
@@ -324,7 +320,7 @@ public class PlayerModelTest {
 		player.addTerritory("alaska");
 		player.incrementArmiesBy(5);
 		Assert.assertTrue(player.getTerritoriesOwned().size() == 1);
-		RiskBoard.ProperInstance(debug).getTerritory("alaska").setOwnerID(player);;
+		RiskBoard.Instance.getTerritory("alaska").setOwnerID(player);;
 		Assert.assertTrue(player.reinforce("alaska"));
 		Assert.assertTrue(player.getNbArmiesToBePlaced() == 4);
 		

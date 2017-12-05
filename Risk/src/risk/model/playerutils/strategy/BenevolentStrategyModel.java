@@ -4,47 +4,30 @@
 package risk.model.playerutils.strategy;
 
 import java.util.ArrayList;
-import java.util.Random;
-
-import risk.model.RiskBoard;
 import risk.model.maputils.Territory;
 import risk.model.playerutils.IPlayer;
-import risk.model.playerutils.strategy.IStrategy;
 import risk.utils.Tuple;
 
 /**
  * Implementation of the Strategy Model
  * @author hcanta
  * @author Mohammad Akif Beg
+ * @version 4.1
  */
-public class BenevolentStrategyModel implements IStrategy {
+public class BenevolentStrategyModel extends Strategy {
 
-	/**
-	 * Random generator
-	 */
-	private Random rand;
+
 	/**
 	 * Generated Serial Version UID
 	 */
-	private static final long serialVersionUID = 7379901556203948621L;
-	/**
-	 * The player using the strategy
-	 */
-	private IPlayer player;
-	/**
-	 * The current game Board
-	 */
-	private RiskBoard board;
+	private static final long serialVersionUID = 735869297957870033L;
 	/**
 	 * Constructor for the Strategy Model
-	 * @param debug The current board in use
 	 * @param player The player using the strategy
 	 */
-	public BenevolentStrategyModel(boolean debug, IPlayer player) 
+	public BenevolentStrategyModel(IPlayer player) 
 	{
-		this.board = RiskBoard.ProperInstance(debug);
-		this.player = player;
-		this.rand = new Random();
+		super(player);
 	}
 
 	/**
