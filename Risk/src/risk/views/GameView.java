@@ -283,6 +283,9 @@ public class GameView implements Observer, Serializable
 			case CardTrade:
 				this.getCardPanel().update(obj, param);
 				break;
+			case GraphUpdate:
+				this.addGraph(((RiskBoard)obj));
+				break;
 			default:
 			case GeneralUpdate:
 				historyUpdate(obj, param);

@@ -199,6 +199,11 @@ public class RiskBoard extends Observable implements Serializable
 			catch(Exception e) {}
 		}
 		continents.clear();
+		this.cardExchangeCount = 0;
+		setState(GameState.IDLE);
+		log.clear();
+		territoryInfo.setLength(0);
+		nbRoundsPlayed = 0;
 	}
 	
 	/**

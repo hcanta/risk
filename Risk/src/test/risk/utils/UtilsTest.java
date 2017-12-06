@@ -289,7 +289,8 @@ public class UtilsTest
 	{
 		board.clear();
 		Utils.loadFile(new File("Maps/Demo.map"));
-		
+		board.setNbCardsExchanged(5);
+		board.setNbRoundsPlayed(3);
 		Path currentRelativePath = Paths.get("");
 		String str = currentRelativePath.toAbsolutePath().toString()+"\\"+RiskStrings.BOARD_FILE_TEST;
 		try
@@ -311,6 +312,8 @@ public class UtilsTest
 	{
 		board.clear();
 		Utils.loadFile(new File("Maps/Demo.map"));
+		Assert.assertTrue(board.getnbCardExchanged() == 0);
+		Assert.assertTrue(board.getnbRoundsPlayed() == 0);
 		Assert.assertTrue(board.getContinents().size() ==2);
 		board.clear();
 		Assert.assertTrue(board.getContinents().size() == 0);
@@ -321,6 +324,8 @@ public class UtilsTest
 			Territory territory = board.getTerritory(board.getTerritories().get(i));
 			Assert.assertTrue(territory.getNeighbours().size() == 38);
 		}
+		Assert.assertTrue(board.getnbCardExchanged() == 5);
+		Assert.assertTrue(board.getnbRoundsPlayed() == 3);
 			
 	}
 	/** Test LoadContinent.

@@ -184,7 +184,7 @@ public class GameEngine implements Serializable
 						Thread thread = new Thread(new Runnable() {
 					         @Override
 					         public void run() {
-					             if(deploy(false))
+					             if(deploy())
 					             {
 					            	 setState(GameState.NEXT_PLAYER);
 					            	 play();
@@ -206,10 +206,9 @@ public class GameEngine implements Serializable
 				{
 					Thread thread = new Thread(new Runnable() {
 				         @Override
-				         public void run() {
-				        	 
+				         public void run() 
+				         {	 
 			            	 play(true,false);
-				             
 				         }
 					});
 					thread.start();
@@ -224,25 +223,18 @@ public class GameEngine implements Serializable
 			{
 				board.resetRoundPlayed();
 				addToHistoryPanel("\n"+RiskStrings.INITIATE_LOAD_PLAY);
-				
-				
-					
-					setState(GameState.STARTUP);
-					Thread thread = new Thread(new Runnable() {
-				         @Override
-				         public void run() {
-				             if(tournament(true))
-				             {
-				            	
-				             }
-				         }
-					});
-					thread.start();
-				
+				setState(GameState.STARTUP);
+				Thread thread = new Thread(new Runnable() 
+				{
+			         @Override
+			         public void run() 
+			         {
+			            tournament();
+			         }
+				});
+				thread.start();
 			}
-	});
-		
-		
+		});
 	}
 	
 	/**
@@ -277,18 +269,14 @@ public class GameEngine implements Serializable
 				if(Utils.loadGame(this, file.getName()))
 				{
 					this.addToHistoryPanel("The Game File was properly loaded.");	
-					this.gamev.addGraph(RiskBoard.Instance);
+					board.update(RiskEvent.GraphUpdate);
 					return true;
-					
 				}
 				else
 				{
 					this.addToHistoryPanel("The Map File was invalid.");
-					
 					board.clear();
-					
 					this.gamev.cleanCenter();
-
 				}
 			}
 		}
@@ -474,7 +462,8 @@ public class GameEngine implements Serializable
 		}
 		return null;
 	}
-/**
+	
+	/**
 	 * This function chooses the file to be edited or loaded
 	 * @param load are we loading to play or to edit
 	 * @return was the file properly loaded or not
@@ -510,9 +499,7 @@ public class GameEngine implements Serializable
 					
 					if(load)
 					{
-						
-						this.gamev.addGraph(RiskBoard.Instance);
-						
+						board.update(RiskEvent.GraphUpdate);
 					}
 					return true;
 					
@@ -905,10 +892,9 @@ public class GameEngine implements Serializable
 	}
 	/**
 	 * This function is called during the startup phase in order to deploy the game
-	 * @param tournament are we in tournament mode or not
 	 * @return true false, was the deployment successful or not
 	 */
-	private boolean tournament(boolean tournament)
+	private boolean tournament()
 	{
 		players = new HashMap<Integer, IPlayer>();
 		String input;
@@ -1065,7 +1051,7 @@ public class GameEngine implements Serializable
 				System.out.println("Game: " + (j+1));
 				this.board.resetRoundPlayed();
 				loadTournament(maps.get(i));
-				createBots(nbPlayer, tournament, PlayerColors.red, strategies);
+				createBots(nbPlayer, true, PlayerColors.red, strategies);
 				generateTurnOrder();
 				Collections.shuffle(playerTurnOrder);
 				
@@ -1107,8 +1093,8 @@ public class GameEngine implements Serializable
 		this.clear();
 		if(Utils.loadFile(file))
 		{
-			this.addToHistoryPanel("The Map File was properly loaded.");
-			this.gamev.addGraph(RiskBoard.Instance);
+			this.addToHistoryPanel("The Map File was properly loaded.");	
+			board.update(RiskEvent.GraphUpdate);
 			return true;
 		}
 		return false;
@@ -1117,10 +1103,9 @@ public class GameEngine implements Serializable
 
 	/**
 	 * This function is called during the startup phase in order to deploy the game
-	 * @param tournament are we in tournament mode or not
 	 * @return true false, was the deployment successful or not
 	 */
-	private boolean deploy(boolean tournament)
+	private boolean deploy()
 	{
 		players = new HashMap<Integer, IPlayer>();
 		String input;
@@ -1149,47 +1134,36 @@ public class GameEngine implements Serializable
 		
 		
 		RiskEnum.PlayerColors humanColor;
-		if(!tournament)
+		String str ="";
+		while(str.length() == 0)
 		{
-			String str ="";
-			while(str.length() == 0)
-			{
-				input =  (String)JOptionPane.showInputDialog(gamev.getFrame(),RiskStrings.PLAYER_NAME, 
-						RiskStrings.RISK, JOptionPane.PLAIN_MESSAGE, null, null, "");
-				if(input == null)
-					return false;
-				str = input.trim();
-			}
-			Object selected = JOptionPane.showInputDialog(null, RiskStrings.CHOOSE_COLOR, RiskStrings.MENU_ITEM_OPEN_MAP,
-					JOptionPane.DEFAULT_OPTION,
-					null, RiskStrings.PLAYER_COLORS, RiskStrings.PLAYER_COLORS[0]);
-			if ( selected != null )
-			{
-			    String selectedString = selected.toString();
-			  
-			    humanColor = RiskEnum.PlayerColors.valueOf(selectedString);
-			    addHumanPlayer(str, humanColor);
-			    if(!createBots(nbPlayer, tournament, humanColor))
-			    {
-			    	return false;
-			    }
-			    
-			}
-			else
-			{
-				board.clear();
-			    return false;
-			}
-			
+			input =  (String)JOptionPane.showInputDialog(gamev.getFrame(),RiskStrings.PLAYER_NAME, 
+					RiskStrings.RISK, JOptionPane.PLAIN_MESSAGE, null, null, "");
+			if(input == null)
+				return false;
+			str = input.trim();
+		}
+		Object selected = JOptionPane.showInputDialog(null, RiskStrings.CHOOSE_COLOR, RiskStrings.MENU_ITEM_OPEN_MAP,
+				JOptionPane.DEFAULT_OPTION,
+				null, RiskStrings.PLAYER_COLORS, RiskStrings.PLAYER_COLORS[0]);
+		if ( selected != null )
+		{
+		    String selectedString = selected.toString();
+		  
+		    humanColor = RiskEnum.PlayerColors.valueOf(selectedString);
+		    addHumanPlayer(str, humanColor);
+		    if(!createBots(nbPlayer, false, humanColor))
+		    {
+		    	return false;
+		    }
+		    
 		}
 		else
 		{
-			 if(!createBots(nbPlayer, tournament, PlayerColors.red))
-		    {
-				players.clear();
-		    	return false;
-		    }
+			board.clear();
+		    return false;
 		}
+			
 		generateTurnOrder();
 		Collections.shuffle(playerTurnOrder);
 		
@@ -2245,8 +2219,6 @@ public class GameEngine implements Serializable
 		return this.players.get(new Integer(index));
 	}
 
-
-	
 	/**
 	 * Returns the ID of the first player for testing purposes
 	 * @return the ID of the first player for testing purposes
@@ -2276,7 +2248,7 @@ public class GameEngine implements Serializable
 	}
 
 	/**
-	 * Thea amount of times card were exchanged
+	 * The amount of times card were exchanged
 	 * @return The amount of times cards were exchanged
 	 */
 	public int getCardExchangeCount() 

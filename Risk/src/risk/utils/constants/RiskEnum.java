@@ -50,7 +50,7 @@ public class RiskEnum implements Serializable
 	 */
 	public static enum RiskEvent
 	{
-		StateChange, GeneralUpdate, HistoryUpdate, CountryUpdate, CardTrade
+		StateChange, GeneralUpdate, HistoryUpdate, CountryUpdate, CardTrade, GraphUpdate
 	}
 	
 	/**

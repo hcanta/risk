@@ -95,17 +95,7 @@ public class Territory extends BoardComponent
 	{
 		this(name, continent, new String[0], xcoord, ycoord);
 	}
-	
-	/**
-	 * Constructor for the territory class 
-	 * @param name  The name of the territory
-	 * @param continent The name of the continent to which the territory belongs
-	 * @param neighbours The array of neighbors to said territory
-	 */
-	public Territory(String name, String continent, String[] neighbours) 
-	{
-		this(name, continent, neighbours, 0, 0);
-	}
+
 	
 	/**
 	 * Constructor for the territory class 

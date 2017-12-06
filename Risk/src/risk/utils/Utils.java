@@ -275,7 +275,6 @@ public class Utils implements Serializable
 		return obj;
 	}
 	
-	
 	/**
 	 * Loads a territory from a file
 	 * @param relativePath The relative Path to the file
@@ -441,8 +440,13 @@ public class Utils implements Serializable
 		str.append("\n");
 		str.append(dataToString(board.getOwnerID()));
 		str.append("\n");
+		str.append(dataToString(board.getnbCardExchanged()));
+		str.append("\n");
+		str.append(dataToString(board.getnbRoundsPlayed()));
+		str.append("\n");
 		str.append(dataToString(board.getContinents().size()));
 		str.append("\n");
+		
 		for(int i =0; i < board.getContinents().size(); i++)
 		{
 			str.append(saveContinentToString(board.getContinent(board.getContinents().get(i))));
@@ -488,7 +492,7 @@ public class Utils implements Serializable
 		board.clear();
 		String name, currentPlayer;
 		GameState state;
-		int ownerID, nbContinent;
+		int ownerID, nbContinent, rounds, cards;
 		
 		try
 		{
@@ -503,6 +507,10 @@ public class Utils implements Serializable
 			line = bufferedReader.readLine();
 			ownerID = (int)stringToData(line);
 			line = bufferedReader.readLine();
+			cards = (int)stringToData(line);
+			line = bufferedReader.readLine();
+			rounds = (int)stringToData(line);
+			line = bufferedReader.readLine();
 			nbContinent = (int)stringToData(line);
 			for(int i =0; i< nbContinent; i++)
 			{
@@ -513,6 +521,8 @@ public class Utils implements Serializable
 			board.setCurrentPlayer(currentPlayer);
 			board.setOwnerID(ownerID);
 			board.setState(state);
+			board.setNbRoundsPlayed(rounds);
+			board.setNbCardsExchanged(cards);
 			return true;
 		
 		}
@@ -828,11 +838,7 @@ public class Utils implements Serializable
 		StringBuffer info = new StringBuffer();
 		info.append(dataToString(engine.getCurrentPlayer()));
 		info.append("\n");
-		info.append(dataToString(engine.getNbRoundsPlayed()));
-		info.append("\n");
 		info.append(dataToString(engine.getMaxRounds()));
-		info.append("\n");
-		info.append(dataToString(engine.getCardExchangeCount()));
 		info.append("\n");
 		info.append(dataToString(engine.getPlayerTurnOrder()));
 		info.append("\n");
@@ -881,9 +887,6 @@ public class Utils implements Serializable
 			int maxRounds = (int)stringToData(line);
 			engine.setMaxRounds(maxRounds);
 			
-			line = bufferedReader.readLine();
-			int cardExchangeCounts = (int)stringToData(line);
-			engine.setCardExchangeCounts(cardExchangeCounts);
 			
 			line = bufferedReader.readLine();
 			@SuppressWarnings("unchecked")

@@ -3,7 +3,6 @@
  */
 package risk.model.playerutils.strategy;
 
-import risk.model.RiskBoard;
 import risk.model.maputils.Territory;
 import risk.model.playerutils.IPlayer;
 import risk.utils.Tuple;
@@ -12,6 +11,7 @@ import risk.utils.Tuple;
  * Implementation of Cheater the Strategy Model
  * @author hcanta
  * @author addy
+ * @version 4.2
  */
 public class CheaterStrategyModel extends Strategy {
 
@@ -21,10 +21,7 @@ public class CheaterStrategyModel extends Strategy {
 	 */
 	private static final long serialVersionUID = -7062346114363150158L;
 
-	/**
-	 * The game board currently active
-	 */
-	private RiskBoard board;
+
 	/**
 	 * Constructor for the Strategy Model Class
 	 * @param player it is The player using the strategy
@@ -49,7 +46,9 @@ public class CheaterStrategyModel extends Strategy {
 			Territory  territory;
 			for(int i =0; i< player.getTerritoriesOwned().size(); i++)
 			{
+				
 				territory = board.getTerritory(player.getTerritoriesOwned().get(i));
+				
 				int armyToBePlaced =  board.getTerritory(territory.getTerritoryName()).getArmyOn()*2;
 				board.getTerritory(territory.getTerritoryName()).setArmyOn(armyToBePlaced);
 			}
@@ -98,7 +97,7 @@ public class CheaterStrategyModel extends Strategy {
 	/**
 	 * Finds the territory with the lowest army
 	 * @param territory The current territory loaded from board
-	 * @return the index of weakest neighbour territory
+	 * @return the index of weakest neighbor territory
 	 */
 	@Override
 	public int getWeakestNeighbour(Territory territory) {
