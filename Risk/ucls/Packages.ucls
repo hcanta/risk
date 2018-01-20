@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.2.2" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
+  associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
+  <package id="1" language="java" name="risk.game" project="Risk" file="/Risk/src/risk/game" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="50" width="101" x="321" y="50"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="2" language="java" name="risk.game.cards" project="Risk" file="/Risk/src/risk/game/cards" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="50" width="117" x="178" y="148"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="3" language="java" name="risk.model" project="Risk" file="/Risk/src/risk/model" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="50" width="101" x="380" y="140"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="4" language="java" name="risk.model.maputils" project="Risk" file="/Risk/src/risk/model/Utils" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="50" width="136" x="361" y="232"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="5" language="java" name="risk.model.playerutils" project="Risk" file="/Risk/src/risk/model/playerutils" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="50" width="146" x="104" y="219"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="6" language="java" name="risk.utils" project="Risk" file="/Risk/src/risk/utils" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="581" y="138"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="7" language="java" name="risk.utils.constants" project="Risk" file="/Risk/src/risk/utils/constants" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="50" width="133" x="267" y="311"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="8" language="java" name="risk.views" project="Risk" file="/Risk/src/risk/views" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="50" width="101" x="465" y="306"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="9" language="java" name="risk.views.ui" project="Risk" file="/Risk/src/risk/views/ui" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="50" width="101" x="100" y="301"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

@@ -1,8 +1,8 @@
 /**
- * 
+ * The model package holds the board and the players
  */
 /**
- * @author Rio
- *
+ * The model package holds the board and the players
+ * @author hcanta
  */
 package risk.model;
